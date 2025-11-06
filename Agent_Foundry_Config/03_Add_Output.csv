@@ -1,0 +1,382 @@
+═══════════════════════════════════════════════════════════════════════════════════
+AGENT FOUNDRY - ADD OUTPUT CONFIGURATION
+Campaign Strategist & Planner Agent - Output Formats
+═══════════════════════════════════════════════════════════════════════════════════
+
+INSTRUCTIONS:
+For each output below, create a new output in Agent Foundry with the specified fields.
+- For "Custom" outputs: Use the JSON schema provided
+- For "Artifact" outputs: Select the Artifact content type specified
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 1: Campaign Plan (Structured JSON)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+campaign_plan
+
+Function name:
+generate_campaign_plan
+
+Function description:
+Generate a comprehensive digital marketing campaign plan including strategy overview, platform recommendations, budget allocation, audience targeting, creative direction, KPIs, and implementation timeline.
+
+Output Type:
+Custom
+
+JSON schema:
+{
+  "type": "object",
+  "properties": {
+    "campaign_overview": {
+      "type": "object",
+      "properties": {
+        "campaign_name": { "type": "string" },
+        "primary_objective": { "type": "string" },
+        "target_audience": { "type": "string" },
+        "budget": { "type": "string" },
+        "duration": { "type": "string" }
+      }
+    },
+    "platform_strategy": {
+      "type": "object",
+      "properties": {
+        "recommended_platforms": { "type": "array", "items": { "type": "string" } },
+        "platform_rationale": { "type": "string" },
+        "budget_allocation": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "audience_targeting": {
+      "type": "object",
+      "properties": {
+        "primary_persona": { "type": "string" },
+        "demographics": { "type": "string" },
+        "interests": { "type": "array", "items": { "type": "string" } },
+        "behaviors": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "creative_direction": {
+      "type": "object",
+      "properties": {
+        "key_messages": { "type": "array", "items": { "type": "string" } },
+        "visual_style": { "type": "string" },
+        "ad_formats": { "type": "array", "items": { "type": "string" } },
+        "cta_recommendations": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "kpis": {
+      "type": "object",
+      "properties": {
+        "primary_kpi": { "type": "string" },
+        "secondary_kpis": { "type": "array", "items": { "type": "string" } },
+        "benchmarks": { "type": "string" }
+      }
+    },
+    "implementation_timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase": { "type": "string" },
+          "duration": { "type": "string" },
+          "activities": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "next_steps": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["campaign_overview", "platform_strategy", "kpis", "next_steps"]
+}
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 2: Budget Allocation (Structured JSON)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+budget_allocation
+
+Function name:
+generate_budget_allocation
+
+Function description:
+Generate detailed budget allocation breakdown across platforms and funnel stages with rationale and expected outcomes.
+
+Output Type:
+Custom
+
+JSON schema:
+{
+  "type": "object",
+  "properties": {
+    "total_budget": {
+      "type": "object",
+      "properties": {
+        "monthly_amount": { "type": "string" },
+        "duration_months": { "type": "number" },
+        "total_campaign_budget": { "type": "string" }
+      }
+    },
+    "funnel_allocation": {
+      "type": "object",
+      "properties": {
+        "awareness": { "type": "string" },
+        "consideration": { "type": "string" },
+        "conversion": { "type": "string" }
+      }
+    },
+    "platform_breakdown": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "platform": { "type": "string" },
+          "monthly_budget": { "type": "string" },
+          "percentage": { "type": "string" },
+          "rationale": { "type": "string" },
+          "expected_metrics": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      }
+    },
+    "testing_budget": { "type": "string" },
+    "optimization_reserve": { "type": "string" },
+    "expected_outcomes": {
+      "type": "object",
+      "properties": {
+        "estimated_reach": { "type": "string" },
+        "estimated_conversions": { "type": "string" },
+        "target_roas": { "type": "string" },
+        "target_cpa": { "type": "string" }
+      }
+    }
+  },
+  "required": ["total_budget", "platform_breakdown", "expected_outcomes"]
+}
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 3: Creative Brief (Structured JSON)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+creative_brief
+
+Function name:
+generate_creative_brief
+
+Function description:
+Generate a comprehensive creative brief for a specific platform including campaign objective, target audience, key messages, visual direction, ad specifications, and success metrics.
+
+Output Type:
+Custom
+
+JSON schema:
+{
+  "type": "object",
+  "properties": {
+    "brief_overview": {
+      "type": "object",
+      "properties": {
+        "platform": { "type": "string" },
+        "campaign_objective": { "type": "string" },
+        "target_audience": { "type": "string" }
+      }
+    },
+    "key_messages": {
+      "type": "object",
+      "properties": {
+        "primary_message": { "type": "string" },
+        "supporting_messages": { "type": "array", "items": { "type": "string" } },
+        "unique_value_proposition": { "type": "string" },
+        "proof_points": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "call_to_action": {
+      "type": "object",
+      "properties": {
+        "primary_cta": { "type": "string" },
+        "alternative_ctas": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "tone_and_voice": {
+      "type": "object",
+      "properties": {
+        "personality": { "type": "string" },
+        "emotional_tone": { "type": "string" }
+      }
+    },
+    "visual_direction": {
+      "type": "object",
+      "properties": {
+        "visual_style": { "type": "string" },
+        "color_palette": { "type": "array", "items": { "type": "string" } },
+        "imagery_guidelines": { "type": "string" },
+        "typography_guidelines": { "type": "string" }
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "format": { "type": "string" },
+          "specifications": { "type": "string" },
+          "quantity": { "type": "string" }
+        }
+      }
+    },
+    "success_metrics": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "required": ["brief_overview", "key_messages", "visual_direction", "deliverables"]
+}
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 4: Campaign Text (Artifact - Formatted Text)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+campaign_text
+
+Function name:
+generate_campaign_text
+
+Function description:
+Generate campaign strategy and recommendations in formatted text for easy reading and sharing.
+
+Output Type:
+Artifact
+
+Artifact content type:
+Text
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 5: Campaign Summary (Artifact - Formatted Text)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+campaign_summary
+
+Function name:
+generate_campaign_summary
+
+Function description:
+Generate a concise executive summary of campaign recommendations.
+
+Output Type:
+Artifact
+
+Artifact content type:
+Text
+
+═══════════════════════════════════════════════════════════════════════════════════
+OUTPUT 6: Campaign Plan Visual (Plotly Chart)
+═══════════════════════════════════════════════════════════════════════════════════
+
+Output name:
+:plotly:
+
+Function name:
+generate_campaign_visual
+
+Function description:
+Generate visual representation of campaign plan including budget allocation charts, funnel stage breakdown, platform distribution, and timeline visualization using Plotly charts.
+
+Output Type:
+Custom
+
+JSON schema:
+{
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "description": "Array of Plotly trace objects for visualization",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Chart type: bar, pie, scatter, line, funnel, timeline, etc."
+          },
+          "x": {
+            "type": "array",
+            "description": "X-axis data values"
+          },
+          "y": {
+            "type": "array",
+            "description": "Y-axis data values"
+          },
+          "name": {
+            "type": "string",
+            "description": "Trace name for legend"
+          },
+          "labels": {
+            "type": "array",
+            "description": "Labels for pie charts"
+          },
+          "values": {
+            "type": "array",
+            "description": "Values for pie charts"
+          },
+          "marker": {
+            "type": "object",
+            "description": "Marker styling properties"
+          }
+        }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "description": "Plotly layout configuration",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Chart title"
+        },
+        "xaxis": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" }
+          }
+        },
+        "yaxis": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" }
+          }
+        },
+        "showlegend": {
+          "type": "boolean"
+        },
+        "height": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": ["data", "layout"]
+}
+
+USAGE NOTES:
+- The special output name ":plotly:" enables Plotly chart rendering
+- Use this for visualizing budget breakdowns, platform comparisons, funnel stages
+- Common chart types: pie (budget allocation), bar (platform comparison), funnel (campaign stages)
+- Return valid Plotly JSON format with data and layout objects
+
+═══════════════════════════════════════════════════════════════════════════════════
+END OF OUTPUT CONFIGURATION
+Total Outputs: 6 (4 Custom JSON + 2 Artifact Text)
+═══════════════════════════════════════════════════════════════════════════════════

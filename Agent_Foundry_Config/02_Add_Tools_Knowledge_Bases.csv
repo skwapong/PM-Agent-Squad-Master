@@ -1,0 +1,245 @@
+═══════════════════════════════════════════════════════════════════════════════════
+AGENT FOUNDRY - ADD TOOLS CONFIGURATION
+Campaign Strategist & Planner Agent - Knowledge Base Tools
+═══════════════════════════════════════════════════════════════════════════════════
+
+INSTRUCTIONS:
+For each tool below, create a new tool in Agent Foundry with the following fields:
+- Function name
+- Function description
+- Target: Knowledgebase
+- Target knowledge base: [as specified]
+- Target function: List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 1: Campaign Fundamentals
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_campaign_fundamentals
+
+Function description:
+Access comprehensive campaign planning fundamentals including SMART goals, funnel stages, target audience definition, competitive analysis, UVP development, campaign timeline, integration strategies, and risk assessment frameworks.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB1_Campaign_Planning_Fundamentals
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 2: Meta Advertising
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_meta_advertising
+
+Function description:
+Access Meta (Facebook & Instagram) advertising best practices including campaign structure, objectives, audience targeting (Core/Custom/Lookalike/Advantage+), ad formats (Feed/Stories/Reels/Carousel), creative guidelines, Meta Pixel tracking, and optimization strategies.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB2_Meta_Advertising_Best_Practices
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 3: Pinterest Advertising
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_pinterest_advertising
+
+Function description:
+Access Pinterest advertising strategies including platform demographics, campaign objectives, audience targeting (interests/keywords/Actalike), ad formats (Standard/Video/Carousel/Shopping), seasonal planning, and creative best practices for discovery-focused campaigns.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB3_Pinterest_Advertising_Best_Practices
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 4: Google Ads
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_google_ads
+
+Function description:
+Access Google Ads comprehensive guidance including Search campaigns (keyword strategy/RSAs/Quality Score), Display campaigns, YouTube video advertising, Shopping campaigns, Performance Max, bidding strategies, and conversion tracking.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB4_Google_Ads_Best_Practices
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 5: Metrics & KPIs
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_metrics_kpis
+
+Function description:
+Access campaign metrics and KPIs including funnel-based metrics (awareness/consideration/conversion/retention), platform-specific metrics, industry benchmarks, attribution models, ROI calculation, and performance measurement frameworks.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB5_Campaign_Metrics_KPIs_Performance
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 6: Audience Targeting
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_audience_targeting
+
+Function description:
+Access audience targeting and segmentation strategies including customer research methodologies, persona development, RFM/lifecycle/behavioral/demographic/psychographic segmentation, platform-specific audience hierarchies, testing frameworks, and optimization tactics.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB6_Audience_Targeting_Segmentation
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 7: Creative Best Practices Part 1
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_creative_part1
+
+Function description:
+Access creative best practices Part 1 including creative development framework, creative briefs, visual design principles, color psychology, photography guidelines, typography, copywriting frameworks (AIDA/PAS/FAB), headline formulas, CTA optimization, and video structure.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB7A_Creative_Best_Practices_Part1
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 8: Creative Best Practices Part 2
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_creative_part2
+
+Function description:
+Access creative best practices Part 2 including platform-specific creative guidelines (Meta/Pinterest/Google/TikTok), creative optimization tactics, A/B testing frameworks, creative personalization, production workflows, tools and resources, and quality checklists.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB7B_Creative_Best_Practices_Part2
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 9: TikTok Advertising Part 1
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_tiktok_part1
+
+Function description:
+Access TikTok advertising Part 1 including platform demographics, user behavior, campaign structure, objectives (awareness/consideration/conversion), audience targeting (demographic/interest/custom/lookalike/automatic), and ad formats (In-Feed/Spark/TopView/Brand Takeover/Hashtag Challenge/Branded Effects).
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB9A_TikTok_Advertising_Part1
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 10: TikTok Advertising Part 2
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_tiktok_part2
+
+Function description:
+Access TikTok advertising Part 2 including creative best practices (3-second rule/authenticity/sound strategy/visual techniques), content formulas, performance optimization, creative testing, audience scaling, budget recommendations, pixel tracking, influencer partnerships, trend participation, and performance benchmarks.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB9B_TikTok_Advertising_Part2
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 11: Campaign Document Templates
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_document_templates
+
+Function description:
+Access campaign document templates and formatting guidelines including professional document structure, React component PDF templates, typography and color schemes, table formatting, highlight boxes, print optimization, responsive design, and accessibility best practices for creating polished campaign planning deliverables.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB10_Campaign_Document_Templates
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+TOOL 12: Campaign Report Template Instructions
+═══════════════════════════════════════════════════════════════════════════════════
+
+Function name:
+kb_report_template
+
+Function description:
+Access system instructions for generating campaign plan reports as complete React components with print-to-PDF functionality, including complete component output requirements, campaign data structure, styling requirements, document sections, validation checklist, and common mistakes to avoid.
+
+Target:
+Knowledgebase
+
+Target knowledge base:
+KB11_Campaign_Report_Template_Instructions
+
+Target function:
+List columns
+
+═══════════════════════════════════════════════════════════════════════════════════
+END OF KNOWLEDGE BASE TOOLS CONFIGURATION
+Total Tools: 12
+═══════════════════════════════════════════════════════════════════════════════════

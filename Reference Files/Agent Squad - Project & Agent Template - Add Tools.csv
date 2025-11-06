@@ -1,0 +1,32 @@
+Field,Description,Instructions,Notes
+Function name,Specify the function,"Enter a unique name for the function—for example, list_columns.",
+Function description,Describe how you like the function to be used,"(Optional) Enter a function description—for example, list the available tables and columns. LLM sees the description. LLM can choose appropriate tool if the detailed description is defined.",
+Target,Dropdown selection of target,"Options: Knowledgebase, Agent, Image Generator, Workflow Executor",
+Target knowledge base,Dropdown selection of knowledge base,"Select a knowledge base name to use
+",If Knowledge Base selected from Target field
+Target function,Single selection; An agent to call. Select an agent from the list.,"Options: List columns, Search schema, Query data directly (Presto SQL)","If Knowledge Base selected
+The supported target functions are;
+List segment folders: Listing up folders that exist in the parent segment
+List by folder: Listing up instances that exist in a particular folder. This requires folder id
+List attributes: Retrieve the attributed definitions configured on the parent segment config
+List behaviors: Retrieve the behavior definitions configured on the parent segment config
+Get segment: Retrieve the metadata of a particular segment. This requires segment id
+Get journey: Retrieve the metadata of a particular journey. This requires journey id
+Get audience: Retrieve the metadata of the parent segment config. This requires journey id
+Get query: Retrieve the count SQL of a particular segment. This requires segment id
+Query data directly: Issue a SQL to the parent segment data
+Query segment analytics: Issue a SQL to analyze on a particular segment. This requires segment id"
+Target agent,Dropdown selection of knowledge base,An agent to call. Select an agent from the list.,If Agent selected from Target field
+Output mode,Single selection,"Options: Return, Show
+Return: The target agent passes an output to caller agent, caller agent output the generated content based on the output result it got
+Show: The target agent's output is rendered directly.",If Agent selected from Target field
+JSON schema,Argument structure definition when the tool is called.,,If Agent selected from Target field
+Prompt template,A user prompt that is used when the target agent is called.,"This can utilize parameter with ""{{parameter_name}}"" format. parameter_name must be defined in the JSON schema",If Agent selected from Target field
+Target image generator,An image generator to use. Select an image generator from existing image generator instances,,If Image Generator selected from Target field
+Target function,Select a relevant Image Generator target function,"Text to Image: Create an image from text prompt, appropriate for 0 to 1 case
+Outpaint: Edit the surroundings of the specified area
+Inpaint: Edit the inside or the specific area
+Image Variation: Create image variation(s) from the given image
+Remove Background: Remove the surroundings of the specified area",If Image Generator selected from Target field
+Target function,Select a relevant Workflow target function,"Execute workflow: execute workflow with workflow id
+Search workflow: Search a particular workflow to execute",If Workflow selected from Target field

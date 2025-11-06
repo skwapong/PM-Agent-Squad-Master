@@ -1,0 +1,19 @@
+Field,Description,Instructions,Notes
+Variable name,Enter a unique name.,AI Agent Foundry uses this name for recognition. :plotly: is a special name that is used for rendering a Plotly chart.,
+Target knowledge base,Dropdown selection of knowledge base,"Select a knowledge base name to use
+",
+Target function,Single section,Only List columns is available,
+List of variables,List for expression to specify the target tables and columns,"Expression
+The string is a comma-separated list of expressions (expression-1, expression-2, ...)
+
+An expression is either of followings:
+
+Table name: if the expression does not include special characters like . or *, it’s a table name. It’s identical to TABLE_NAME.*.
+
+Pattern with “*”: if the expression includes special characters, it’s a matching rule, where * matches with any strings.
+
+!expression: if the expression starts with !, it negates the following expression, where the expression is either of above.","Examples: customers, behavior_pageviews, behavior_clicks = All columns of customers, behavior_pageviews, and behavior_clicks tables.
+
+customers.*, behavior_pageviews.*, behavior_clicks.* = All columns of customers, behavior_pageviews, and behavior_clicks tables.
+
+customers.*, !customers.time, behavior_*.*, products.{id,name}, !*.email = All columns except “time” of customers table, all columns of all behavior tables, and id and name columns of products table. But exclude all “email” columns from all tables."

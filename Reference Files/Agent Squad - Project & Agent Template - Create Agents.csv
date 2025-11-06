@@ -1,0 +1,7 @@
+Field,Description,Instructions,Notes
+Agent name,Create a name that helps users understand what the agent is used for.,"For example, you might want to create an agent to write an email message and name it Email Creator.",
+Model name,"Select a model from the drop-down list.
+Identifying a model for your agent provides additional information to the agent's user. For example, some LLM models perform better at high-reasoning tasks, while others are better at fast-response tasks.","Options: Nova Pro, Nova Lite, Nova Micro, Llama 4 Maverick 17B, Llama 4 Scout 17B, Claude 3.5 Sonnet V2, Claude 3.5 Sonnet, Claude 3.7 Sonnet, Claude 4 Sonnet, Claude 4 Opus, Claude 4.5 Haiku, Claude 4.5 Sonnet, Claude 3 Haiku, GPT-5, GPT-5 mini, GPT-5 nano, GPT 4.1, GPT 4.1 mini, GPT 4.1 nano, Gemini 2.5 Flash, Gemini 2.5 Pro, Gemini 2.5 Flash-Lite, Gemini 2.0 Flash-Lite",
+Max Tools iterations,Tool iterations repeatedly refine and improve a tool by going through development cycles.,You can choose the maximum number of tool iterations allowed per agent. The default is 0.,
+Temperature,The temperature parameter controls the randomness of an LLM's output. ,"Lower values (e.g., 0.1) make responses more deterministic, while higher values (e.g., 0.8) increase creativity and variation. Specify a number between 0 to 1.",
+System Prompt,"System Prompt is an instruction for LLM model how it behaves, writing in natural language.","Instructing with structured format is more appropriate. Defining role, tasks, and the details will make agent more behave expectedly.",

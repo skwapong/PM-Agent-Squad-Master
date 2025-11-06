@@ -1,0 +1,10 @@
+Field,Description,Instructions,Notes
+Output name,Enter a unique name.,AI Agent Foundry uses this name for recognition. :plotly: is a special name that is used for rendering a Plotly chart.,
+Function name,Specify the function,Enter a name for the function. Agent refers to this name.,
+Function description,(Optional) Enter a function description,Describe how you like the function to be used,
+Output Type,Custom or Artifact,"Custom: JSON Schema can be defined
+Artifact: Choose an appropriate type",
+JSON schema,JSON schema of the output data structure. The agent creates output following the definition.,Use this if the output must be persisted as an individual object from chat conversations. The form type interface supports only Artifact type output to render the output,If Custom is selected on Output Type
+Artifact content type,Single selection,"Text: This should be used for text-based generated content
+Image: This should be used for Image content
+React: This should be used for React code output. The React code will be executed as an output. Typical use case is to render a dashboard. In the react code, Plotly.js and Tailwind.css can be used.",If Artifact is selected on Output Type

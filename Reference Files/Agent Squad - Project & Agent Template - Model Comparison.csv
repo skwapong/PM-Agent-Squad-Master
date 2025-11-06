@@ -1,0 +1,181 @@
+Developer,Model,Pros,Cons,Common Agent Uses
+Amazon,Nova Pro,"Strong multimodal skills (text, image, video). 
+
+Deep AWS integration (Bedrock). 
+
+Good balance of cost and performance.","Proprietary and locked to AWS. 
+
+Video analysis ignores audio. 
+
+Less raw reasoning power than top-tier GPT-5 or Claude 4 Opus.","Business intelligence agents: Analyzing sales videos, charts, and reports within AWS. 
+
+Cloud automation agents: Managing and orchestrating AWS resources."
+Amazon,Nova Lite,"Very fast and low-cost multimodal model. 
+
+Optimized for interactive, real-time applications.","Less accurate than Nova Pro. 
+
+Not intended for highly complex reasoning.","Customer service agents: Handling high-volume, real-time text and image queries. 
+
+Content moderation agents: Rapidly scanning user-submitted images."
+Amazon,Nova Micro,"Extremely cheap and fast for text-only tasks. 
+
+Optimized for low latency and high throughput.","Text-only; no vision or audio capabilities. 
+
+The weakest model in the Nova family.","Simple API agents: Formatting data, classifying text, or powering simple chatbots. 
+
+Router agents: Quickly assessing a user's intent before passing to a larger model."
+Meta,Llama 4 Maverick 17B,"Open-weight (MoE: 17B active of 400B total). 
+
+Frontier performance that rivals closed models. 
+
+Natively multimodal (text, image). 
+
+No API cost if self-hosted.","Requires significant hardware and technical skill to self-host. 
+
+No built-in safety/moderation layer (requires self-implementation).","Private/on-premise agents: Operating inside a company's firewall for maximum data privacy. 
+
+Custom-trained agents: Fine-tuned on proprietary data for specialized tasks (e.g., medical research)."
+Meta,Llama 4 Scout 17B,"Open-weight (MoE). 
+
+Massive 10M token context window. 
+
+Excellent for processing entire codebases or multiple large documents.","Also requires significant hardware to run. 
+
+Slower than Maverick due to its focus on long context.","Research agents: Reading and summarizing multiple technical papers or books. 
+
+Coding agents: Analyzing and refactoring an entire large-scale software project."
+Anthropic,Claude 4 Opus,"State-of-the-art reasoning and coding. 
+
+""Constitutional AI"" provides strong safety and reliability. 
+
+Excels at complex, multi-step tasks.","Very expensive; the highest-cost model. 
+
+Proprietary. 
+
+Safety alignment can sometimes be restrictive.","High-stakes enterprise agents: Handling sensitive legal, financial, or medical data. 
+
+Autonomous coding agents: Planning and executing complex software development tasks."
+Anthropic,Claude 4 Sonnet,"Excellent balance of price and performance. 
+
+Nearly as capable as Opus but significantly cheaper and faster.","Proprietary. 
+
+Not quite as powerful as Opus for the most complex reasoning.","Advanced workflow agents: Powering the ""brains"" of most production-grade business automations. 
+
+Complex customer service agents: Handling multi-turn, nuanced conversations."
+Anthropic,Claude 4.5 Sonnet,"Adds ""Computer Use"" (can control a browser/OS). 
+
+""Extended Thinking"" allows it to reason before answering. 
+
+Best-in-class for agentic tasks.","Proprietary. 
+
+More expensive than Claude 4 Sonnet. 
+
+""Computer Use"" features can have a steep learning curve.","Autonomous web agents: Browsing websites, filling out forms, and extracting data. 
+
+Proactive assistant agents: Monitoring systems and taking action without a prompt."
+Anthropic,"Claude 3.7 Sonnet
+
+(and 3.5 Sonnet / V2)","High-speed, cost-effective models. 
+
+The 3.7 version introduced early ""extended thinking"" capabilities. 
+
+Great for scaling.","Proprietary. 
+
+Outclassed by the Claude 4 and 4.5 families in reasoning and agentic skill.","Mid-complexity agents: Tasks that need more power than Haiku but not the cost of Sonnet 4.5 (e.g., drafting long-form content, summarizing meetings)."
+Anthropic,Claude 4.5 Haiku,"Adds ""Computer Use"" and ""Extended Thinking"" to the fast/cheap tier. 
+
+Incredibly fast and affordable for its capabilities.","Proprietary. 
+
+Much less accurate than Sonnet/Opus; can fail at complex tasks.","Simple autonomous agents: Performing basic, repetitive UI tasks (e.g., ""login and download this report""). 
+
+Scalable data extraction agents."
+Anthropic,Claude 3 Haiku,"Extremely fast and low-cost (text, image). 
+
+The ""entry-level"" Claude model.","Proprietary. 
+
+No advanced agentic skills (like computer use). 
+
+Low reasoning power; struggles with nuance.","Simple RAG agents: Quickly pulling information from a knowledge base. 
+
+Triage/classification agents."
+OpenAI,GPT-5,"Top-tier performance in reasoning, coding, and problem-solving. 
+
+""Thinking"" modes allow for dynamic control over reasoning/cost. 
+
+Robust and reliable API.","Proprietary and high-cost. 
+
+Can be slower than competitors for its ""high thinking"" modes.","""God-mode"" agents: The central controller for complex agent swarms. 
+
+Autonomous problem-solving agents: Given a high-level goal, it can plan and execute all steps."
+OpenAI,GPT-5 mini,"Excellent balance of speed, cost, and intelligence. 
+
+The ""Sonnet"" or ""Pro"" equivalent in the GPT-5 family. 
+
+Also features ""Thinking"" modes.","Proprietary. 
+
+Still more expensive than ""nano"" or ""lite"" tiers.","Primary agent ""brain"": Used for most production workflows that require reliable, smart responses. 
+
+Advanced data analysis agents."
+OpenAI,GPT-5 nano,"Very fast and very low-cost. 
+
+Optimized for high-throughput tasks. 
+
+Surprisingly capable for its size.","Proprietary. 
+
+Low reasoning power; not suitable for complex tasks on its own.","""Worker"" or ""Specialist"" agents: Handling simple, repetitive tasks given by a larger agent (e.g., ""summarize this text,"" ""check this code for syntax errors"")."
+OpenAI,GPT 4.1,"A strong, reliable flagship model (successor to GPT-4o). 
+
+Well-understood and battle-tested.","Proprietary. 
+
+Generally surpassed by the GPT-5 family in performance and efficiency.",Legacy agents: Powering established workflows built before GPT-5's release.
+OpenAI,GPT 4.1 mini / nano,"Faster, cheaper versions of GPT 4.1.","Proprietary. 
+
+Largely made obsolete by the more capable and efficient GPT-5 nano.",Low-cost agents: Used in applications where upgrading to the GPT-5 stack isn't a priority.
+Gemini,Gemini 2.5 Pro,"Massive 1M+ token context window. 
+
+Deep integration with Google ecosystem (Workspace, Cloud). 
+
+Excellent at processing and reasoning over huge datasets (code, video, text).","Proprietary. 
+
+Can be verbose. 
+
+Best features are locked into the Google Cloud ecosystem.","Productivity agents: Managing your Gmail, Drive, and Calendar. 
+
+Long-context research agents: Analyzing entire repositories or 10-hour videos."
+Gemini,Gemini 2.5 Flash,"Extremely fast and cost-effective. 
+
+Also supports a 1M token context window. 
+
+Optimized for speed in long-context tasks.","Proprietary. 
+
+Much lower reasoning quality than Pro, especially in long-context tasks.","Real-time conversational agents: Powering chatbots that need to reference large documents instantly. 
+
+High-speed RAG agents."
+Gemini,Gemini 2.5 Flash-Lite,"Advanced Agentic Skills: Supports ""Thinking"" mode (allowing it to reason before answering), code execution, and Google Search grounding. 
+
+Larger Output: Has a much larger output limit (65.5K tokens) than its predecessor. 
+
+Better Instruction Following: More accurate, less ""preachy"" in tone, and better at being concise.","Proprietary. 
+
+""Thinking"" mode, while more powerful, can increase latency and cost compared to non-thinking operation. 
+
+More expensive than the 2.0 version.","Smarter ""Worker"" Agents: Can be given complex instructions to perform tasks like running code or verifying information. 
+
+Dynamic Workflow Agents: Used in agentic pipelines that require decision-making. 
+
+Small-scale Reasoning Agents: Handling simple logic or analysis tasks."
+Gemini,Gemini 2.0 Flash-Lite,"Extreme Speed & Low Cost: One of the fastest and cheapest models on the market, optimized for high throughput. 
+
+Excellent for RAG: Its speed and 1M token context window make it ideal for high-volume RAG at a low cost. 
+
+Very Low Latency: Perfect for real-time, interactive applications.","Proprietary. 
+
+No Advanced Skills: Does not support ""Thinking"" mode, code execution, or grounding. 
+
+Limited Reasoning: Has very low reasoning power; not for complex tasks. 
+
+Small Output Limit: Restricted to a smaller 8.2K token output.","Simple ""Worker"" Agents: Used in a swarm to perform high-volume, simple tasks (e.g., ""format this data,"" ""classify this email""). 
+
+Real-time Voice Agents: Powering conversational AI where low latency is more important than deep intelligence. 
+
+Triage/Router Agents: Quickly assessing user intent before routing to a more powerful model."
