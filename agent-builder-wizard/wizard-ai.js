@@ -371,7 +371,7 @@ async function generateAgent() {
         }
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "systemPrompt": "You are an expert campaign strategist..."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content`;
+        const prompt = `Based on this agent description:\n\n"${description}"\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model and temperature\n7. Create a comprehensive systemPrompt (150-300 words) that defines the agent's role, expertise, and behavior`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -398,6 +398,12 @@ async function generateAgent() {
         const domain = config.domain || 'custom';
         agentConfig.domain = domain;
 
+        // Set agent name from AI suggestion
+        if (config.agentName) {
+            agentConfig.agentName = config.agentName;
+            console.log(`✅ Agent Name: "${config.agentName}"`);
+        }
+
         // Generate knowledge bases from AI suggestions
         if (config.knowledgeBases && config.knowledgeBases.length > 0) {
             knowledgeBases = [];
@@ -416,12 +422,19 @@ async function generateAgent() {
         // Generate agent configuration with AI suggestions
         if (config.model) {
             agentConfig.model = config.model;
+            console.log(`✅ AI Model: ${config.model}`);
         }
         if (config.temperature !== undefined) {
             agentConfig.temperature = config.temperature;
+            console.log(`✅ Temperature: ${config.temperature}`);
+        }
+        if (config.modelReasoning) {
+            agentConfig.modelReasoning = config.modelReasoning;
+            console.log(`✅ Model Reasoning: "${config.modelReasoning.substring(0, 60)}..."`);
         }
         if (config.systemPrompt) {
             agentConfig.systemPrompt = config.systemPrompt;
+            console.log(`✅ System Prompt: ${config.systemPrompt.length} characters`);
         } else {
             generateAgentConfig(domain);
         }
@@ -1611,10 +1624,25 @@ function generateAgentConfig(domain) {
     agentConfig.model = domainModels[domain];
     agentConfig.temperature = domainTemperatures[domain];
 
-    document.getElementById('agentName').value = agentConfig.name;
+    // Populate Agent Name (check if AI already set it, otherwise use domain default)
+    if (!agentConfig.agentName) {
+        agentConfig.agentName = agentConfig.name;
+    }
+    document.getElementById('agentName').value = agentConfig.agentName;
+
     document.getElementById('modelSelect').value = agentConfig.model;
     document.getElementById('temperature').value = agentConfig.temperature;
     document.getElementById('tempValue').textContent = agentConfig.temperature;
+
+    // Show model reasoning if AI provided it
+    const reasoningSection = document.getElementById('modelReasoningSection');
+    const reasoningText = document.getElementById('modelReasoningText');
+    if (agentConfig.modelReasoning) {
+        reasoningText.textContent = agentConfig.modelReasoning;
+        reasoningSection.style.display = 'block';
+    } else {
+        reasoningSection.style.display = 'none';
+    }
 
     generateSystemPrompt(domain);
     updateModelRecommendation();
