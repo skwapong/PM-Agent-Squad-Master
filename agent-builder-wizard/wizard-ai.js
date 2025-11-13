@@ -476,14 +476,19 @@ async function generateAgent() {
     if (generateBtn) generateBtn.style.display = 'none';
     if (cancelBtn) cancelBtn.style.display = 'block';
 
-    // Get description from textarea (user might have typed but not triggered input event)
+    // Get description from textarea or chat input (dashboard layout)
     const descriptionTextarea = document.getElementById('agentDescription');
-    const description = descriptionTextarea ? descriptionTextarea.value.trim() : agentConfig.description;
+    const chatInput = document.getElementById('aiChatInput');
+    const description = descriptionTextarea ? descriptionTextarea.value.trim() :
+                       chatInput ? chatInput.value.trim() :
+                       agentConfig.description;
 
     if (!description || description.length < 20) {
         alert('Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).');
-        // Focus on the description field
-        if (descriptionTextarea) {
+        // Focus on the appropriate input field
+        if (chatInput) {
+            chatInput.focus();
+        } else if (descriptionTextarea) {
             descriptionTextarea.focus();
         }
         // Restore buttons
