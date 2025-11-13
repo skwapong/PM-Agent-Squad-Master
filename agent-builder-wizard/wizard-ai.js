@@ -62,7 +62,7 @@ function setupEventListeners() {
     });
 
     // Sidebar navigation (dashboard layout)
-    document.querySelectorAll('.step-nav-item').forEach(navItem => {
+    document.querySelectorAll('.step-nav-item, .progress-step').forEach(navItem => {
         navItem.addEventListener('click', function() {
             const step = parseInt(this.dataset.step);
             if (!isNaN(step) && step >= 0 && step <= 4) {
@@ -2445,11 +2445,12 @@ function updateStepDisplay() {
     });
 
     // Update sidebar navigation (new dashboard layout)
-    document.querySelectorAll('.step-nav-item').forEach((navItem, index) => {
-        if (index === currentStep) {
+    document.querySelectorAll('.step-nav-item, .progress-step').forEach(navItem => {
+        const stepNum = parseInt(navItem.dataset.step);
+        if (stepNum === currentStep) {
             navItem.classList.add('active');
             navItem.classList.remove('completed');
-        } else if (index < currentStep) {
+        } else if (stepNum < currentStep) {
             navItem.classList.add('completed');
             navItem.classList.remove('active');
         } else {

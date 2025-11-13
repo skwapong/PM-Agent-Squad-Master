@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Foundry Assistant - TD Diamond Canvas</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="td-theme-modern.css">
+    <style>
+        /* Step visibility */
+        .step-content {
+            display: none;
+        }
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* AI message animations */
+        .ai-message {
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Typing indicator */
+        .typing-indicator {
+            display: inline-flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--td-primary-500);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            background: var(--td-gradient-bg);
+        }
+
+        /* Left Sidebar - AI Chat */
+        .sidebar-left {
+            width: 380px;
+            background: white;
+            border-right: 1px solid var(--td-neutral-200);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--td-shadow-md);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--td-gradient-mixed);
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h2 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .sidebar-header p {
+            margin: 0;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Center - Form Steps */
+        .content-center {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+        }
+
+        /* Right Sidebar - Progress */
+        .sidebar-right {
+            width: 280px;
+            background: white;
+            border-left: 1px solid var(--td-neutral-200);
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: var(--td-shadow-md);
+        }
+
+        /* Progress steps */
+        .progress-step {
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 2px solid var(--td-neutral-200);
+            background: var(--td-neutral-50);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .progress-step:hover {
+            border-color: var(--td-primary-300);
+            transform: translateX(-4px);
+        }
+
+        .progress-step.active {
+            background: var(--td-gradient-primary);
+            color: white;
+            border-color: var(--td-primary-600);
+            box-shadow: var(--td-shadow-md);
+        }
+
+        .progress-step.completed {
+            border-color: var(--td-success);
+            background: var(--td-success-light);
+        }
+
+        .progress-step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--td-neutral-200);
+            font-weight: 600;
+            font-size: 14px;
+            margin-right: 12px;
+        }
+
+        .progress-step.active .progress-step-number {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-step.completed .progress-step-number {
+            background: var(--td-success);
+            color: white;
+        }
+
+        /* Cards */
+        .td-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--td-shadow-sm);
+            border: 1px solid var(--td-neutral-200);
+        }
+
+        .td-card-header {
+            margin-bottom: 20px;
+        }
+
+        .td-card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--td-neutral-950);
+            margin: 0 0 8px 0;
+        }
+
+        .td-card-subtitle {
+            font-size: 14px;
+            color: var(--td-neutral-600);
+            margin: 0;
+        }
+
+        /* Form elements */
+        .td-input,
+        .td-textarea,
+        .td-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--td-neutral-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: var(--td-font-family);
+            transition: all 0.2s;
+        }
+
+        .td-input:focus,
+        .td-textarea:focus,
+        .td-select:focus {
+            outline: none;
+            border-color: var(--td-primary-500);
+            box-shadow: 0 0 0 3px rgba(0, 124, 255, 0.1);
+        }
+
+        .td-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--td-neutral-900);
+            margin-bottom: 8px;
+        }
+
+        .td-hint {
+            font-size: 12px;
+            color: var(--td-neutral-600);
+            margin-top: 6px;
+        }
+
+        /* Buttons */
+        .td-btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: var(--td-font-family);
+        }
+
+        .td-btn-primary {
+            background: var(--td-gradient-primary);
+            color: white;
+        }
+
+        .td-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--td-shadow-lg);
+        }
+
+        .td-btn-secondary {
+            background: var(--td-neutral-100);
+            color: var(--td-neutral-900);
+        }
+
+        .td-btn-secondary:hover {
+            background: var(--td-neutral-200);
+        }
+
+        .td-btn-danger {
+            background: var(--td-error);
+            color: white;
+        }
+
+        /* Chat area */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--td-neutral-50);
+        }
+
+        .chat-message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 90%;
+        }
+
+        .chat-message.user {
+            background: var(--td-gradient-primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .chat-message.assistant {
+            background: white;
+            border: 1px solid var(--td-neutral-200);
+        }
+
+        .chat-input-area {
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid var(--td-neutral-200);
+        }
+
+        /* Quick examples */
+        .quick-examples {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .quick-example {
+            padding: 6px 12px;
+            background: var(--td-neutral-100);
+            border: 1px solid var(--td-neutral-200);
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-example:hover {
+            background: var(--td-primary-50);
+            border-color: var(--td-primary-300);
+        }
+
+        /* Navigation buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--td-neutral-200);
+        }
+
+        /* KB Items */
+        .kb-item {
+            background: var(--td-neutral-50);
+            border: 1px solid var(--td-neutral-200);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .kb-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .kb-remove-btn {
+            background: var(--td-error-light);
+            color: var(--td-error);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Form grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge.success {
+            background: var(--td-success-light);
+            color: var(--td-success);
+        }
+    </style>
+</head>
+<body>
+    <!-- API Connection Status Modal -->
+    <div id="apiKeyModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="background: white; border-radius: 16px; box-shadow: var(--td-shadow-2xl); padding: 32px; max-width: 480px; width: 90%;">
+            <h3 style="font-size: 24px; font-weight: 600; margin: 0 0 16px 0;">🔌 API Connection Status</h3>
+
+            <div style="background: var(--td-success-light); border: 2px solid var(--td-success); border-radius: 12px; padding: 20px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <span style="font-size: 32px;">✅</span>
+                    <div>
+                        <p style="font-size: 16px; font-weight: 600; color: var(--td-success); margin: 0 0 4px 0;">Local Connection Active</p>
+                        <p style="font-size: 14px; color: var(--td-neutral-700); margin: 0;">Connected to Claude Code CLI on localhost:3001</p>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 13px; color: var(--td-neutral-600); margin-bottom: 20px;">
+                This application uses the Claude Code CLI running locally on your machine. No API key configuration needed.
+            </p>
+
+            <button id="closeApiModalBtn" class="td-btn td-btn-primary" style="width: 100%;">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Left Sidebar: AI Chat -->
+        <div class="sidebar-left">
+            <div class="sidebar-header">
+                <h2>💬 AI Assistant</h2>
+                <p>Describe your agent and I'll help you build it</p>
+            </div>
+
+            <div class="chat-messages" id="aiChatMessages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <div class="chat-input-area">
+                <div class="quick-examples">
+                    <button class="quick-example" data-example="campaign-building">📊 Campaign Building</button>
+                    <button class="quick-example" data-example="campaign-optimization">⚡ Optimization</button>
+                    <button class="quick-example" data-example="campaign-reporting">📈 Reporting</button>
+                </div>
+
+                <div id="chatInputError" style="color: var(--td-error); font-size: 13px; font-weight: 600; margin-bottom: 8px; display: none;">
+                    ⚠️ Please enter a message before sending
+                </div>
+
+                <textarea
+                    id="aiChatInput"
+                    class="td-textarea"
+                    placeholder="Describe your agent idea... (Ctrl+Enter to send)"
+                    rows="3"
+                    style="margin-bottom: 12px; resize: vertical;"
+                ></textarea>
+
+                <div style="display: flex; gap: 8px;">
+                    <button id="aiSendBtn" class="td-btn td-btn-primary" style="flex: 1;">
+                        💬 Ask Assistant
+                    </button>
+                    <button id="aiStopBtn" class="td-btn td-btn-danger" style="flex: 1; display: none;">
+                        ⏹️ Stop
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-center">
+                <!-- Header -->
+                <div style="margin-bottom: 32px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div>
+                            <h1 style="font-size: 32px; font-weight: 700; margin: 0 0 8px 0; background: var(--td-gradient-mixed); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                                Agent Foundry Assistant
+                            </h1>
+                            <p style="font-size: 16px; color: var(--td-neutral-600); margin: 0;">
+                                Build intelligent agents with AI-powered configuration
+                            </p>
+                        </div>
+                        <button id="configureApiBtn" class="status-badge success">
+                            <span id="apiStatusIndicator">🔴</span> API Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 0: AI Chat (Primary Interface) -->
+                <div id="step-0" class="step-content active" data-step="0">
+                    <div class="td-card">
+                        <div class="td-card-header">
+                            <h2 class="td-card-title">🤖 Describe Your Agent</h2>
+                            <p class="td-card-subtitle">Use the AI assistant on the left to describe your agent, or click "Auto-Generate" to let AI create everything for you.</p>
+                        </div>
+
+                        <button id="aiGenerateBtn" class="td-btn td-btn-primary" style="width: 100%;">
+                            ✨ Auto-Generate Complete Agent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 1: Agent Details -->
+                <div id="step-1" class="step-content" data-step="1">
+                    <div class="td-card">
+                        <div class="td-card-header">
+                            <h2 class="td-card-title">📝 Agent Details</h2>
+                            <p class="td-card-subtitle">Configure your agent's basic information</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="td-label">Agent Name</label>
+                            <input type="text" id="agentName" class="td-input" placeholder="e.g., Campaign Optimizer">
+                            <p class="td-hint">A descriptive name for your agent</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="td-label">System Prompt</label>
+                            <textarea id="systemPrompt" class="td-textarea" rows="6" placeholder="You are a helpful assistant that..."></textarea>
+                            <p class="td-hint">This defines your agent's behavior and expertise</p>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="td-label">Model</label>
+                                <select id="model" class="td-select">
+                                    <option value="anthropic.claude-3-5-sonnet-20241022-v2:0">Claude 3.5 Sonnet v2</option>
+                                    <option value="anthropic.claude-3-5-haiku-20241022-v1:0">Claude 3.5 Haiku</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="td-label">Temperature: <span id="tempValue">0.5</span></label>
+                                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.5" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Knowledge Bases -->
+                <div id="step-2" class="step-content" data-step="2">
+                    <div class="td-card">
+                        <div class="td-card-header">
+                            <h2 class="td-card-title">📚 Knowledge Bases</h2>
+                            <p class="td-card-subtitle">Add data sources your agent can reference</p>
+                        </div>
+
+                        <button id="addKBBtn" class="td-btn td-btn-secondary" style="margin-bottom: 20px;">
+                            ➕ Add Knowledge Base
+                        </button>
+
+                        <div id="kbList">
+                            <!-- KB items will be added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Project Configuration -->
+                <div id="step-3" class="step-content" data-step="3">
+                    <div class="td-card">
+                        <div class="td-card-header">
+                            <h2 class="td-card-title">⚙️ Project Configuration</h2>
+                            <p class="td-card-subtitle">Configure your TD Agent deployment</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="td-label">Project Name</label>
+                            <input type="text" id="projectName" class="td-input" placeholder="my-agent-project">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="td-label">Project Description</label>
+                            <textarea id="projectDescription" class="td-textarea" rows="4" placeholder="Describe your project..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Review & Export -->
+                <div id="step-4" class="step-content" data-step="4">
+                    <div class="td-card">
+                        <div class="td-card-header">
+                            <h2 class="td-card-title">✅ Review & Export</h2>
+                            <p class="td-card-subtitle">Review your configuration and download files</p>
+                        </div>
+
+                        <div id="reviewContent" style="background: var(--td-neutral-50); border-radius: 8px; padding: 20px; margin-bottom: 20px; font-family: var(--td-font-mono); font-size: 13px;">
+                            <!-- Review content will be populated here -->
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <button id="downloadAgentBtn" class="td-btn td-btn-primary">
+                                📥 Download agent.json
+                            </button>
+                            <button id="downloadKBsBtn" class="td-btn td-btn-primary">
+                                📥 Download KBs
+                            </button>
+                            <button id="downloadProjectBtn" class="td-btn td-btn-primary">
+                                📥 Download project.json
+                            </button>
+                            <button id="downloadAllBtn" class="td-btn td-btn-primary">
+                                📦 Download All
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="nav-buttons">
+                    <button id="prevBtn" class="td-btn td-btn-secondary" style="flex: 1;" disabled>
+                        ← Previous
+                    </button>
+                    <button id="nextBtn" class="td-btn td-btn-primary" style="flex: 1;">
+                        Next →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Sidebar: Progress -->
+            <div class="sidebar-right">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 20px 0; color: var(--td-neutral-900);">📋 Build Progress</h3>
+
+                <div class="progress-step active" data-step="0">
+                    <div style="display: flex; align-items: center;">
+                        <span class="progress-step-number">1</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Describe Agent</div>
+                            <div style="font-size: 12px; opacity: 0.8;">AI-powered creation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-step" data-step="1">
+                    <div style="display: flex; align-items: center;">
+                        <span class="progress-step-number">2</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Agent Details</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Name & configuration</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-step" data-step="2">
+                    <div style="display: flex; align-items: center;">
+                        <span class="progress-step-number">3</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Knowledge Bases</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Add data sources</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-step" data-step="3">
+                    <div style="display: flex; align-items: center;">
+                        <span class="progress-step-number">4</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Project Config</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Deployment settings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-step" data-step="4">
+                    <div style="display: flex; align-items: center;">
+                        <span class="progress-step-number">5</span>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">Review & Export</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Download files</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--td-neutral-200);">
+                    <p style="font-size: 12px; color: var(--td-neutral-600); margin: 0;">
+                        💡 <strong>Tip:</strong> Use the AI assistant to describe your agent and auto-generate all configurations instantly.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="claude-api.js"></script>
+    <script src="wizard-ai.js"></script>
+</body>
+</html>
