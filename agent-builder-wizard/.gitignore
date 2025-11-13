@@ -1,0 +1,20 @@
+# Temp files
+.temp/
+*.log
+
+# Node modules
+node_modules/
+
+# Environment files (contains API keys)
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
