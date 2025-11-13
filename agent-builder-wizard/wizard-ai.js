@@ -25,6 +25,9 @@ let chatHistory = [];
 // Generation cancellation state
 let generationCancelled = false;
 
+// Chat response abort controller
+let chatAbortController = null;
+
 // Initialize wizard
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
@@ -43,6 +46,7 @@ function setupEventListeners() {
 
     // AI Chat
     document.getElementById('aiSendBtn').addEventListener('click', sendToAI);
+    document.getElementById('aiStopBtn').addEventListener('click', stopResponse);
     document.getElementById('aiChatInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && e.ctrlKey) {
             sendToAI();
@@ -190,8 +194,42 @@ function updateApiStatusIndicator(isConnected) {
 async function sendToAI() {
     const input = document.getElementById('aiChatInput');
     const message = input.value.trim();
+    const errorDiv = document.getElementById('chatInputError');
+    const sendBtn = document.getElementById('aiSendBtn');
+    const stopBtn = document.getElementById('aiStopBtn');
 
-    if (!message) return;
+    // Validate input
+    if (!message) {
+        // Show error message
+        if (errorDiv) {
+            errorDiv.style.display = 'block';
+            // Add red border to input
+            input.classList.add('border-red-500');
+            input.classList.remove('border-gray-300');
+
+            // Hide error after 3 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+                input.classList.remove('border-red-500');
+                input.classList.add('border-gray-300');
+            }, 3000);
+        }
+        return;
+    }
+
+    // Hide error if it was showing
+    if (errorDiv) {
+        errorDiv.style.display = 'none';
+        input.classList.remove('border-red-500');
+        input.classList.add('border-gray-300');
+    }
+
+    // Toggle buttons - show stop, hide send
+    if (sendBtn) sendBtn.style.display = 'none';
+    if (stopBtn) stopBtn.style.display = 'block';
+
+    // Create abort controller for this request
+    chatAbortController = new AbortController();
 
     // Add user message to chat
     addChatMessage('user', message);
@@ -201,7 +239,7 @@ async function sendToAI() {
     input.value = '';
 
     // Show typing indicator
-    showTypingIndicator('Claude is thinking...');
+    showTypingIndicator('Agent Foundry Assistant is thinking...');
 
     try {
         // Check if Claude API is available
@@ -218,7 +256,8 @@ async function sendToAI() {
             (chunk, fullText) => {
                 // Update the typing indicator with streaming text
                 updateTypingIndicator(fullText);
-            }
+            },
+            chatAbortController?.signal // Pass abort signal
         );
 
         removeTypingIndicator();
@@ -244,8 +283,46 @@ async function sendToAI() {
     } catch (error) {
         console.error('❌ AI Error:', error);
         removeTypingIndicator();
-        addChatMessage('assistant', `⚠️ <strong>Error:</strong> ${error.message}<br><br>Please ensure:<br>• The proxy is running (node claude-code-proxy.cjs)<br>• Your API key is configured in .env file<br>• You have an active internet connection`);
+
+        // Check if request was aborted
+        if (error.name === 'AbortError' || chatAbortController?.signal.aborted) {
+            addChatMessage('assistant', '⏸️ <strong>Response stopped.</strong> Feel free to ask another question!');
+        } else {
+            addChatMessage('assistant', `⚠️ <strong>Error:</strong> ${error.message}<br><br>Please ensure:<br>• The proxy is running (node claude-code-proxy.cjs)<br>• Your API key is configured in .env file<br>• You have an active internet connection`);
+        }
+    } finally {
+        // Always restore buttons
+        const sendBtn = document.getElementById('aiSendBtn');
+        const stopBtn = document.getElementById('aiStopBtn');
+        if (sendBtn) sendBtn.style.display = 'block';
+        if (stopBtn) stopBtn.style.display = 'none';
+
+        // Clear abort controller
+        chatAbortController = null;
     }
+}
+
+// Stop ongoing AI response
+function stopResponse() {
+    console.log('🛑 User requested to stop response');
+
+    // Abort the ongoing request
+    if (chatAbortController) {
+        chatAbortController.abort();
+        console.log('✅ Request aborted');
+    }
+
+    // Remove typing indicator
+    removeTypingIndicator();
+
+    // Restore buttons immediately
+    const sendBtn = document.getElementById('aiSendBtn');
+    const stopBtn = document.getElementById('aiStopBtn');
+    if (sendBtn) sendBtn.style.display = 'block';
+    if (stopBtn) stopBtn.style.display = 'none';
+
+    // Show stopped message
+    addChatMessage('assistant', '⏸️ <strong>Response stopped.</strong> Feel free to ask another question!');
 }
 
 function addChatMessage(role, content) {

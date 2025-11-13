@@ -53,9 +53,10 @@ class ClaudeAPI {
      * @param {string} userMessage - The user's message
      * @param {Array} conversationHistory - Previous messages for context
      * @param {Function} onChunk - Callback for streaming chunks
+     * @param {AbortSignal} signal - Optional abort signal
      * @returns {Promise<string>} - Full response text
      */
-    async sendMessage(userMessage, conversationHistory = [], onChunk = null) {
+    async sendMessage(userMessage, conversationHistory = [], onChunk = null, signal = null) {
         // Check if using localhost (no API key needed)
         const isLocalhost = this.apiUrl.includes('localhost') || this.apiUrl.includes('127.0.0.1');
 
@@ -72,7 +73,7 @@ class ClaudeAPI {
             console.log('📨 Message:', userMessage);
 
             try {
-                const response = await fetch(this.apiUrl, {
+                const fetchOptions = {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -81,7 +82,14 @@ class ClaudeAPI {
                         message: userMessage,
                         history: conversationHistory
                     })
-                });
+                };
+
+                // Add abort signal if provided
+                if (signal) {
+                    fetchOptions.signal = signal;
+                }
+
+                const response = await fetch(this.apiUrl, fetchOptions);
 
                 console.log('📡 Response status:', response.status);
 
