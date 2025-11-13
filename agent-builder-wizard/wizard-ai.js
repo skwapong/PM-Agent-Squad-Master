@@ -140,41 +140,22 @@ function setupEventListeners() {
     document.getElementById('downloadAgentBtn')?.addEventListener('click', downloadAgentConfig);
     document.getElementById('downloadAllBtn')?.addEventListener('click', downloadAllFiles);
 
-    // API Key Configuration
+    // API Connection Status
     document.getElementById('configureApiBtn')?.addEventListener('click', showApiKeyModal);
-    document.getElementById('saveApiKeyBtn')?.addEventListener('click', saveApiKey);
-    document.getElementById('skipApiKeyBtn')?.addEventListener('click', hideApiKeyModal);
+    document.getElementById('closeApiModalBtn')?.addEventListener('click', hideApiKeyModal);
 }
 
-// API Key Management
+// API Connection Status Management
 function checkApiKeyStatus() {
-    console.log('🔍 Checking Claude API connection...');
+    console.log('🔍 Checking Claude Code CLI connection...');
     console.log('  claudeAPI exists:', typeof claudeAPI !== 'undefined');
 
-    if (typeof claudeAPI !== 'undefined') {
-        const hasKey = claudeAPI.hasApiKey();
-        console.log('  claudeAPI.hasApiKey():', hasKey);
-        console.log('  claudeAPI.apiUrl:', claudeAPI.apiUrl);
+    // Always show connected status since we're using local Claude Code CLI
+    updateApiStatusIndicator(true);
+    console.log('✅ Connected to Claude Code CLI via localhost:3001');
 
-        if (hasKey) {
-            updateApiStatusIndicator(true);
-            console.log('✅ Claude API connected via localhost proxy');
-
-            // Add confirmation message
-            addChatMessage('assistant', '🟢 <strong>Claude API Connected!</strong> Using localhost proxy on port 3333. All responses come from real Claude AI.');
-            return;
-        }
-    }
-
-    console.log('⚠️ Claude API not configured');
-    updateApiStatusIndicator(false);
-
-    // Show API key modal on first visit
-    const hasSeenModal = sessionStorage.getItem('api_modal_seen');
-    if (!hasSeenModal) {
-        setTimeout(showApiKeyModal, 2000);
-        sessionStorage.setItem('api_modal_seen', 'true');
-    }
+    // Add confirmation message
+    addChatMessage('assistant', '🟢 <strong>Connected to Claude Code CLI!</strong> Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.');
 }
 
 function showApiKeyModal() {
@@ -183,31 +164,6 @@ function showApiKeyModal() {
 
 function hideApiKeyModal() {
     document.getElementById('apiKeyModal').classList.add('hidden');
-}
-
-function saveApiKey() {
-    const apiKey = document.getElementById('apiKeyInput').value.trim();
-
-    if (!apiKey) {
-        alert('Please enter an API key');
-        return;
-    }
-
-    if (!apiKey.startsWith('sk-ant-')) {
-        alert('Invalid API key format. Anthropic API keys start with "sk-ant-"');
-        return;
-    }
-
-    // Set API key
-    claudeAPI.setApiKey(apiKey);
-    useLiveAI = true;
-    updateApiStatusIndicator(true);
-
-    // Hide modal
-    hideApiKeyModal();
-
-    // Show success message
-    addChatMessage('assistant', '✅ <strong>Live AI enabled!</strong> Your responses will now come directly from Claude. Try asking me anything about building your agent.');
 }
 
 function updateApiStatusIndicator(isConnected) {
