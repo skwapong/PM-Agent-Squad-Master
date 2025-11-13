@@ -449,6 +449,7 @@ The agent should be analytical, clear, and able to translate complex data into a
     const chatInput = document.getElementById('aiChatInput');
     if (chatInput) {
         chatInput.value = examples[type];
+        agentConfig.description = examples[type]; // Save to config too!
         chatInput.focus();
         return;
     }
