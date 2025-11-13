@@ -413,21 +413,26 @@ The agent should be data-driven, analytical, and provide specific optimization t
 The agent should be analytical, clear, and able to translate complex data into actionable insights and recommendations.`
     };
 
+    // Try to populate chat input (dashboard layout)
+    const chatInput = document.getElementById('aiChatInput');
+    if (chatInput) {
+        chatInput.value = examples[type];
+        chatInput.focus();
+        return;
+    }
+
+    // Fallback to agent description (original layout)
     const textarea = document.getElementById('agentDescription');
-    textarea.value = examples[type];
-    agentConfig.description = examples[type];
+    if (textarea) {
+        textarea.value = examples[type];
+        agentConfig.description = examples[type];
 
-    // Also populate the AI chat
-    document.getElementById('aiChatInput').value = examples[type];
-
-    // Add helpful AI message
-    const typeNames = {
-        'campaign-building': 'Campaign Building',
-        'campaign-optimization': 'Campaign Optimization',
-        'campaign-reporting': 'Campaign Reporting'
-    };
-    const displayName = typeNames[type] || type.replace(/-/g, ' ').toUpperCase();
-    addChatMessage('assistant', `I've loaded an example for a <strong>${displayName} Agent</strong>. Click <strong>"Send to Claude"</strong> to get personalized recommendations, or click <strong>"✨ Auto-Generate Agent"</strong> to build it automatically!`);
+        // Also try to populate AI chat if it exists
+        const fallbackChatInput = document.getElementById('aiChatInput');
+        if (fallbackChatInput) {
+            fallbackChatInput.value = examples[type];
+        }
+    }
 }
 
 // Cancel Generation
