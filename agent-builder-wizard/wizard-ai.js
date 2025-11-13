@@ -135,6 +135,7 @@ function setupEventListeners() {
     document.getElementById('addKBBtn')?.addEventListener('click', addKnowledgeBase);
 
     // Download buttons
+    document.getElementById('viewOutputBtn')?.addEventListener('click', viewOutputWebpage);
     document.getElementById('downloadKBsBtn')?.addEventListener('click', downloadKnowledgeBases);
     document.getElementById('downloadProjectBtn')?.addEventListener('click', downloadProjectConfig);
     document.getElementById('downloadAgentBtn')?.addEventListener('click', downloadAgentConfig);
@@ -2843,6 +2844,326 @@ ${knowledgeBases.slice(0, 5).map((kb, i) => `- Provide information from ${kb.nam
 
     downloadFile(filename, content);
     addChatMessage('assistant', '✅ Downloaded agent configuration guide!');
+}
+
+function viewOutputWebpage() {
+    // Generate HTML content for the output webpage
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${agentConfig.name || 'Agent'} - Configuration Output</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .copy-box {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .field-value {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            font-family: 'Courier New', monospace;
+            color: #1f2937;
+        }
+
+        .kb-list {
+            list-style: none;
+        }
+
+        .kb-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .kb-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .kb-desc {
+            color: #6b7280;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .kb-content {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #f9fafb;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 ${agentConfig.name || 'AI Agent'}</h1>
+            <p>Configuration Output - Ready for Agent Foundry</p>
+        </div>
+
+        <div class="content">
+            <!-- Agent Configuration -->
+            <div class="section">
+                <h2 class="section-title">📋 Agent Configuration</h2>
+
+                <div class="field">
+                    <span class="field-label">Agent Name:</span>
+                    <div class="field-value">${agentConfig.name || 'Not specified'}</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">System Prompt:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('systemPrompt')">📋 Copy</button>
+                        <pre id="systemPrompt" class="field-value">${agentConfig.systemPrompt || 'Not specified'}</pre>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Model:</span>
+                    <div class="field-value">${agentConfig.model}</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Temperature:</span>
+                    <div class="field-value">${agentConfig.temperature}</div>
+                </div>
+            </div>
+
+            <!-- Project Configuration -->
+            <div class="section">
+                <h2 class="section-title">⚙️ Project Configuration</h2>
+
+                <div class="field">
+                    <span class="field-label">Project Name:</span>
+                    <div class="field-value">${agentConfig.projectName || 'Not specified'}</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Project Description:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('projectDesc')">📋 Copy</button>
+                        <pre id="projectDesc" class="field-value">${agentConfig.projectDescription || 'Not specified'}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Knowledge Bases -->
+            <div class="section">
+                <h2 class="section-title">📚 Knowledge Bases (${knowledgeBases.length})</h2>
+
+                ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No knowledge bases configured</p>' : `
+                    <ul class="kb-list">
+                        ${knowledgeBases.map((kb, index) => `
+                            <li class="kb-item">
+                                <div class="kb-name">
+                                    <span class="badge">KB ${index + 1}</span>
+                                    ${kb.name}
+                                </div>
+                                <div class="kb-desc">${kb.description}</div>
+                                <div class="copy-box">
+                                    <button class="copy-btn" onclick="copyToClipboard('kb${index}')">📋 Copy</button>
+                                    <div id="kb${index}" class="kb-content">${kb.content}</div>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `}
+            </div>
+
+            <!-- Tool Configurations -->
+            <div class="section">
+                <h2 class="section-title">🔧 Tools</h2>
+                <p style="color: #6b7280; margin-bottom: 15px;">Tools generated from knowledge bases:</p>
+                ${knowledgeBases.map(kb => {
+                    const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                    return `<div class="field-value" style="margin-bottom: 10px;">kb_${toolId}</div>`;
+                }).join('')}
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>💡 Usage Instructions:</strong></p>
+            <p style="margin-top: 10px;">Click the "📋 Copy" buttons to copy any section directly to your clipboard.<br>
+            Paste these values into Agent Foundry to configure your agent.</p>
+            <p style="margin-top: 20px; font-size: 14px;">Generated by Agent Foundry Assistant</p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.innerText || element.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                // Find the button that was clicked
+                const button = element.parentElement.querySelector('.copy-btn');
+                const originalText = button.textContent;
+
+                // Show success feedback
+                button.textContent = '✅ Copied!';
+                button.style.background = '#10b981';
+
+                // Reset after 2 seconds
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+    </script>
+</body>
+</html>
+    `;
+
+    // Open in new window
+    const newWindow = window.open('', '_blank');
+    newWindow.document.write(htmlContent);
+    newWindow.document.close();
+
+    addChatMessage('assistant', '📄 <strong>Output webpage opened!</strong> You can now easily copy and paste any section directly to Agent Foundry.');
 }
 
 function downloadAllFiles() {
