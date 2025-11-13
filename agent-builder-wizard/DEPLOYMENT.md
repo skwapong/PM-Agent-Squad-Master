@@ -2,7 +2,7 @@
 
 ## ✅ Deployed to GitHub
 
-**Repository:** https://github.com/skwapong/Campaign_Strategist_Planner_Agent
+**Repository:** https://github.com/skwapong/PM-Agent-Squad-Master
 
 **Wizard Location:** `/agent-builder-wizard/`
 
@@ -14,7 +14,7 @@
 
 Enable GitHub Pages to host the wizard online:
 
-1. Go to your repository: https://github.com/skwapong/Campaign_Strategist_Planner_Agent
+1. Go to your repository: https://github.com/skwapong/PM-Agent-Squad-Master
 2. Click **Settings** → **Pages**
 3. Under "Source", select **main** branch
 4. Under "Folder", select **/ (root)**
@@ -22,7 +22,7 @@ Enable GitHub Pages to host the wizard online:
 
 Wait a few minutes, then access at:
 ```
-https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 **⚠️ Note:** The Claude CLI proxy won't work in GitHub Pages (browser-only). Users will need to run the proxy locally.
@@ -35,10 +35,10 @@ For full functionality with Claude CLI:
 
 ```bash
 # Clone the repository
-git clone https://github.com/skwapong/Campaign_Strategist_Planner_Agent.git
+git clone https://github.com/skwapong/PM-Agent-Squad-Master.git
 
 # Navigate to wizard
-cd Campaign_Strategist_Planner_Agent/agent-builder-wizard
+cd PM-Agent-Squad-Master/agent-builder-wizard
 
 # Start the proxy
 npm start
@@ -69,8 +69,8 @@ Share these instructions with users:
 
 ```bash
 # Clone
-git clone https://github.com/skwapong/Campaign_Strategist_Planner_Agent.git
-cd Campaign_Strategist_Planner_Agent/agent-builder-wizard
+git clone https://github.com/skwapong/PM-Agent-Squad-Master.git
+cd PM-Agent-Squad-Master/agent-builder-wizard
 
 # Start (requires Claude Code CLI installed)
 bash START.sh
@@ -80,7 +80,7 @@ bash START.sh
 
 Visit the GitHub Pages link:
 ```
-https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 **Note:** Without the local proxy, the AI features won't work, but users can see the UI and understand the workflow.
@@ -123,7 +123,7 @@ agent-builder-wizard/
 
 ### Step 1: Enable Pages
 
-1. **Navigate:** https://github.com/skwapong/Campaign_Strategist_Planner_Agent/settings/pages
+1. **Navigate:** https://github.com/skwapong/PM-Agent-Squad-Master/settings/pages
 2. **Source:** Deploy from a branch
 3. **Branch:** main
 4. **Folder:** / (root)
@@ -133,14 +133,14 @@ agent-builder-wizard/
 
 GitHub will build and deploy. Check status at:
 ```
-https://github.com/skwapong/Campaign_Strategist_Planner_Agent/deployments
+https://github.com/skwapong/PM-Agent-Squad-Master/deployments
 ```
 
 ### Step 3: Access
 
 Once deployed (usually 1-2 minutes):
 ```
-https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 ---
@@ -198,8 +198,8 @@ Interactive UI for building AI agents with Claude Code CLI integration.
 ### Quick Start
 
 \`\`\`bash
-git clone https://github.com/skwapong/Campaign_Strategist_Planner_Agent.git
-cd Campaign_Strategist_Planner_Agent/agent-builder-wizard
+git clone https://github.com/skwapong/PM-Agent-Squad-Master.git
+cd PM-Agent-Squad-Master/agent-builder-wizard
 bash START.sh
 \`\`\`
 
@@ -213,7 +213,7 @@ bash START.sh
 
 **Docs:** See `/agent-builder-wizard/README-START-HERE.md`
 
-**Demo:** https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+**Demo:** https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 ---
@@ -227,7 +227,7 @@ bash START.sh
 curl -I http://localhost:3333/health
 
 # GitHub Pages (after enabled)
-curl -I https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+curl -I https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 ### Test Locally
@@ -249,13 +249,13 @@ https://github.com/skwapong/Campaign_Strategist_Planner_Agent
 
 ### 2. Share GitHub Pages Link (UI only)
 ```
-https://skwapong.github.io/Campaign_Strategist_Planner_Agent/agent-builder-wizard/index-ai.html
+https://skwapong.github.io/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 ### 3. Share Clone Instructions
 ```bash
-git clone https://github.com/skwapong/Campaign_Strategist_Planner_Agent.git
-cd Campaign_Strategist_Planner_Agent/agent-builder-wizard
+git clone https://github.com/skwapong/PM-Agent-Squad-Master.git
+cd PM-Agent-Squad-Master/agent-builder-wizard
 bash START.sh
 ```
 
