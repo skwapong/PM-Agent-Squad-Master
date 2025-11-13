@@ -213,7 +213,23 @@ async function sendToAI() {
         );
 
         removeTypingIndicator();
-        addChatMessage('assistant', aiResponse);
+
+        // If Claude provided agent recommendations, auto-populate and add helpful message
+        let finalResponse = aiResponse;
+        if (aiResponse.includes('Agent') && (aiResponse.includes('Knowledge Base') || aiResponse.includes('Model:') || aiResponse.includes('Temperature:'))) {
+            const descriptionTextarea = document.getElementById('agentDescription');
+            if (descriptionTextarea && !descriptionTextarea.value.trim()) {
+                // Populate with the user's original question
+                descriptionTextarea.value = message;
+                agentConfig.description = message;
+                console.log('✅ Auto-populated description from chat message');
+
+                // Add a helpful message
+                finalResponse += `<br><br>💡 <strong>Tip:</strong> I've automatically filled in your agent description below. You can now click <strong>"✨ Auto-Generate Agent"</strong> to create your agent with these recommendations!`;
+            }
+        }
+
+        addChatMessage('assistant', finalResponse);
         chatHistory.push({ role: 'assistant', content: aiResponse });
 
     } catch (error) {
