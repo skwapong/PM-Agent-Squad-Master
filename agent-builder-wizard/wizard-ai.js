@@ -2321,6 +2321,45 @@ function updateStepDisplay() {
         nextBtn.style.display = 'block';
     }
 
+    // Populate Step 3 (Agent Config) fields when navigating to it
+    if (currentStep === 3) {
+        // Populate Agent Name
+        if (agentConfig.agentName) {
+            document.getElementById('agentName').value = agentConfig.agentName;
+            console.log(`📝 Populated Agent Name: "${agentConfig.agentName}"`);
+        }
+
+        // Populate Model Selection
+        if (agentConfig.model) {
+            document.getElementById('modelSelect').value = agentConfig.model;
+            console.log(`📝 Populated Model: ${agentConfig.model}`);
+        }
+
+        // Populate Temperature
+        if (agentConfig.temperature !== undefined) {
+            document.getElementById('temperature').value = agentConfig.temperature;
+            document.getElementById('tempValue').textContent = agentConfig.temperature;
+            console.log(`📝 Populated Temperature: ${agentConfig.temperature}`);
+        }
+
+        // Populate System Prompt
+        if (agentConfig.systemPrompt) {
+            document.getElementById('systemPrompt').value = agentConfig.systemPrompt;
+            console.log(`📝 Populated System Prompt: ${agentConfig.systemPrompt.length} chars`);
+        }
+
+        // Show Model Reasoning if available
+        const reasoningSection = document.getElementById('modelReasoningSection');
+        const reasoningText = document.getElementById('modelReasoningText');
+        if (agentConfig.modelReasoning) {
+            reasoningText.textContent = agentConfig.modelReasoning;
+            reasoningSection.style.display = 'block';
+            console.log(`📝 Showing Model Reasoning`);
+        } else {
+            reasoningSection.style.display = 'none';
+        }
+    }
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
