@@ -3042,53 +3042,7 @@ function viewOutputWebpage() {
         </div>
 
         <div class="content">
-            <!-- Agent Configuration -->
-            <div class="section">
-                <h2 class="section-title">📋 Agent Configuration</h2>
-
-                <div class="field">
-                    <span class="field-label">Agent Name:</span>
-                    <div class="field-value">${agentConfig.name || 'Not specified'}</div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">System Prompt:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('systemPrompt')">📋 Copy</button>
-                        <pre id="systemPrompt" class="field-value">${agentConfig.systemPrompt || 'Not specified'}</pre>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Model:</span>
-                    <div class="field-value">${agentConfig.model}</div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Temperature:</span>
-                    <div class="field-value">${agentConfig.temperature}</div>
-                </div>
-            </div>
-
-            <!-- Project Configuration -->
-            <div class="section">
-                <h2 class="section-title">⚙️ Project Configuration</h2>
-
-                <div class="field">
-                    <span class="field-label">Project Name:</span>
-                    <div class="field-value">${agentConfig.projectName || 'Not specified'}</div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Project Description:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('projectDesc')">📋 Copy</button>
-                        <pre id="projectDesc" class="field-value">${agentConfig.projectDescription || 'Not specified'}</pre>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Knowledge Bases (Detailed) -->
+            <!-- Step 1: Knowledge Bases (Detailed) -->
             <div class="section">
                 <h2 class="section-title">📚 Knowledge Bases (${knowledgeBases.length})</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Each knowledge base provides specialized expertise to your agent. Copy each section to create the knowledge base in Agent Foundry.</p>
@@ -3145,47 +3099,133 @@ function viewOutputWebpage() {
                 `}
             </div>
 
-            <!-- Tools Configuration -->
+            <!-- Step 2: Project Configuration -->
             <div class="section">
-                <h2 class="section-title">🔧 Tools Configuration</h2>
-                <p style="color: #6b7280; margin-bottom: 20px;">Configure these tools in Agent Foundry to enable knowledge base access.</p>
+                <h2 class="section-title">📁 Step 2: Project Configuration</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Create a project to contain your agent and knowledge bases.</p>
 
-                ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No tools to configure (no knowledge bases)</p>' : `
-                    <div class="field">
-                        <span class="field-label">All Tool IDs (comma-separated):</span>
-                        <div class="copy-box">
-                            <button class="copy-btn" onclick="copyToClipboard('allTools')">📋 Copy</button>
-                            <div id="allTools" class="field-value">${knowledgeBases.map(kb => {
-                                const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-                                return 'kb_' + toolId;
-                            }).join(', ')}</div>
-                        </div>
+                <div class="field">
+                    <span class="field-label">Project Name:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('projectName')">📋 Copy</button>
+                        <div id="projectName" class="field-value">${agentConfig.projectName || 'Not specified'}</div>
                     </div>
+                </div>
 
+                <div class="field">
+                    <span class="field-label">Project Type:</span>
+                    <div class="field-value">Self-defined</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Project Description:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('projectDesc')">📋 Copy</button>
+                        <pre id="projectDesc" class="field-value">${agentConfig.projectDescription || 'Not specified'}</pre>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Use Runtime Text Resource:</span>
+                    <div class="field-value">☐ Not enabled</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Use Workflow Executor:</span>
+                    <div class="field-value">☐ Not enabled</div>
+                </div>
+            </div>
+
+            <!-- Step 3: Agent Configuration -->
+            <div class="section">
+                <h2 class="section-title">🤖 Step 3: Agent Configuration</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Configure your agent's basic settings and behavior.</p>
+
+                <div class="field">
+                    <span class="field-label">Agent Name:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('agentName')">📋 Copy</button>
+                        <div id="agentName" class="field-value">${agentConfig.name || 'Not specified'}</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Model Name:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('modelName')">📋 Copy</button>
+                        <div id="modelName" class="field-value">${agentConfig.model}</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Temperature:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
+                        <div id="temperature" class="field-value">${agentConfig.temperature}</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Max Tools Iterations:</span>
+                    <div class="field-value">0 (default)</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">System Prompt:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('systemPrompt')">📋 Copy</button>
+                        <pre id="systemPrompt" class="field-value">${agentConfig.systemPrompt || 'Not specified'}</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Tools Configuration -->
+            <div class="section">
+                <h2 class="section-title">🔧 Step 4: Add Tools</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Add tools to connect your agent to knowledge bases. Each KB requires one tool.</p>
+
+                ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No tools to configure (no knowledge bases created yet)</p>' : `
                     ${knowledgeBases.map((kb, index) => {
                         const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
                         return `
-                        <div class="field">
-                            <span class="field-label">Tool ${index + 1}: kb_${toolId}</span>
-                            <div style="margin-top: 10px;">
-                                <div style="margin-bottom: 10px;">
-                                    <strong>Name:</strong>
-                                    <div class="copy-box">
-                                        <button class="copy-btn" onclick="copyToClipboard('toolName${index}')">📋 Copy</button>
-                                        <div id="toolName${index}" class="field-value">kb_${toolId}</div>
-                                    </div>
+                        <div class="field" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
+                            <h3 style="font-size: 16px; font-weight: 600; color: #667eea; margin-bottom: 15px;">
+                                <span class="badge">Tool ${index + 1}</span>
+                                ${kb.name} Tool
+                            </h3>
+
+                            <div style="margin-bottom: 12px;">
+                                <strong>Function Name:</strong>
+                                <div class="copy-box">
+                                    <button class="copy-btn" onclick="copyToClipboard('toolFnName${index}')">📋 Copy</button>
+                                    <div id="toolFnName${index}" class="field-value">kb_${toolId}</div>
                                 </div>
-                                <div style="margin-bottom: 10px;">
-                                    <strong>Description:</strong>
-                                    <div class="copy-box">
-                                        <button class="copy-btn" onclick="copyToClipboard('toolDesc${index}')">📋 Copy</button>
-                                        <div id="toolDesc${index}" class="field-value">Access knowledge about ${kb.name}</div>
-                                    </div>
+                            </div>
+
+                            <div style="margin-bottom: 12px;">
+                                <strong>Function Description:</strong>
+                                <div class="copy-box">
+                                    <button class="copy-btn" onclick="copyToClipboard('toolFnDesc${index}')">📋 Copy</button>
+                                    <div id="toolFnDesc${index}" class="field-value">Search and retrieve information from the ${kb.name} knowledge base</div>
                                 </div>
-                                <div>
-                                    <strong>Type:</strong>
-                                    <div class="field-value">Knowledge Base</div>
+                            </div>
+
+                            <div style="margin-bottom: 12px;">
+                                <strong>Target (Tool Type):</strong>
+                                <div class="field-value">Knowledge Base</div>
+                            </div>
+
+                            <div style="margin-bottom: 12px;">
+                                <strong>Target Knowledge Base:</strong>
+                                <div class="copy-box">
+                                    <button class="copy-btn" onclick="copyToClipboard('toolTargetKB${index}')">📋 Copy</button>
+                                    <div id="toolTargetKB${index}" class="field-value">${kb.name}</div>
                                 </div>
+                            </div>
+
+                            <div>
+                                <strong>Target Function:</strong>
+                                <div class="field-value">Query data directly (Presto SQL)</div>
                             </div>
                         </div>
                         `;
@@ -3193,59 +3233,65 @@ function viewOutputWebpage() {
                 `}
             </div>
 
-            <!-- Output Configuration -->
+            <!-- Step 5: Output Configuration -->
             <div class="section">
-                <h2 class="section-title">📤 Output Configuration</h2>
-                <p style="color: #6b7280; margin-bottom: 20px;">Configure how your agent formats and delivers responses.</p>
+                <h2 class="section-title">📤 Step 5: Add Outputs</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Configure structured outputs for your agent (optional). Default text output is always available.</p>
 
-                <div class="field">
-                    <span class="field-label">Output Format:</span>
-                    <div class="field-value">Text (Markdown supported)</div>
+                <div class="field" style="background: #fffbeb; padding: 20px; border-radius: 8px; border: 2px solid #fbbf24;">
+                    <h3 style="font-size: 16px; font-weight: 600; color: #92400e; margin-bottom: 15px;">
+                        💡 Default Output (No Configuration Needed)
+                    </h3>
+                    <p style="color: #78350f; font-size: 14px; margin: 0;">
+                        Your agent will automatically return text responses with markdown formatting support.
+                        Only configure custom outputs if you need structured JSON data or special artifacts like Plotly charts.
+                    </p>
                 </div>
 
-                <div class="field">
-                    <span class="field-label">Response Style:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('responseStyle')">📋 Copy</button>
-                        <div id="responseStyle" class="field-value">Professional, structured responses with clear formatting and actionable insights</div>
+                <div class="field" style="margin-top: 20px;">
+                    <h4 style="font-weight: 600; margin-bottom: 10px;">Optional: Custom JSON Output</h4>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <div style="margin-bottom: 12px;">
+                            <strong>Output Name:</strong>
+                            <div class="field-value">structured_response</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Function Name:</strong>
+                            <div class="field-value">generate_structured_output</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Output Type:</strong>
+                            <div class="field-value">Custom (JSON)</div>
+                        </div>
+                        <div>
+                            <strong>Function Description:</strong>
+                            <div class="field-value">Generate structured JSON output for programmatic use</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="field">
-                    <span class="field-label">Citation Handling:</span>
-                    <div class="field-value">Include references to knowledge base sources when applicable</div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Error Handling:</span>
-                    <div class="field-value">Graceful fallback responses when information is not available</div>
-                </div>
-            </div>
-
-            <!-- Deployment Configuration -->
-            <div class="section">
-                <h2 class="section-title">🚀 Deployment Configuration</h2>
-                <p style="color: #6b7280; margin-bottom: 20px;">Settings for deploying your agent to AWS Bedrock.</p>
-
-                <div class="field">
-                    <span class="field-label">AWS Region:</span>
-                    <div class="field-value">us-east-1 (recommended)</div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Foundation Model:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('deployModel')">📋 Copy</button>
-                        <div id="deployModel" class="field-value">${agentConfig.model}</div>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <span class="field-label">Inference Settings:</span>
-                    <div style="margin-top: 10px;">
-                        <div style="margin-bottom: 8px;"><strong>Temperature:</strong> ${agentConfig.temperature}</div>
-                        <div style="margin-bottom: 8px;"><strong>Max Tokens:</strong> 4096</div>
-                        <div style="margin-bottom: 8px;"><strong>Top P:</strong> 0.9</div>
+                <div class="field" style="margin-top: 20px;">
+                    <h4 style="font-weight: 600; margin-bottom: 10px;">Optional: Plotly Chart Output</h4>
+                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <div style="margin-bottom: 12px;">
+                            <strong>Output Name:</strong>
+                            <div class="copy-box">
+                                <button class="copy-btn" onclick="copyToClipboard('plotlyName')">📋 Copy</button>
+                                <div id="plotlyName" class="field-value">:plotly:</div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Function Name:</strong>
+                            <div class="field-value">create_chart</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <strong>Output Type:</strong>
+                            <div class="field-value">Artifact</div>
+                        </div>
+                        <div>
+                            <strong>Artifact Content Type:</strong>
+                            <div class="field-value">React (for Plotly charts)</div>
+                        </div>
                     </div>
                 </div>
             </div>
