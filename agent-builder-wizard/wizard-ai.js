@@ -2505,8 +2505,11 @@ function renderConfigSummary() {
 
 // Download Functions
 function downloadKnowledgeBases() {
+    // Create agent name slug for filenames
+    const agentSlug = (agentConfig.agentName || agentConfig.name || 'Agent').replace(/\s+/g, '_');
+
     knowledgeBases.forEach((kb, index) => {
-        const filename = `KB${index + 1}_${kb.name.replace(/\s+/g, '_')}.md`;
+        const filename = `${agentSlug}_KB${index + 1}_${kb.name.replace(/\s+/g, '_')}.md`;
         const content = generateKBFile(kb);
         downloadFile(filename, content);
     });
@@ -2585,7 +2588,11 @@ Follow the instructions in **AGENT_CONFIG.md** to:
 **Created:** ${new Date().toLocaleDateString()}
 `;
 
-    downloadFile('PROJECT_SETUP.md', content);
+    // Create agent name slug for filename
+    const agentSlug = (agentConfig.agentName || agentConfig.name || 'Agent').replace(/\s+/g, '_');
+    const filename = `${agentSlug}_PROJECT_SETUP.md`;
+
+    downloadFile(filename, content);
     addChatMessage('assistant', '✅ Downloaded project setup guide!');
 }
 
@@ -2673,7 +2680,11 @@ ${knowledgeBases.slice(0, 5).map((kb, i) => `- Provide information from ${kb.nam
 **Created:** ${new Date().toLocaleDateString()}
 `;
 
-    downloadFile('AGENT_CONFIG.md', content);
+    // Create agent name slug for filename
+    const agentSlug = (agentConfig.agentName || agentConfig.name || 'Agent').replace(/\s+/g, '_');
+    const filename = `${agentSlug}_AGENT_CONFIG.md`;
+
+    downloadFile(filename, content);
     addChatMessage('assistant', '✅ Downloaded agent configuration guide!');
 }
 
