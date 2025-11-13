@@ -61,18 +61,27 @@ function setupEventListeners() {
         });
     });
 
-    // Step 0: Agent Description
-    document.getElementById('agentDescription').addEventListener('input', function() {
-        agentConfig.description = this.value;
-    });
+    // Step 0: Agent Description (if exists)
+    const agentDesc = document.getElementById('agentDescription');
+    if (agentDesc) {
+        agentDesc.addEventListener('input', function() {
+            agentConfig.description = this.value;
+        });
+    }
 
-    document.getElementById('agentTone').addEventListener('change', function() {
-        agentConfig.tone = this.value;
-    });
+    const agentTone = document.getElementById('agentTone');
+    if (agentTone) {
+        agentTone.addEventListener('change', function() {
+            agentConfig.tone = this.value;
+        });
+    }
 
-    document.getElementById('agentAudience').addEventListener('input', function() {
-        agentConfig.audience = this.value;
-    });
+    const agentAudience = document.getElementById('agentAudience');
+    if (agentAudience) {
+        agentAudience.addEventListener('input', function() {
+            agentConfig.audience = this.value;
+        });
+    }
 
     // Generate Agent Button
     const generateBtn = document.getElementById('aiGenerateBtn');
@@ -90,16 +99,23 @@ function setupEventListeners() {
     document.getElementById('resetBtn')?.addEventListener('click', resetWizard);
 
     // Temperature slider
-    document.getElementById('temperature').addEventListener('input', function() {
-        document.getElementById('tempValue').textContent = this.value;
-        agentConfig.temperature = parseFloat(this.value);
-    });
+    const tempSlider = document.getElementById('temperature') || document.getElementById('temperatureSlider');
+    const tempValue = document.getElementById('tempValue') || document.getElementById('temperatureValue');
+    if (tempSlider && tempValue) {
+        tempSlider.addEventListener('input', function() {
+            tempValue.textContent = this.value;
+            agentConfig.temperature = parseFloat(this.value);
+        });
+    }
 
     // Model selection
-    document.getElementById('modelSelect').addEventListener('change', function() {
-        agentConfig.model = this.value;
-        updateModelRecommendation();
-    });
+    const modelSelect = document.getElementById('modelSelect');
+    if (modelSelect) {
+        modelSelect.addEventListener('change', function() {
+            agentConfig.model = this.value;
+            updateModelRecommendation();
+        });
+    }
 
     // Regenerate prompt
     document.getElementById('regeneratePromptBtn')?.addEventListener('click', regenerateSystemPrompt);
