@@ -2753,7 +2753,7 @@ function resetWizard() {
     chatMessages.innerHTML = `
         <div class="ai-message bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-4 border border-indigo-100">
             <p class="text-sm text-gray-800">
-                👋 Hi! I'm Claude, your AI assistant. I'll help you build a custom AI agent for AWS Bedrock.
+                👋 Hi! I'm your Agent Foundry Assistant. I'll help you build a custom AI Foundry Agent.
                 <br><br>
                 <strong>Let's start:</strong> What kind of agent do you want to build? Describe what it should do.
             </p>
