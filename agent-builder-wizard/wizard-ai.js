@@ -3088,37 +3088,201 @@ function viewOutputWebpage() {
                 </div>
             </div>
 
-            <!-- Knowledge Bases -->
+            <!-- Knowledge Bases (Detailed) -->
             <div class="section">
                 <h2 class="section-title">📚 Knowledge Bases (${knowledgeBases.length})</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Each knowledge base provides specialized expertise to your agent. Copy each section to create the knowledge base in Agent Foundry.</p>
 
                 ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No knowledge bases configured</p>' : `
                     <ul class="kb-list">
-                        ${knowledgeBases.map((kb, index) => `
+                        ${knowledgeBases.map((kb, index) => {
+                            const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                            return `
                             <li class="kb-item">
                                 <div class="kb-name">
                                     <span class="badge">KB ${index + 1}</span>
                                     ${kb.name}
                                 </div>
                                 <div class="kb-desc">${kb.description}</div>
-                                <div class="copy-box">
-                                    <button class="copy-btn" onclick="copyToClipboard('kb${index}')">📋 Copy</button>
-                                    <div id="kb${index}" class="kb-content">${kb.content}</div>
+
+                                <div style="margin-top: 15px;">
+                                    <div class="field">
+                                        <span class="field-label">📝 Knowledge Base Name:</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbName${index}')">📋 Copy</button>
+                                            <div id="kbName${index}" class="field-value">${kb.name}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <span class="field-label">📄 Description:</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbDesc${index}')">📋 Copy</button>
+                                            <div id="kbDesc${index}" class="field-value">${kb.description}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <span class="field-label">📚 Content (Markdown):</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbContent${index}')">📋 Copy</button>
+                                            <div id="kbContent${index}" class="kb-content">${kb.content}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <span class="field-label">🔧 Generated Tool ID:</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbTool${index}')">📋 Copy</button>
+                                            <div id="kbTool${index}" class="field-value">kb_${toolId}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </li>
-                        `).join('')}
+                        `;
+                        }).join('')}
                     </ul>
                 `}
             </div>
 
-            <!-- Tool Configurations -->
+            <!-- Tools Configuration -->
             <div class="section">
-                <h2 class="section-title">🔧 Tools</h2>
-                <p style="color: #6b7280; margin-bottom: 15px;">Tools generated from knowledge bases:</p>
-                ${knowledgeBases.map(kb => {
-                    const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
-                    return `<div class="field-value" style="margin-bottom: 10px;">kb_${toolId}</div>`;
-                }).join('')}
+                <h2 class="section-title">🔧 Tools Configuration</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Configure these tools in Agent Foundry to enable knowledge base access.</p>
+
+                ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No tools to configure (no knowledge bases)</p>' : `
+                    <div class="field">
+                        <span class="field-label">All Tool IDs (comma-separated):</span>
+                        <div class="copy-box">
+                            <button class="copy-btn" onclick="copyToClipboard('allTools')">📋 Copy</button>
+                            <div id="allTools" class="field-value">${knowledgeBases.map(kb => {
+                                const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                                return 'kb_' + toolId;
+                            }).join(', ')}</div>
+                        </div>
+                    </div>
+
+                    ${knowledgeBases.map((kb, index) => {
+                        const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                        return `
+                        <div class="field">
+                            <span class="field-label">Tool ${index + 1}: kb_${toolId}</span>
+                            <div style="margin-top: 10px;">
+                                <div style="margin-bottom: 10px;">
+                                    <strong>Name:</strong>
+                                    <div class="copy-box">
+                                        <button class="copy-btn" onclick="copyToClipboard('toolName${index}')">📋 Copy</button>
+                                        <div id="toolName${index}" class="field-value">kb_${toolId}</div>
+                                    </div>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <strong>Description:</strong>
+                                    <div class="copy-box">
+                                        <button class="copy-btn" onclick="copyToClipboard('toolDesc${index}')">📋 Copy</button>
+                                        <div id="toolDesc${index}" class="field-value">Access knowledge about ${kb.name}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <strong>Type:</strong>
+                                    <div class="field-value">Knowledge Base</div>
+                                </div>
+                            </div>
+                        </div>
+                        `;
+                    }).join('')}
+                `}
+            </div>
+
+            <!-- Output Configuration -->
+            <div class="section">
+                <h2 class="section-title">📤 Output Configuration</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Configure how your agent formats and delivers responses.</p>
+
+                <div class="field">
+                    <span class="field-label">Output Format:</span>
+                    <div class="field-value">Text (Markdown supported)</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Response Style:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('responseStyle')">📋 Copy</button>
+                        <div id="responseStyle" class="field-value">Professional, structured responses with clear formatting and actionable insights</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Citation Handling:</span>
+                    <div class="field-value">Include references to knowledge base sources when applicable</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Error Handling:</span>
+                    <div class="field-value">Graceful fallback responses when information is not available</div>
+                </div>
+            </div>
+
+            <!-- Deployment Configuration -->
+            <div class="section">
+                <h2 class="section-title">🚀 Deployment Configuration</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Settings for deploying your agent to AWS Bedrock.</p>
+
+                <div class="field">
+                    <span class="field-label">AWS Region:</span>
+                    <div class="field-value">us-east-1 (recommended)</div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Foundation Model:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('deployModel')">📋 Copy</button>
+                        <div id="deployModel" class="field-value">${agentConfig.model}</div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Inference Settings:</span>
+                    <div style="margin-top: 10px;">
+                        <div style="margin-bottom: 8px;"><strong>Temperature:</strong> ${agentConfig.temperature}</div>
+                        <div style="margin-bottom: 8px;"><strong>Max Tokens:</strong> 4096</div>
+                        <div style="margin-bottom: 8px;"><strong>Top P:</strong> 0.9</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete Configuration Summary -->
+            <div class="section">
+                <h2 class="section-title">📋 Complete Configuration Summary</h2>
+                <p style="color: #6b7280; margin-bottom: 20px;">Full configuration in JSON format for reference or programmatic deployment.</p>
+
+                <div class="copy-box">
+                    <button class="copy-btn" onclick="copyToClipboard('fullConfig')">📋 Copy JSON</button>
+                    <pre id="fullConfig" class="field-value" style="max-height: 400px; overflow-y: auto;">${JSON.stringify({
+                        agent: {
+                            name: agentConfig.name,
+                            systemPrompt: agentConfig.systemPrompt,
+                            model: agentConfig.model,
+                            temperature: agentConfig.temperature
+                        },
+                        project: {
+                            name: agentConfig.projectName,
+                            description: agentConfig.projectDescription
+                        },
+                        knowledgeBases: knowledgeBases.map((kb, index) => ({
+                            id: index + 1,
+                            name: kb.name,
+                            description: kb.description,
+                            toolId: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                            content: kb.content
+                        })),
+                        tools: knowledgeBases.map((kb, index) => ({
+                            id: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                            name: kb.name,
+                            type: 'knowledge_base',
+                            description: 'Access knowledge about ' + kb.name
+                        }))
+                    }, null, 2)}</pre>
+                </div>
             </div>
         </div>
 
