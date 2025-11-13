@@ -371,17 +371,28 @@ async function generateAgent() {
         }
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"\n\nPlease generate a complete agent configuration including:\n\n1. Identify the domain (marketing, HR, support, IT, sales, or custom)\n2. Suggest 4-5 specific knowledge base topics with brief descriptions\n3. Recommend the optimal AI model\n4. Suggest the best temperature setting\n5. Create a system prompt for this agent\n\nFormat your response as JSON with this structure:\n{\n  "domain": "marketing",\n  "knowledgeBases": [\n    {"name": "KB Name", "description": "Brief description"}\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "systemPrompt": "System prompt text"\n}`;
+        const prompt = `Based on this agent description:\n\n"${description}"\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "systemPrompt": "You are an expert campaign strategist..."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content`;
 
-        const aiResponse = await claudeAPI.sendMessage(prompt, chatHistory);
+        const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
-        // Try to parse JSON from response
-        const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+        console.log('🔍 AI Response for parsing:', aiResponse.substring(0, 200));
+
+        // Try to parse JSON from response - look for JSON block
+        let jsonMatch = aiResponse.match(/```json\s*([\s\S]*?)\s*```/);
         if (!jsonMatch) {
-            throw new Error('Could not parse AI response. Please try again.');
+            // Try without code block
+            jsonMatch = aiResponse.match(/(\{[\s\S]*\})/);
         }
 
-        const config = JSON.parse(jsonMatch[0]);
+        if (!jsonMatch) {
+            console.error('❌ Could not find JSON in response:', aiResponse);
+            throw new Error('AI did not return valid JSON. Using fallback generation.');
+        }
+
+        const jsonString = jsonMatch[1] || jsonMatch[0];
+        console.log('📝 Extracted JSON:', jsonString.substring(0, 200));
+
+        const config = JSON.parse(jsonString);
 
         // Detect domain
         const domain = config.domain || 'custom';
@@ -2160,15 +2171,17 @@ function renderKnowledgeBases() {
 }
 
 // Add Knowledge Base
-function addKnowledgeBase() {
+function addKnowledgeBase(name = '', content = '') {
     kbCounter++;
     const newKB = {
         id: `kb-${kbCounter}`,
-        name: '',
-        content: ''
+        name: name,
+        content: content
     };
     knowledgeBases.push(newKB);
     renderKnowledgeBases();
+
+    console.log(`✅ Added KB: "${name}" (${content.length} chars)`);
 }
 
 // Remove Knowledge Base
