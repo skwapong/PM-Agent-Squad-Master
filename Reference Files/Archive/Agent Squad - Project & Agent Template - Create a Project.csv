@@ -1,0 +1,6 @@
+Column,Description,Instructions
+Project name,Describe what the project is about,As per description
+Type,Select whether the project is self-defined or Managed,Default to Self-defined
+Description,Describe the project in a few words,As per description
+Use runtime text resource,Runtime Text Knowledge Base can be used in the project if checked,
+Use workflow executor,Workflow Executor tool can be used in the project if checked,

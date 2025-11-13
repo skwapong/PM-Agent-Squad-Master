@@ -1,0 +1,78 @@
+{
+  "agent": {
+    "name": "Campaign Strategist & Planner",
+    "displayName": "Campaign Strategist & Planner",
+    "description": "Expert digital marketing campaign strategist",
+    "welcomeMessage": "👋 Hi! I'm your Campaign Strategist & Planner. I can help you develop comprehensive campaign strategies across Meta, Pinterest, Google Ads, and TikTok.\n\nUse the quick action buttons below to get started, or ask me anything about campaign planning!",
+    "icon": "🎯",
+    "color": "#6366f1"
+  },
+  "quickActions": [
+    {
+      "id": "new-campaign",
+      "label": "New Campaign Plan",
+      "icon": "lightning",
+      "prompt": "Help me plan a new campaign. What information do you need to get started?",
+      "category": "planning"
+    },
+    {
+      "id": "platform-recommendation",
+      "label": "Platform Recommendation",
+      "icon": "target",
+      "prompt": "What platform mix would you recommend for my business? I'll provide details about my target audience and goals.",
+      "category": "strategy"
+    },
+    {
+      "id": "budget-allocation",
+      "label": "Budget Allocation",
+      "icon": "dollar",
+      "prompt": "Help me allocate my campaign budget across platforms and funnel stages. What's my total budget and business goals?",
+      "category": "budget"
+    },
+    {
+      "id": "creative-brief",
+      "label": "Creative Brief",
+      "icon": "brush",
+      "prompt": "Create a creative brief for my campaign. What platform and campaign objectives should I share?",
+      "category": "creative"
+    },
+    {
+      "id": "kpi-setup",
+      "label": "KPI & Metrics Setup",
+      "icon": "chart",
+      "prompt": "Help me set up KPIs and metrics for tracking campaign performance. What type of campaign am I running?",
+      "category": "analytics"
+    }
+  ],
+  "knowledgeBases": {
+    "folder": "Agent_Knowledge_Bases",
+    "files": [
+      "KB1_Campaign_Planning_Fundamentals.md",
+      "KB2_Meta_Advertising_Best_Practices.md",
+      "KB3_Pinterest_Advertising_Best_Practices.md",
+      "KB4_Google_Ads_Best_Practices.md",
+      "KB5_Campaign_Metrics_KPIs_Performance.md",
+      "KB6_Audience_Targeting_Segmentation.md",
+      "KB7A_Creative_Best_Practices_Part1.md",
+      "KB7B_Creative_Best_Practices_Part2.md",
+      "KB9A_TikTok_Advertising_Part1.md",
+      "KB9B_TikTok_Advertising_Part2.md"
+    ]
+  },
+  "deployment": {
+    "platform": "Amazon Bedrock Agent Foundry",
+    "supportedPlatforms": ["vercel", "netlify", "aws-s3", "github-pages"]
+  },
+  "customization": {
+    "theme": {
+      "primaryColor": "#6366f1",
+      "secondaryColor": "#8b5cf6",
+      "accentColor": "#ec4899"
+    },
+    "branding": {
+      "enableCustomLogo": false,
+      "logoUrl": "",
+      "companyName": ""
+    }
+  }
+}

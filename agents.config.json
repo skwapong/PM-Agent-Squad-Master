@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "multiAgentEnabled": false,
+  "defaultAgentId": "campaign-strategist",
+  "agents": [
+    {
+      "id": "campaign-strategist",
+      "name": "Campaign Strategist & Planner",
+      "displayName": "Campaign Strategist",
+      "description": "Expert digital marketing campaign strategist",
+      "route": "/",
+      "enabled": true,
+      "configFile": "agent.config.json",
+      "knowledgeBasesFolder": "Agent_Knowledge_Bases",
+      "icon": "🎯",
+      "color": "#6366f1",
+      "welcomeMessage": "👋 Hi! I'm your Campaign Strategist & Planner. I can help you develop comprehensive campaign strategies.",
+      "quickActions": [
+        {
+          "id": "new-campaign",
+          "label": "New Campaign Plan",
+          "icon": "lightning",
+          "prompt": "Help me plan a new campaign.",
+          "category": "planning"
+        }
+      ]
+    }
+  ],
+  "routing": {
+    "mode": "path",
+    "basePath": "/",
+    "agentSwitcher": {
+      "enabled": true,
+      "position": "header",
+      "showDescriptions": true
+    }
+  },
+  "shared": {
+    "theme": {
+      "primaryColor": "#6366f1",
+      "secondaryColor": "#8b5cf6",
+      "accentColor": "#ec4899"
+    },
+    "features": {
+      "analytics": false,
+      "debugging": true
+    }
+  }
+}

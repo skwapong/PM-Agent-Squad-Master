@@ -1,0 +1,120 @@
+{
+  "version": "2.0.0",
+  "environments": {
+    "development": {
+      "name": "Development",
+      "url": "http://localhost:5173",
+      "bedrock": {
+        "endpoint": "https://bedrock-agent-runtime.us-east-1.amazonaws.com",
+        "region": "us-east-1",
+        "agentId": "dev-agent-id",
+        "agentAliasId": "dev-alias"
+      },
+      "features": {
+        "analytics": false,
+        "debugMode": true,
+        "mockBedrock": true,
+        "errorReporting": false
+      },
+      "performance": {
+        "enableCaching": false,
+        "requestTimeout": 30000
+      }
+    },
+    "staging": {
+      "name": "Staging",
+      "url": "https://staging.yourdomain.com",
+      "bedrock": {
+        "endpoint": "https://bedrock-agent-runtime.us-east-1.amazonaws.com",
+        "region": "us-east-1",
+        "agentId": "staging-agent-id",
+        "agentAliasId": "staging-alias"
+      },
+      "features": {
+        "analytics": true,
+        "debugMode": true,
+        "mockBedrock": false,
+        "errorReporting": true
+      },
+      "performance": {
+        "enableCaching": true,
+        "requestTimeout": 30000
+      }
+    },
+    "production": {
+      "name": "Production",
+      "url": "https://yourdomain.com",
+      "bedrock": {
+        "endpoint": "https://bedrock-agent-runtime.us-east-1.amazonaws.com",
+        "region": "us-east-1",
+        "agentId": "prod-agent-id",
+        "agentAliasId": "prod-alias"
+      },
+      "features": {
+        "analytics": true,
+        "debugMode": false,
+        "mockBedrock": false,
+        "errorReporting": true
+      },
+      "performance": {
+        "enableCaching": true,
+        "requestTimeout": 30000
+      },
+      "security": {
+        "enableRateLimit": true,
+        "maxRequestsPerMinute": 60,
+        "enableCORS": true,
+        "allowedOrigins": ["https://yourdomain.com"]
+      }
+    }
+  },
+  "deployment": {
+    "platforms": {
+      "vercel": {
+        "enabled": true,
+        "projectName": "pm-agent-squad-master",
+        "framework": "vite",
+        "buildCommand": "npm run build",
+        "outputDirectory": "dist",
+        "environmentVariables": {
+          "development": {},
+          "staging": {},
+          "production": {}
+        }
+      },
+      "netlify": {
+        "enabled": false,
+        "buildCommand": "npm run build",
+        "publishDirectory": "dist"
+      },
+      "aws-s3": {
+        "enabled": false,
+        "bucket": "your-bucket-name",
+        "region": "us-east-1",
+        "cloudfront": {
+          "enabled": false,
+          "distributionId": ""
+        }
+      }
+    }
+  },
+  "ci-cd": {
+    "github-actions": {
+      "enabled": true,
+      "workflows": {
+        "test": {
+          "trigger": ["push", "pull_request"],
+          "branches": ["main", "develop"]
+        },
+        "deploy-staging": {
+          "trigger": ["push"],
+          "branches": ["develop"]
+        },
+        "deploy-production": {
+          "trigger": ["push"],
+          "branches": ["main"]
+        }
+      }
+    }
+  }
+}

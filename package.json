@@ -1,13 +1,24 @@
 {
-  "name": "campaign-strategist-chat",
-  "version": "1.0.0",
-  "description": "Campaign Strategist & Planner Chat Interface with Quick Action Buttons",
+  "name": "pm-agent-squad-master",
+  "version": "2.0.0",
+  "description": "Universal AI Agent Template for Amazon Bedrock Agent Foundry",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode development",
+    "dev:staging": "vite --mode staging",
     "build": "vite build",
+    "build:staging": "vite build --mode staging",
+    "build:production": "vite build --mode production",
     "preview": "vite preview",
-    "deploy": "npm run build && vercel --prod"
+    "deploy": "npm run build && vercel --prod",
+    "deploy:staging": "npm run build:staging && vercel",
+    "validate:kb": "node scripts/validate-kb.js",
+    "validate:kb:verbose": "node scripts/validate-kb.js --verbose",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "config:edit": "vite --config vite.config.editor.js"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -15,14 +26,16 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.0.8"
+    "@vitest/ui": "^1.0.4",
+    "vite": "^5.0.8",
+    "vitest": "^1.0.4"
   },
   "keywords": [
-    "campaign",
-    "marketing",
-    "ai",
+    "ai-agent",
+    "bedrock",
+    "template",
     "chatbot",
-    "strategist"
+    "agent-foundry"
   ],
   "author": "",
   "license": "MIT"

@@ -1,7 +1,59 @@
 # Agent Foundry Deployment Guide
-## Campaign Strategist & Planner Agent
 
-This guide provides step-by-step instructions for deploying the Campaign Strategist & Planner agent on the Agent Foundry platform (AWS Bedrock-based).
+## ⚠️ IMPORTANT: This is an Example Configuration
+
+This guide shows how to deploy a **Campaign Strategist & Planner** agent as an EXAMPLE.
+
+**This folder (`Agent_Config/`) contains:**
+- ✅ Example configuration for a campaign marketing agent
+- ✅ Step-by-step deployment guide
+- ✅ Template files you can adapt for YOUR agent
+
+**YOU SHOULD:**
+- Use these files as templates
+- Adapt the configuration for YOUR domain
+- Replace campaign-specific content with your own
+
+---
+
+## 🎯 What's in This Folder
+
+| File | Purpose | Type |
+|------|---------|------|
+| `01_Create_Agent.md` | Agent configuration example | Example + Template |
+| `02_Add_Tools_Knowledge_Bases.md` | Knowledge base tools setup | Example + Template |
+| `03_Add_Output.md` | Output format configuration | Example + Template |
+| `AGENT_FOUNDRY_DEPLOYMENT_GUIDE.md` | Deployment instructions | Universal Guide |
+
+---
+
+## 📖 How to Use These Files
+
+### If Building a Campaign Marketing Agent
+→ Use the example configurations as-is or with minor customization
+
+### If Building a Different Agent
+→ Use these as templates and adapt for your domain:
+
+**Example Adaptations:**
+
+**HR Agent:**
+- Agent name: "HR Assistant & Employee Support"
+- Knowledge bases: HR policies, benefits, procedures
+- Tools: HR policy search, benefits lookup, leave request
+- Outputs: Policy summaries, benefit comparisons
+
+**Support Agent:**
+- Agent name: "Customer Support Assistant"
+- Knowledge bases: Product docs, FAQs, troubleshooting
+- Tools: Product search, ticket search, FAQ lookup
+- Outputs: Support tickets, resolution steps
+
+---
+
+## 🚀 Deployment Overview
+
+This guide provides step-by-step instructions for deploying ANY agent (not just campaign marketing) on the Agent Foundry platform (AWS Bedrock-based).
 
 ---
 

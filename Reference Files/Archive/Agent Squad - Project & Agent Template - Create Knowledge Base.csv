@@ -1,0 +1,8 @@
+Column,Description,Instructions,Notes
+Knowledge Base name,Describe what the Knowledge base is about,Enter a Knowledge Base name specifying how it is use,
+Knowledge Base Type,Select the type of Knowledge base,"Options: Database, Text",
+Text-input,Input the text related to the knowledge base,"Enter text sentences up to 18,000 characters",When Text is selected as the Knowledge base type
+Database name,List of available databases available on the instance in use,Select database from dropdown list,The database must exist in Plazma DB.
+TD Query,Define query for data needed for the knowledge base,"Exclude Columns: If you want to exclude specific columns, you must list all columns you want to use
+Exclude Records: If you want to exclude specific records, you must exclude records using where clause ",Select Add Table selection
+Name,Add an understandable table name,Enter a table name to refer to.,

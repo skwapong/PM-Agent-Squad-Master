@@ -18,6 +18,13 @@ build
 .env.test.local
 .env.production.local
 
+# Test coverage
+coverage
+.nyc_output
+
+# Config editor build
+dist-editor
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
