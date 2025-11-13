@@ -61,6 +61,17 @@ function setupEventListeners() {
         });
     });
 
+    // Sidebar navigation (dashboard layout)
+    document.querySelectorAll('.step-nav-item').forEach(navItem => {
+        navItem.addEventListener('click', function() {
+            const step = parseInt(this.dataset.step);
+            if (!isNaN(step) && step >= 0 && step <= 4) {
+                currentStep = step;
+                updateStepDisplay();
+            }
+        });
+    });
+
     // Step 0: Agent Description (if exists)
     const agentDesc = document.getElementById('agentDescription');
     if (agentDesc) {
@@ -246,6 +257,11 @@ async function sendToAI() {
 
     // Create abort controller for this request
     chatAbortController = new AbortController();
+
+    // Save message as agent description if it looks like a description
+    if (message.length > 20 && !agentConfig.description) {
+        agentConfig.description = message;
+    }
 
     // Add user message to chat
     addChatMessage('user', message);
@@ -2431,20 +2447,26 @@ function prevStep() {
 }
 
 function updateStepDisplay() {
-    // Hide all steps
-    document.querySelectorAll('.step-content').forEach(step => {
+    // Hide all steps (support both old and new layouts)
+    document.querySelectorAll('.step-content, .step-content-panel').forEach(step => {
         step.classList.remove('active');
+        step.style.display = 'none';
     });
 
-    // Show current step
-    const currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+    // Show current step (try both selectors)
+    let currentStepElement = document.querySelector(`.step-content[data-step="${currentStep}"]`);
+    if (!currentStepElement) {
+        currentStepElement = document.getElementById(`step-${currentStep}`);
+    }
     if (currentStepElement) {
         currentStepElement.classList.add('active');
+        currentStepElement.style.display = 'block';
     }
 
-    // Update progress indicators
+    // Update progress indicators (old layout)
     document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
         const circle = indicator.querySelector('div');
+        if (!circle) return;
         if (index < currentStep) {
             indicator.classList.add('completed');
             indicator.classList.remove('active');
@@ -2465,11 +2487,31 @@ function updateStepDisplay() {
         }
     });
 
-    // Update step number
-    document.getElementById('currentStepNum').textContent = currentStep;
+    // Update sidebar navigation (new dashboard layout)
+    document.querySelectorAll('.step-nav-item').forEach((navItem, index) => {
+        if (index === currentStep) {
+            navItem.classList.add('active');
+            navItem.classList.remove('completed');
+        } else if (index < currentStep) {
+            navItem.classList.add('completed');
+            navItem.classList.remove('active');
+        } else {
+            navItem.classList.remove('active', 'completed');
+        }
+    });
+
+    // Update step number (if exists)
+    const stepNum = document.getElementById('currentStepNum') || document.getElementById('currentStepDisplay');
+    if (stepNum) {
+        stepNum.textContent = currentStep + 1; // Display 1-based step number
+    }
 
     // Update navigation buttons
-    document.getElementById('prevBtn').disabled = currentStep === 0;
+    const prevBtn = document.getElementById('prevBtn');
+    if (prevBtn) {
+        prevBtn.disabled = currentStep === 0;
+        prevBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+    }
 
     const nextBtn = document.getElementById('nextBtn');
     if (currentStep === 4) {
