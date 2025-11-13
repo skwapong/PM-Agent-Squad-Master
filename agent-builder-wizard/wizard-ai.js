@@ -22,6 +22,9 @@ let agentConfig = {
 let chatHistory = [];
 // Demo mode removed - always using live Claude API
 
+// Generation cancellation state
+let generationCancelled = false;
+
 // Initialize wizard
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
@@ -71,6 +74,12 @@ function setupEventListeners() {
     const generateBtn = document.getElementById('aiGenerateBtn');
     if (generateBtn) {
         generateBtn.addEventListener('click', generateAgent);
+    }
+
+    // Cancel Generation Button
+    const cancelGenerateBtn = document.getElementById('cancelGenerateBtn');
+    if (cancelGenerateBtn) {
+        cancelGenerateBtn.addEventListener('click', cancelGeneration);
     }
 
     // Reset Button
@@ -344,8 +353,31 @@ The agent should be analytical, clear, and able to translate complex data into a
     addChatMessage('assistant', `I've loaded an example for a <strong>${displayName} Agent</strong>. Click <strong>"Send to Claude"</strong> to get personalized recommendations, or click <strong>"✨ Auto-Generate Agent"</strong> to build it automatically!`);
 }
 
+// Cancel Generation
+function cancelGeneration() {
+    generationCancelled = true;
+    console.log('🛑 User requested generation cancellation');
+
+    // Immediately hide cancel button and show generate button
+    const generateBtn = document.getElementById('aiGenerateBtn');
+    const cancelBtn = document.getElementById('cancelGenerateBtn');
+    if (generateBtn) generateBtn.style.display = 'block';
+    if (cancelBtn) cancelBtn.style.display = 'none';
+
+    addChatMessage('assistant', '⏸️ Cancelling generation... Please wait for the current operation to complete.');
+}
+
 // Auto-Generate Agent
 async function generateAgent() {
+    // Reset cancellation flag
+    generationCancelled = false;
+
+    // Show cancel button, hide generate button
+    const generateBtn = document.getElementById('aiGenerateBtn');
+    const cancelBtn = document.getElementById('cancelGenerateBtn');
+    if (generateBtn) generateBtn.style.display = 'none';
+    if (cancelBtn) cancelBtn.style.display = 'block';
+
     // Get description from textarea (user might have typed but not triggered input event)
     const descriptionTextarea = document.getElementById('agentDescription');
     const description = descriptionTextarea ? descriptionTextarea.value.trim() : agentConfig.description;
@@ -356,6 +388,9 @@ async function generateAgent() {
         if (descriptionTextarea) {
             descriptionTextarea.focus();
         }
+        // Restore buttons
+        if (generateBtn) generateBtn.style.display = 'block';
+        if (cancelBtn) cancelBtn.style.display = 'none';
         return;
     }
 
@@ -374,6 +409,17 @@ async function generateAgent() {
         const prompt = `Based on this agent description:\n\n"${description}"\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model and temperature\n7. Create a comprehensive systemPrompt (150-300 words) that defines the agent's role, expertise, and behavior`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
+
+        // Check if generation was cancelled
+        if (generationCancelled) {
+            console.log('⚠️ Generation cancelled by user');
+            removeTypingIndicator();
+            addChatMessage('assistant', '❌ Generation cancelled. You can try again when ready.');
+            // Restore buttons
+            if (generateBtn) generateBtn.style.display = 'block';
+            if (cancelBtn) cancelBtn.style.display = 'none';
+            return;
+        }
 
         console.log('🔍 AI Response for parsing:', aiResponse.substring(0, 200));
 
@@ -441,6 +487,10 @@ async function generateAgent() {
 
         removeTypingIndicator();
 
+        // Restore buttons
+        if (generateBtn) generateBtn.style.display = 'block';
+        if (cancelBtn) cancelBtn.style.display = 'none';
+
         // Show success message
         addChatMessage('assistant', `✅ <strong>Agent generated successfully!</strong><br><br>
         I've created:<br>
@@ -457,6 +507,10 @@ async function generateAgent() {
     } catch (error) {
         console.error('❌ Auto-generate error:', error);
         removeTypingIndicator();
+
+        // Restore buttons
+        if (generateBtn) generateBtn.style.display = 'block';
+        if (cancelBtn) cancelBtn.style.display = 'none';
 
         // Fallback to keyword-based generation
         alert('AI generation failed. Using keyword-based generation instead.');
