@@ -88,7 +88,32 @@ function setupEventListeners() {
         });
     }
 
+    // Language toggle
+    const languageToggle = document.getElementById('languageToggle');
+    const languageSelector = document.getElementById('languageSelector');
+    const languageOffMessage = document.getElementById('languageOffMessage');
     const agentLanguage = document.getElementById('agentLanguage');
+
+    if (languageToggle && languageSelector && languageOffMessage) {
+        languageToggle.addEventListener('change', function() {
+            if (this.checked) {
+                // Show language selector, hide message
+                languageSelector.style.display = 'block';
+                languageOffMessage.style.display = 'none';
+                // Set language to first option (multilingual)
+                if (agentLanguage) {
+                    agentConfig.language = agentLanguage.value;
+                }
+            } else {
+                // Hide language selector, show message
+                languageSelector.style.display = 'none';
+                languageOffMessage.style.display = 'block';
+                // Reset to English
+                agentConfig.language = 'english';
+            }
+        });
+    }
+
     if (agentLanguage) {
         agentLanguage.addEventListener('change', function() {
             agentConfig.language = this.value;
