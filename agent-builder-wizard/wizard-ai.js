@@ -92,6 +92,7 @@ const translations = {
         'step0.purpose': "What is your agent's purpose?",
         'step0.tone': 'What tone should your agent have?',
         'step0.audience': 'Who will use this agent?',
+        'step0.hint': 'Be specific! Include what the agent should do, who will use it, and what knowledge it needs.',
         'step0.tip': '<strong>💡 Tip:</strong> The more detail you provide, the better Claude can generate your agent configuration. Include specific examples of questions users might ask or tasks they need help with.',
 
         // Tone options
@@ -187,6 +188,7 @@ const translations = {
         'step0.purpose': 'Qual é o propósito do seu agente?',
         'step0.tone': 'Que tom seu agente deve ter?',
         'step0.audience': 'Quem usará este agente?',
+        'step0.hint': 'Seja específico! Inclua o que o agente deve fazer, quem o usará e qual conhecimento ele precisa.',
         'step0.tip': '<strong>💡 Dica:</strong> Quanto mais detalhes você fornecer, melhor o Claude pode gerar a configuração do seu agente. Inclua exemplos específicos de perguntas que os usuários podem fazer ou tarefas com as quais precisam de ajuda.',
 
         'tone.professional': 'Profissional e Formal',
@@ -298,6 +300,7 @@ const translations = {
         'step0.purpose': 'エージェントの目的は何ですか？',
         'step0.tone': 'エージェントのトーンは？',
         'step0.audience': '誰がこのエージェントを使用しますか？',
+        'step0.hint': '具体的に記述してください！エージェントが何をすべきか、誰が使用するか、どのような知識が必要かを含めてください。',
         'step0.tip': '<strong>💡 ヒント：</strong>詳細を提供するほど、Claudeはより良いエージェント設定を生成できます。ユーザーが尋ねる可能性のある質問や必要なタスクの具体例を含めてください。',
 
         // Tone options
