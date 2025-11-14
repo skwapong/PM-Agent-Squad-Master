@@ -431,30 +431,6 @@ function applyTranslations(language) {
         agentAudience.placeholder = dict['audience.placeholder'];
     }
 
-    // Translate "Quick Examples:" text
-    const quickExamplesElements = document.querySelectorAll('p');
-    quickExamplesElements.forEach(el => {
-        if (el.textContent.trim() === 'Quick Examples:' || el.textContent.trim() === 'クイック例：' || el.textContent.trim() === 'Exemplos Rápidos:') {
-            el.textContent = dict['quick.examples'] || 'Quick Examples:';
-        }
-    });
-
-    // Translate the connected status message
-    const connectedMessages = document.querySelectorAll('p');
-    connectedMessages.forEach(el => {
-        if (el.textContent.includes('Connected to Claude Code CLI') || el.textContent.includes('接続しました') || el.textContent.includes('Conectado')) {
-            el.innerHTML = dict['connected.status'] || el.textContent;
-        }
-    });
-
-    // Translate tip text
-    const tipElements = document.querySelectorAll('p');
-    tipElements.forEach(el => {
-        if (el.textContent.includes('Tip: The more detail') || el.textContent.includes('ヒント：') || el.textContent.includes('Dica:')) {
-            el.innerHTML = dict['tip.text'] || el.textContent;
-        }
-    });
-
     console.log(`Applied ${language} translations to page`);
 }
 
