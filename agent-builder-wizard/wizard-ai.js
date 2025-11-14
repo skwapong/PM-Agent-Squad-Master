@@ -2504,6 +2504,11 @@ async function updateApiModalStatus() {
     const container = document.getElementById('apiModalStatusContainer');
     if (!container) return;
 
+    // Get the directory path of the current HTML file
+    const currentPath = window.location.pathname;
+    const directoryPath = currentPath.substring(0, currentPath.lastIndexOf('/'));
+    const fullPath = decodeURIComponent(directoryPath);
+
     try {
         const response = await fetch('http://localhost:3333/health', {
             method: 'GET',
@@ -2527,7 +2532,9 @@ async function updateApiModalStatus() {
             throw new Error('Health check failed');
         }
     } catch (error) {
-        // Disconnected state
+        // Disconnected state - Generate commands with dynamic path
+        const commands = `cd ${fullPath}\\n./START.sh`;
+
         container.innerHTML = `
             <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
                 <div class="flex items-center gap-3">
@@ -2549,7 +2556,7 @@ async function updateApiModalStatus() {
                     <li><strong>2. Copy and paste these commands:</strong>
                         <div class="bg-white rounded p-3 mt-2 ml-4 relative">
                             <button
-                                onclick="navigator.clipboard.writeText('cd /Users/sam.kwapong/PM-Agent-Squad-Master/agent-builder-wizard/\\n./START.sh').then(() => {
+                                onclick="navigator.clipboard.writeText('${commands}').then(() => {
                                     const btn = event.target.closest('button');
                                     const originalHTML = btn.innerHTML;
                                     btn.innerHTML = '✓ Copied!';
@@ -2564,7 +2571,7 @@ async function updateApiModalStatus() {
                             >
                                 📋 Copy
                             </button>
-                            <p class="text-gray-800 font-mono text-xs pr-20">cd /Users/sam.kwapong/PM-Agent-Squad-Master/agent-builder-wizard/</p>
+                            <p class="text-gray-800 font-mono text-xs pr-20">cd ${fullPath}</p>
                             <p class="text-gray-800 font-mono text-xs mt-1">./START.sh</p>
                         </div>
                         <p class="text-xs text-blue-700 mt-2 ml-4">Tip: Click the "Copy" button, then right-click in terminal to paste</p>
