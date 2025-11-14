@@ -199,7 +199,24 @@ const translations = {
         'sidebar.step3.msg': '🤖 Almost there! Review your agent settings. I\'ve optimized the model and temperature for your use case.',
         'sidebar.step4.msg': '🎉 Excellent! Your agent is ready to deploy. Download the files and follow the AWS Bedrock deployment guide.',
         'sidebar.generating': '✨ Asking Claude AI to generate your agent configuration...',
-        'sidebar.connected': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.'
+        'sidebar.connected': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'Marketing Campaign Planning Hub',
+        'domain.marketing.desc': 'A marketing campaign strategist that assists with campaign planning, content creation, channel selection, and performance optimization. Helps execute effective marketing strategies.',
+        'domain.marketing.agent': 'Marketing Campaign Strategist',
+        'domain.hr.name': 'Employee HR Support System',
+        'domain.hr.desc': 'A comprehensive HR assistant that helps employees with company policies, benefits, time off requests, and general HR inquiries. Provides accurate, empathetic support based on company HR documentation.',
+        'domain.hr.agent': 'HR Support Assistant',
+        'domain.support.name': 'Customer Support Assistant Platform',
+        'domain.support.desc': 'An intelligent customer support system that helps customers with product questions, troubleshooting, and account management. Escalates complex issues to human agents when appropriate.',
+        'domain.support.agent': 'Customer Support Agent',
+        'domain.it.name': 'IT Support & Technical Help Desk',
+        'domain.it.desc': 'A technical support assistant that guides employees through system setup, software installation, troubleshooting, and security best practices. Provides precise, step-by-step technical guidance.',
+        'domain.it.agent': 'IT Support Specialist',
+        'domain.sales.name': 'Sales Assistant & CRM Helper',
+        'domain.sales.desc': 'A sales enablement tool that helps sales teams with product information, pricing, objection handling, and closing techniques. Supports the entire sales process from discovery to close.',
+        'domain.sales.agent': 'Sales Assistant'
     },
 
     portuguese: {
@@ -335,7 +352,24 @@ const translations = {
         'sidebar.step3.msg': '🤖 Quase lá! Revise as configurações do agente. Otimizei o modelo e a temperatura para seu caso de uso.',
         'sidebar.step4.msg': '🎉 Excelente! Seu agente está pronto para implantar. Baixe os arquivos e siga o guia de implantação do AWS Bedrock.',
         'sidebar.generating': '✨ Pedindo ao Claude AI para gerar a configuração do seu agente...',
-        'sidebar.connected': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.'
+        'sidebar.connected': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'Hub de Planejamento de Campanhas de Marketing',
+        'domain.marketing.desc': 'Um estrategista de campanhas de marketing que auxilia no planejamento de campanhas, criação de conteúdo, seleção de canais e otimização de desempenho. Ajuda a executar estratégias de marketing eficazes.',
+        'domain.marketing.agent': 'Estrategista de Campanhas de Marketing',
+        'domain.hr.name': 'Sistema de Suporte de RH para Funcionários',
+        'domain.hr.desc': 'Um assistente de RH abrangente que ajuda funcionários com políticas da empresa, benefícios, solicitações de folga e consultas gerais de RH. Fornece suporte preciso e empático baseado na documentação de RH da empresa.',
+        'domain.hr.agent': 'Assistente de Suporte de RH',
+        'domain.support.name': 'Plataforma de Assistente de Suporte ao Cliente',
+        'domain.support.desc': 'Um sistema inteligente de suporte ao cliente que ajuda clientes com perguntas sobre produtos, solução de problemas e gerenciamento de contas. Escala questões complexas para agentes humanos quando apropriado.',
+        'domain.support.agent': 'Agente de Suporte ao Cliente',
+        'domain.it.name': 'Help Desk de Suporte de TI e Técnico',
+        'domain.it.desc': 'Um assistente de suporte técnico que orienta funcionários através de configuração de sistema, instalação de software, solução de problemas e melhores práticas de segurança. Fornece orientação técnica precisa e passo a passo.',
+        'domain.it.agent': 'Especialista em Suporte de TI',
+        'domain.sales.name': 'Assistente de Vendas e Auxiliar de CRM',
+        'domain.sales.desc': 'Uma ferramenta de capacitação de vendas que ajuda equipes de vendas com informações sobre produtos, preços, tratamento de objeções e técnicas de fechamento. Suporta todo o processo de vendas, da descoberta ao fechamento.',
+        'domain.sales.agent': 'Assistente de Vendas'
     },
 
     spanish: {
@@ -501,7 +535,24 @@ const translations = {
         'sidebar.step3.msg': '🤖 もう少しです！エージェント設定を確認してください。ユースケースに合わせてモデルと温度を最適化しました。',
         'sidebar.step4.msg': '🎉 完璧です！エージェントのデプロイ準備が整いました。ファイルをダウンロードしてAWS Bedrockデプロイメントガイドに従ってください。',
         'sidebar.generating': '✨ Claude AIにエージェント設定の生成を依頼しています...',
-        'sidebar.connected': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。'
+        'sidebar.connected': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'マーケティングキャンペーン計画ハブ',
+        'domain.marketing.desc': 'キャンペーン計画、コンテンツ作成、チャネル選択、パフォーマンス最適化を支援するマーケティングキャンペーンストラテジスト。効果的なマーケティング戦略の実行をサポートします。',
+        'domain.marketing.agent': 'マーケティングキャンペーン戦略アドバイザー',
+        'domain.hr.name': '従業員HR支援システム',
+        'domain.hr.desc': '会社の方針、福利厚生、休暇申請、一般的なHRに関する問い合わせについて従業員を支援する包括的なHRアシスタント。会社のHR文書に基づいて正確で共感的なサポートを提供します。',
+        'domain.hr.agent': 'HR支援アシスタント',
+        'domain.support.name': 'カスタマーサポートアシスタントプラットフォーム',
+        'domain.support.desc': '製品に関する質問、トラブルシューティング、アカウント管理で顧客を支援するインテリジェントなカスタマーサポートシステム。複雑な問題は適切な場合に人間のエージェントにエスカレートします。',
+        'domain.support.agent': 'カスタマーサポートエージェント',
+        'domain.it.name': 'ITサポート＆テクニカルヘルプデスク',
+        'domain.it.desc': 'システムセットアップ、ソフトウェアインストール、トラブルシューティング、セキュリティベストプラクティスを通じて従業員をガイドするテクニカルサポートアシスタント。正確で段階的なテクニカルガイダンスを提供します。',
+        'domain.it.agent': 'ITサポートスペシャリスト',
+        'domain.sales.name': 'セールスアシスタント＆CRMヘルパー',
+        'domain.sales.desc': '製品情報、価格設定、異議処理、クロージング技術について営業チームを支援する営業支援ツール。発見からクロージングまでの営業プロセス全体をサポートします。',
+        'domain.sales.agent': 'セールスアシスタント'
     },
 
     french: {
@@ -2369,19 +2420,19 @@ Create 2-3 detailed personas representing ideal customers.
 // Generate Project Configuration
 function generateProjectConfig(domain) {
     const domainNames = {
-        hr: 'Employee HR Support System',
-        support: 'Customer Support Assistant Platform',
-        it: 'IT Support & Technical Help Desk',
-        sales: 'Sales Assistant & CRM Helper',
-        marketing: 'Marketing Campaign Planning Hub'
+        hr: getTranslation('domain.hr.name'),
+        support: getTranslation('domain.support.name'),
+        it: getTranslation('domain.it.name'),
+        sales: getTranslation('domain.sales.name'),
+        marketing: getTranslation('domain.marketing.name')
     };
 
     const domainDescriptions = {
-        hr: 'A comprehensive HR assistant that helps employees with company policies, benefits, time off requests, and general HR inquiries. Provides accurate, empathetic support based on company HR documentation.',
-        support: 'An intelligent customer support system that helps customers with product questions, troubleshooting, and account management. Escalates complex issues to human agents when appropriate.',
-        it: 'A technical support assistant that guides employees through system setup, software installation, troubleshooting, and security best practices. Provides precise, step-by-step technical guidance.',
-        sales: 'A sales enablement tool that helps sales teams with product information, pricing, objection handling, and closing techniques. Supports the entire sales process from discovery to close.',
-        marketing: 'A marketing campaign strategist that assists with campaign planning, content creation, channel selection, and performance optimization. Helps execute effective marketing strategies.'
+        hr: getTranslation('domain.hr.desc'),
+        support: getTranslation('domain.support.desc'),
+        it: getTranslation('domain.it.desc'),
+        sales: getTranslation('domain.sales.desc'),
+        marketing: getTranslation('domain.marketing.desc')
     };
 
     agentConfig.projectName = domainNames[domain] || 'Custom AI Agent System';
@@ -2394,11 +2445,11 @@ function generateProjectConfig(domain) {
 // Generate Agent Configuration
 function generateAgentConfig(domain) {
     const domainAgentNames = {
-        hr: 'HR Support Assistant',
-        support: 'Customer Support Agent',
-        it: 'IT Support Specialist',
-        sales: 'Sales Assistant',
-        marketing: 'Marketing Campaign Strategist'
+        hr: getTranslation('domain.hr.agent'),
+        support: getTranslation('domain.support.agent'),
+        it: getTranslation('domain.it.agent'),
+        sales: getTranslation('domain.sales.agent'),
+        marketing: getTranslation('domain.marketing.agent')
     };
 
     const domainModels = {
