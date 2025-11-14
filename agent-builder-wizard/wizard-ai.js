@@ -143,7 +143,15 @@ const translations = {
         'step.total': 'of 4',
 
         // Validation
-        'error.required': '⚠️ Please enter a message before sending'
+        'error.required': '⚠️ Please enter a message before sending',
+
+        // Placeholders and examples
+        'chat.placeholder': 'Example: I want to build a campaign planning agent that helps marketers create comprehensive marketing campaigns across multiple channels...',
+        'example.text': 'Example: I want to build a campaign planning agent that helps marketers create comprehensive marketing campaigns across multiple channels...',
+        'audience.placeholder': 'Example: Company employees, customers, internal team members...',
+        'connected.status': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.',
+        'quick.examples': 'Quick Examples:',
+        'tip.text': '💡 Tip: The more detail you provide, the better Claude can generate your agent configuration. Include specific examples of questions users might ask or tasks they need help with.'
     },
 
     portuguese: {
@@ -223,7 +231,15 @@ const translations = {
         'step.of': 'Passo',
         'step.total': 'de 4',
 
-        'error.required': '⚠️ Por favor, digite uma mensagem antes de enviar'
+        'error.required': '⚠️ Por favor, digite uma mensagem antes de enviar',
+
+        // Placeholders and examples
+        'chat.placeholder': 'Exemplo: Quero construir um agente de planejamento de campanhas que ajuda profissionais de marketing a criar campanhas abrangentes em múltiplos canais...',
+        'example.text': 'Exemplo: Quero construir um agente de planejamento de campanhas que ajuda profissionais de marketing...',
+        'audience.placeholder': 'Exemplo: Funcionários da empresa, clientes, membros da equipe interna...',
+        'connected.status': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.',
+        'quick.examples': 'Exemplos Rápidos:',
+        'tip.text': '💡 Dica: Quanto mais detalhes você fornecer, melhor o Claude pode gerar a configuração do seu agente. Inclua exemplos específicos de perguntas que os usuários podem fazer ou tarefas com as quais precisam de ajuda.'
     },
 
     spanish: {
@@ -333,7 +349,15 @@ const translations = {
         'step.total': '/ 4',
 
         // Validation
-        'error.required': '⚠️ 送信する前にメッセージを入力してください'
+        'error.required': '⚠️ 送信する前にメッセージを入力してください',
+
+        // Placeholders and examples
+        'chat.placeholder': '例：マルチチャネルでの包括的なマーケティングキャンペーンの作成をマーケターに支援するキャンペーン計画エージェントを構築したいです...',
+        'example.text': '例：マーケターが複数のチャネルで包括的なマーケティングキャンペーンを作成するのを支援するキャンペーン計画エージェントを構築したいです...',
+        'audience.placeholder': '例：社員、顧客、社内チームメンバー...',
+        'connected.status': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。',
+        'quick.examples': 'クイック例：',
+        'tip.text': '💡 ヒント：詳細を提供するほど、Claudeはより良いエージェント設定を生成できます。ユーザーが尋ねる可能性のある質問や必要なタスクの具体例を含めてください。'
     },
 
     french: {
@@ -388,6 +412,46 @@ function applyTranslations(language) {
             } else {
                 element.innerHTML = dict[key];
             }
+        }
+    });
+
+    // Translate specific placeholders by ID
+    const chatInput = document.getElementById('aiChatInput');
+    if (chatInput && dict['chat.placeholder']) {
+        chatInput.placeholder = dict['chat.placeholder'];
+    }
+
+    const agentDescription = document.getElementById('agentDescription');
+    if (agentDescription && dict['example.text']) {
+        agentDescription.placeholder = dict['example.text'];
+    }
+
+    const agentAudience = document.getElementById('agentAudience');
+    if (agentAudience && dict['audience.placeholder']) {
+        agentAudience.placeholder = dict['audience.placeholder'];
+    }
+
+    // Translate "Quick Examples:" text
+    const quickExamplesElements = document.querySelectorAll('p');
+    quickExamplesElements.forEach(el => {
+        if (el.textContent.trim() === 'Quick Examples:' || el.textContent.trim() === 'クイック例：' || el.textContent.trim() === 'Exemplos Rápidos:') {
+            el.textContent = dict['quick.examples'] || 'Quick Examples:';
+        }
+    });
+
+    // Translate the connected status message
+    const connectedMessages = document.querySelectorAll('p');
+    connectedMessages.forEach(el => {
+        if (el.textContent.includes('Connected to Claude Code CLI') || el.textContent.includes('接続しました') || el.textContent.includes('Conectado')) {
+            el.innerHTML = dict['connected.status'] || el.textContent;
+        }
+    });
+
+    // Translate tip text
+    const tipElements = document.querySelectorAll('p');
+    tipElements.forEach(el => {
+        if (el.textContent.includes('Tip: The more detail') || el.textContent.includes('ヒント：') || el.textContent.includes('Dica:')) {
+            el.innerHTML = dict['tip.text'] || el.textContent;
         }
     });
 
