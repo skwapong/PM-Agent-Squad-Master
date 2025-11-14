@@ -779,8 +779,12 @@ function removeTypingIndicator() {
 
 // Quick Example Loaders
 function loadQuickExample(type) {
+    // Get current language
+    const currentLang = agentConfig.language || 'english';
+
     const examples = {
-        'campaign-building': `I want to build a campaign planning agent that helps marketers with:
+        english: {
+            'campaign-building': `I want to build a campaign planning agent that helps marketers with:
 - Creating comprehensive marketing campaign strategies
 - Planning multi-channel campaigns (Meta, Google, TikTok, Pinterest)
 - Developing campaign messaging and creative briefs
@@ -789,7 +793,7 @@ function loadQuickExample(type) {
 - Timeline and milestone planning
 
 The agent should be strategic, creative, and provide actionable recommendations based on campaign planning frameworks and advertising best practices.`,
-        'campaign-optimization': `I need a campaign optimization agent that assists marketers with:
+            'campaign-optimization': `I need a campaign optimization agent that assists marketers with:
 - Analyzing campaign performance across all channels
 - Identifying optimization opportunities (targeting, creative, bidding)
 - A/B testing strategies and recommendations
@@ -798,7 +802,7 @@ The agent should be strategic, creative, and provide actionable recommendations 
 - Ad creative performance analysis
 
 The agent should be data-driven, analytical, and provide specific optimization tactics to improve campaign ROI.`,
-        'campaign-reporting': `I want a campaign reporting agent that helps marketers with:
+            'campaign-reporting': `I want a campaign reporting agent that helps marketers with:
 - Generating comprehensive campaign performance reports
 - Analyzing metrics across Meta, Google, TikTok, Pinterest platforms
 - Calculating ROI, ROAS, CPA, and other key metrics
@@ -807,13 +811,75 @@ The agent should be data-driven, analytical, and provide specific optimization t
 - Benchmarking performance against industry standards
 
 The agent should be analytical, clear, and able to translate complex data into actionable insights and recommendations.`
+        },
+        japanese: {
+            'campaign-building': `マーケターを支援するキャンペーン計画エージェントを構築したいです：
+- 包括的なマーケティングキャンペーン戦略の作成
+- マルチチャネルキャンペーンの計画（Meta、Google、TikTok、Pinterest）
+- キャンペーンメッセージとクリエイティブブリーフの開発
+- キャンペーン目標とKPIの設定
+- チャネル間での予算配分
+- タイムラインとマイルストーンの計画
+
+エージェントは戦略的で創造的であり、キャンペーン計画フレームワークと広告のベストプラクティスに基づいた実用的な推奨事項を提供する必要があります。`,
+            'campaign-optimization': `マーケターを支援するキャンペーン最適化エージェントが必要です：
+- すべてのチャネルでのキャンペーンパフォーマンスの分析
+- 最適化の機会の特定（ターゲティング、クリエイティブ、入札）
+- A/Bテスト戦略と推奨事項
+- パフォーマンスに基づく予算の再配分
+- オーディエンスの絞り込みと拡大戦略
+- 広告クリエイティブのパフォーマンス分析
+
+エージェントはデータ駆動型で分析的であり、キャンペーンROIを改善するための具体的な最適化戦術を提供する必要があります。`,
+            'campaign-reporting': `マーケターを支援するキャンペーンレポートエージェントが必要です：
+- 包括的なキャンペーンパフォーマンスレポートの生成
+- Meta、Google、TikTok、Pinterestプラットフォームのメトリクス分析
+- ROI、ROAS、CPA、その他の主要メトリクスの計算
+- キャンペーンデータからのトレンドとインサイトの特定
+- エグゼクティブサマリーとプレゼンテーションの作成
+- 業界標準に対するパフォーマンスのベンチマーク
+
+エージェントは分析的で明確であり、複雑なデータを実用的なインサイトと推奨事項に変換できる必要があります。`
+        },
+        portuguese: {
+            'campaign-building': `Quero construir um agente de planejamento de campanhas que ajude profissionais de marketing com:
+- Criação de estratégias abrangentes de campanha de marketing
+- Planejamento de campanhas multicanais (Meta, Google, TikTok, Pinterest)
+- Desenvolvimento de mensagens de campanha e briefings criativos
+- Definição de objetivos de campanha e KPIs
+- Alocação de orçamento entre canais
+- Planejamento de cronograma e marcos
+
+O agente deve ser estratégico, criativo e fornecer recomendações acionáveis baseadas em estruturas de planejamento de campanha e melhores práticas de publicidade.`,
+            'campaign-optimization': `Preciso de um agente de otimização de campanhas que auxilie profissionais de marketing com:
+- Análise de desempenho de campanha em todos os canais
+- Identificação de oportunidades de otimização (segmentação, criativo, lances)
+- Estratégias e recomendações de testes A/B
+- Realocação de orçamento com base no desempenho
+- Estratégias de refinamento e expansão de público
+- Análise de desempenho de criativos de anúncios
+
+O agente deve ser orientado por dados, analítico e fornecer táticas específicas de otimização para melhorar o ROI da campanha.`,
+            'campaign-reporting': `Quero um agente de relatórios de campanhas que ajude profissionais de marketing com:
+- Geração de relatórios abrangentes de desempenho de campanha
+- Análise de métricas nas plataformas Meta, Google, TikTok, Pinterest
+- Cálculo de ROI, ROAS, CPA e outras métricas-chave
+- Identificação de tendências e insights dos dados de campanha
+- Criação de resumos executivos e apresentações
+- Comparação de desempenho com padrões do setor
+
+O agente deve ser analítico, claro e capaz de traduzir dados complexos em insights e recomendações acionáveis.`
+        }
     };
+
+    // Get examples for current language, fallback to English
+    const langExamples = examples[currentLang] || examples['english'];
 
     // Try to populate chat input (dashboard layout)
     const chatInput = document.getElementById('aiChatInput');
     if (chatInput) {
-        chatInput.value = examples[type];
-        agentConfig.description = examples[type]; // Save to config too!
+        chatInput.value = langExamples[type];
+        agentConfig.description = langExamples[type]; // Save to config too!
         chatInput.focus();
         return;
     }
@@ -821,13 +887,13 @@ The agent should be analytical, clear, and able to translate complex data into a
     // Fallback to agent description (original layout)
     const textarea = document.getElementById('agentDescription');
     if (textarea) {
-        textarea.value = examples[type];
-        agentConfig.description = examples[type];
+        textarea.value = langExamples[type];
+        agentConfig.description = langExamples[type];
 
         // Also try to populate AI chat if it exists
         const fallbackChatInput = document.getElementById('aiChatInput');
         if (fallbackChatInput) {
-            fallbackChatInput.value = examples[type];
+            fallbackChatInput.value = langExamples[type];
         }
     }
 }
