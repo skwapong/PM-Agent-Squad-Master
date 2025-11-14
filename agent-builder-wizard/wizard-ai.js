@@ -975,9 +975,16 @@ async function generateAgent() {
     // Get description from textarea or chat input (dashboard layout)
     const descriptionTextarea = document.getElementById('agentDescription');
     const chatInput = document.getElementById('aiChatInput');
-    const description = descriptionTextarea ? descriptionTextarea.value.trim() :
-                       chatInput ? chatInput.value.trim() :
-                       agentConfig.description;
+
+    // Check each source in order, use first non-empty value
+    let description = '';
+    if (descriptionTextarea && descriptionTextarea.value.trim()) {
+        description = descriptionTextarea.value.trim();
+    } else if (chatInput && chatInput.value.trim()) {
+        description = chatInput.value.trim();
+    } else if (agentConfig.description) {
+        description = agentConfig.description;
+    }
 
     if (!description || description.length < 20) {
         console.log('🚫 Validation failed:');
