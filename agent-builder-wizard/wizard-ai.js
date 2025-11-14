@@ -106,7 +106,12 @@ const translations = {
         'step1.title': '📚 Step 1: Review Knowledge Bases',
         'step1.info': '<strong>✨ AI-Generated:</strong> Based on your description, Claude has created these knowledge bases for your agent. Review and edit as needed.',
         'step1.empty': 'Complete Step 0 to generate knowledge bases',
+        'step1.kb.title': 'Knowledge Base',
+        'step1.kb.content': 'Content',
+        'step1.kb.characters': 'characters',
         'button.addkb': '➕ Add Another Knowledge Base',
+        'button.remove': 'Remove',
+        'button.expand': 'Expand',
 
         // Step 2
         'step2.title': '⚙️ Step 2: Review Project Setup',
@@ -129,6 +134,13 @@ const translations = {
         // Step 4
         'step4.title': '🚀 Step 4: Download & Deploy',
         'step4.info': '<strong>✅ Configuration Complete!</strong> Your AI agent is ready to deploy. Download all files and follow the deployment guide.',
+        'step4.summary': 'Configuration Summary',
+        'step4.agent.name': 'Agent Name:',
+        'step4.project': 'Project:',
+        'step4.model': 'AI Model:',
+        'step4.temperature': 'Temperature:',
+        'step4.kb': 'Knowledge Bases:',
+        'step4.tools': 'Tools:',
         'button.viewoutput': '📄 View Copyable Output Webpage',
         'button.downloadkbs': '📚 Download Knowledge Base Files (.md)',
         'button.downloadproject': '📋 Download Project Setup Guide',
@@ -172,7 +184,15 @@ const translations = {
         'success.kb.count': 'knowledge bases',
         'success.project.config': 'Project configuration',
         'success.agent.settings': 'Agent settings and system prompt',
-        'success.next.step': 'Click <strong>"Next →"</strong> to review and customize each component!'
+        'success.next.step': 'Click <strong>"Next →"</strong> to review and customize each component!',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 Great! Review your knowledge bases. These will be the foundation of your agent\'s expertise.',
+        'sidebar.step2.msg': '🔧 Now let\'s configure your project. I\'ve pre-filled the details based on your description.',
+        'sidebar.step3.msg': '🤖 Almost there! Review your agent settings. I\'ve optimized the model and temperature for your use case.',
+        'sidebar.step4.msg': '🎉 Excellent! Your agent is ready to deploy. Download the files and follow the AWS Bedrock deployment guide.',
+        'sidebar.generating': '✨ Asking Claude AI to generate your agent configuration...',
+        'sidebar.connected': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.'
     },
 
     portuguese: {
@@ -220,7 +240,12 @@ const translations = {
         'step1.title': '📚 Passo 1: Revisar Bases de Conhecimento',
         'step1.info': '<strong>✨ Gerado por IA:</strong> Com base na sua descrição, o Claude criou essas bases de conhecimento para seu agente. Revise e edite conforme necessário.',
         'step1.empty': 'Complete o Passo 0 para gerar bases de conhecimento',
+        'step1.kb.title': 'Base de Conhecimento',
+        'step1.kb.content': 'Conteúdo',
+        'step1.kb.characters': 'caracteres',
         'button.addkb': '➕ Adicionar Outra Base de Conhecimento',
+        'button.remove': 'Remover',
+        'button.expand': 'Expandir',
 
         'step2.title': '⚙️ Passo 2: Revisar Configuração do Projeto',
         'step2.info': '<strong>✨ Gerado por IA:</strong> O Claude configurou as definições do seu projeto. Revise e modifique se necessário.',
@@ -240,6 +265,13 @@ const translations = {
 
         'step4.title': '🚀 Passo 4: Baixar e Implantar',
         'step4.info': '<strong>✅ Configuração Completa!</strong> Seu agente de IA está pronto para implantar. Baixe todos os arquivos e siga o guia de implantação.',
+        'step4.summary': 'Resumo da Configuração',
+        'step4.agent.name': 'Nome do Agente:',
+        'step4.project': 'Projeto:',
+        'step4.model': 'Modelo de IA:',
+        'step4.temperature': 'Temperatura:',
+        'step4.kb': 'Bases de Conhecimento:',
+        'step4.tools': 'Ferramentas:',
         'button.viewoutput': '📄 Ver Página de Saída Copiável',
         'button.downloadkbs': '📚 Baixar Arquivos de Base de Conhecimento (.md)',
         'button.downloadproject': '📋 Baixar Guia de Configuração do Projeto',
@@ -281,7 +313,15 @@ const translations = {
         'success.kb.count': 'bases de conhecimento',
         'success.project.config': 'Configuração do projeto',
         'success.agent.settings': 'Configurações e prompt do sistema do agente',
-        'success.next.step': 'Clique em <strong>"Próximo →"</strong> para revisar e personalizar cada componente!'
+        'success.next.step': 'Clique em <strong>"Próximo →"</strong> para revisar e personalizar cada componente!',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 Ótimo! Revise suas bases de conhecimento. Elas serão a base da expertise do seu agente.',
+        'sidebar.step2.msg': '🔧 Agora vamos configurar seu projeto. Pré-preenchi os detalhes com base na sua descrição.',
+        'sidebar.step3.msg': '🤖 Quase lá! Revise as configurações do agente. Otimizei o modelo e a temperatura para seu caso de uso.',
+        'sidebar.step4.msg': '🎉 Excelente! Seu agente está pronto para implantar. Baixe os arquivos e siga o guia de implantação do AWS Bedrock.',
+        'sidebar.generating': '✨ Pedindo ao Claude AI para gerar a configuração do seu agente...',
+        'sidebar.connected': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.'
     },
 
     spanish: {
@@ -354,7 +394,12 @@ const translations = {
         'step1.title': '📚 ステップ1：ナレッジベースを確認',
         'step1.info': '<strong>✨ AI生成：</strong>あなたの説明に基づいて、Claudeがエージェント用のナレッジベースを作成しました。必要に応じて確認・編集してください。',
         'step1.empty': 'ステップ0を完了してナレッジベースを生成',
+        'step1.kb.title': 'ナレッジベース',
+        'step1.kb.content': 'コンテンツ',
+        'step1.kb.characters': '文字',
         'button.addkb': '➕ ナレッジベースを追加',
+        'button.remove': '削除',
+        'button.expand': '展開',
 
         // Step 2
         'step2.title': '⚙️ ステップ2：プロジェクト設定を確認',
@@ -376,6 +421,13 @@ const translations = {
 
         // Step 4
         'step4.title': '🚀 ステップ4：ダウンロード＆デプロイ',
+        'step4.summary': '設定サマリー',
+        'step4.agent.name': 'エージェント名：',
+        'step4.project': 'プロジェクト：',
+        'step4.model': 'AIモデル：',
+        'step4.temperature': '温度：',
+        'step4.kb': 'ナレッジベース：',
+        'step4.tools': 'ツール：',
         'step4.info': '<strong>✅ 設定完了！</strong>AIエージェントのデプロイ準備が整いました。すべてのファイルをダウンロードしてデプロイメントガイドに従ってください。',
         'button.viewoutput': '📄 コピー可能な出力ページを表示',
         'button.downloadkbs': '📚 ナレッジベースファイルをダウンロード（.md）',
@@ -420,7 +472,15 @@ const translations = {
         'success.kb.count': 'ナレッジベース',
         'success.project.config': 'プロジェクト設定',
         'success.agent.settings': 'エージェント設定とシステムプロンプト',
-        'success.next.step': '<strong>「次へ →」</strong>をクリックして、各コンポーネントを確認・カスタマイズしてください！'
+        'success.next.step': '<strong>「次へ →」</strong>をクリックして、各コンポーネントを確認・カスタマイズしてください！',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 すばらしい！ナレッジベースを確認してください。これらがエージェントの専門知識の基盤となります。',
+        'sidebar.step2.msg': '🔧 次はプロジェクトを設定しましょう。説明に基づいて詳細を事前入力しました。',
+        'sidebar.step3.msg': '🤖 もう少しです！エージェント設定を確認してください。ユースケースに合わせてモデルと温度を最適化しました。',
+        'sidebar.step4.msg': '🎉 完璧です！エージェントのデプロイ準備が整いました。ファイルをダウンロードしてAWS Bedrockデプロイメントガイドに従ってください。',
+        'sidebar.generating': '✨ Claude AIにエージェント設定の生成を依頼しています...',
+        'sidebar.connected': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。'
     },
 
     french: {
@@ -636,7 +696,7 @@ function checkApiKeyStatus() {
     console.log('✅ Connected to Claude Code CLI via localhost:3001');
 
     // Add confirmation message
-    addChatMessage('assistant', '🟢 <strong>Connected to Claude Code CLI!</strong> Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.');
+    addChatMessage('assistant', getTranslation('sidebar.connected'));
 }
 
 function showApiKeyModal() {
@@ -1041,7 +1101,7 @@ async function generateAgent() {
         descTextarea.value = description;
     }
 
-    showTypingIndicator('✨ Asking Claude AI to generate your agent configuration...');
+    showTypingIndicator(getTranslation('sidebar.generating'));
 
     try {
         // Check if Claude API is available
@@ -2862,7 +2922,7 @@ function renderKnowledgeBases() {
             <div class="flex justify-between items-start mb-3">
                 <div class="flex-1">
                     <label class="block text-sm font-medium text-gray-700 mb-1">
-                        Knowledge Base ${index + 1} - Title <span class="text-red-500">*</span>
+                        ${getTranslation('step1.kb.title')} ${index + 1} - ${getTranslation('step1.kb.title')} <span class="text-red-500">*</span>
                     </label>
                     <input
                         type="text"
@@ -2875,12 +2935,12 @@ function renderKnowledgeBases() {
                     onclick="removeKnowledgeBase('${kb.id}')"
                     class="ml-3 text-red-600 hover:text-red-700 text-sm font-medium"
                 >
-                    Remove
+                    ${getTranslation('button.remove')}
                 </button>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                    Content <span class="text-red-500">*</span>
+                    ${getTranslation('step1.kb.content')} <span class="text-red-500">*</span>
                 </label>
                 <textarea
                     id="${kb.id}-content"
@@ -2888,8 +2948,8 @@ function renderKnowledgeBases() {
                     class="w-full border border-gray-300 rounded px-3 py-2 text-sm kb-editor focus:ring-2 focus:ring-indigo-500"
                 >${kb.content}</textarea>
                 <div class="flex justify-between items-center mt-1">
-                    <span id="${kb.id}-char-count" class="text-xs text-gray-500">${kb.content.length.toLocaleString()} / 18,000 characters</span>
-                    <button class="text-xs text-indigo-600 hover:text-indigo-700">Expand</button>
+                    <span id="${kb.id}-char-count" class="text-xs text-gray-500">${kb.content.length.toLocaleString()} / 18,000 ${getTranslation('step1.kb.characters')}</span>
+                    <button class="text-xs text-indigo-600 hover:text-indigo-700">${getTranslation('button.expand')}</button>
                 </div>
             </div>
         `;
@@ -2970,14 +3030,14 @@ function nextStep() {
 
         // Show AI encouragement
         if (currentStep === 1) {
-            addChatMessage('assistant', '📚 Great! Review your knowledge bases. These will be the foundation of your agent\'s expertise.');
+            addChatMessage('assistant', getTranslation('sidebar.step1.msg'));
         } else if (currentStep === 2) {
-            addChatMessage('assistant', '⚙️ Now let\'s configure your project. I\'ve pre-filled the details based on your description.');
+            addChatMessage('assistant', getTranslation('sidebar.step2.msg'));
         } else if (currentStep === 3) {
-            addChatMessage('assistant', '🤖 Almost there! Review your agent settings. I\'ve optimized the model and temperature for your use case.');
+            addChatMessage('assistant', getTranslation('sidebar.step3.msg'));
         } else if (currentStep === 4) {
             renderConfigSummary();
-            addChatMessage('assistant', '🎉 Excellent! Your agent is ready to deploy. Download the files and follow the AWS Bedrock deployment guide.');
+            addChatMessage('assistant', getTranslation('sidebar.step4.msg'));
         }
     }
 }
@@ -3207,38 +3267,38 @@ function renderConfigSummary() {
     }));
 
     summaryDiv.innerHTML = `
-        <h3 class="font-bold text-lg mb-4">Configuration Summary</h3>
+        <h3 class="font-bold text-lg mb-4">${getTranslation('step4.summary')}</h3>
 
         <div class="space-y-3">
             <div>
-                <p class="text-sm font-semibold text-gray-600">Agent Name:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.agent.name')}</p>
                 <p class="text-gray-900">${agentConfig.name}</p>
             </div>
 
             <div>
-                <p class="text-sm font-semibold text-gray-600">Project:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.project')}</p>
                 <p class="text-gray-900">${agentConfig.projectName}</p>
             </div>
 
             <div>
-                <p class="text-sm font-semibold text-gray-600">AI Model:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.model')}</p>
                 <p class="text-gray-900">${agentConfig.model}</p>
             </div>
 
             <div>
-                <p class="text-sm font-semibold text-gray-600">Temperature:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.temperature')}</p>
                 <p class="text-gray-900">${agentConfig.temperature}</p>
             </div>
 
             <div>
-                <p class="text-sm font-semibold text-gray-600">Knowledge Bases:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.kb')}</p>
                 <ul class="list-disc list-inside text-gray-900">
                     ${knowledgeBases.map(kb => `<li>${kb.name}</li>`).join('')}
                 </ul>
             </div>
 
             <div>
-                <p class="text-sm font-semibold text-gray-600">Tools:</p>
+                <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.tools')}</p>
                 <ul class="list-disc list-inside text-gray-900 text-sm">
                     ${tools.map(tool => `<li>${tool.name}</li>`).join('')}
                 </ul>
