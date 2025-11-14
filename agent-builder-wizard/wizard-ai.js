@@ -164,7 +164,15 @@ const translations = {
         'audience.placeholder': 'Example: Company employees, customers, internal team members...',
         'connected.status': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.',
         'quick.examples': 'Quick Examples:',
-        'tip.text': '💡 Tip: The more detail you provide, the better Claude can generate your agent configuration. Include specific examples of questions users might ask or tasks they need help with.'
+        'tip.text': '💡 Tip: The more detail you provide, the better Claude can generate your agent configuration. Include specific examples of questions users might ask or tasks they need help with.',
+
+        // Success messages
+        'success.generated': 'Agent generated successfully!',
+        'success.created': "I've created:",
+        'success.kb.count': 'knowledge bases',
+        'success.project.config': 'Project configuration',
+        'success.agent.settings': 'Agent settings and system prompt',
+        'success.next.step': 'Click <strong>"Next →"</strong> to review and customize each component!'
     },
 
     portuguese: {
@@ -265,7 +273,15 @@ const translations = {
         'audience.placeholder': 'Exemplo: Funcionários da empresa, clientes, membros da equipe interna...',
         'connected.status': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.',
         'quick.examples': 'Exemplos Rápidos:',
-        'tip.text': '💡 Dica: Quanto mais detalhes você fornecer, melhor o Claude pode gerar a configuração do seu agente. Inclua exemplos específicos de perguntas que os usuários podem fazer ou tarefas com as quais precisam de ajuda.'
+        'tip.text': '💡 Dica: Quanto mais detalhes você fornecer, melhor o Claude pode gerar a configuração do seu agente. Inclua exemplos específicos de perguntas que os usuários podem fazer ou tarefas com as quais precisam de ajuda.',
+
+        // Success messages
+        'success.generated': 'Agente gerado com sucesso!',
+        'success.created': 'Eu criei:',
+        'success.kb.count': 'bases de conhecimento',
+        'success.project.config': 'Configuração do projeto',
+        'success.agent.settings': 'Configurações e prompt do sistema do agente',
+        'success.next.step': 'Clique em <strong>"Próximo →"</strong> para revisar e personalizar cada componente!'
     },
 
     spanish: {
@@ -396,7 +412,15 @@ const translations = {
         'audience.placeholder': '例：社員、顧客、社内チームメンバー...',
         'connected.status': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。',
         'quick.examples': 'クイック例：',
-        'tip.text': '💡 ヒント：詳細を提供するほど、Claudeはより良いエージェント設定を生成できます。ユーザーが尋ねる可能性のある質問や必要なタスクの具体例を含めてください。'
+        'tip.text': '💡 ヒント：詳細を提供するほど、Claudeはより良いエージェント設定を生成できます。ユーザーが尋ねる可能性のある質問や必要なタスクの具体例を含めてください。',
+
+        // Success messages
+        'success.generated': 'エージェントが正常に生成されました！',
+        'success.created': '作成したもの：',
+        'success.kb.count': 'ナレッジベース',
+        'success.project.config': 'プロジェクト設定',
+        'success.agent.settings': 'エージェント設定とシステムプロンプト',
+        'success.next.step': '<strong>「次へ →」</strong>をクリックして、各コンポーネントを確認・カスタマイズしてください！'
     },
 
     french: {
@@ -1130,12 +1154,12 @@ async function generateAgent() {
         if (cancelBtn) cancelBtn.style.display = 'none';
 
         // Show success message
-        addChatMessage('assistant', `✅ <strong>Agent generated successfully!</strong><br><br>
-        I've created:<br>
-        • ${knowledgeBases.length} knowledge bases<br>
-        • Project configuration<br>
-        • Agent settings and system prompt<br><br>
-        Click <strong>"Next →"</strong> to review and customize each component!`);
+        addChatMessage('assistant', `✅ <strong>${getTranslation('success.generated')}</strong><br><br>
+        ${getTranslation('success.created')}<br>
+        • ${knowledgeBases.length} ${getTranslation('success.kb.count')}<br>
+        • ${getTranslation('success.project.config')}<br>
+        • ${getTranslation('success.agent.settings')}<br><br>
+        ${getTranslation('success.next.step')}`);
 
         // Move to next step
         setTimeout(() => {
