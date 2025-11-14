@@ -1,0 +1,21 @@
+{
+  "name": "agent-builder-wizard",
+  "version": "2.0.0",
+  "description": "AI-powered Agent Builder Wizard using local Claude Code CLI",
+  "main": "claude-code-proxy.cjs",
+  "scripts": {
+    "start": "node claude-code-proxy.cjs",
+    "test": "curl http://localhost:3333/health"
+  },
+  "keywords": [
+    "ai",
+    "claude",
+    "agent",
+    "builder",
+    "wizard",
+    "claude-code"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
