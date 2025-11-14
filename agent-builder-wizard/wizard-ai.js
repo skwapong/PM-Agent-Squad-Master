@@ -980,6 +980,12 @@ async function generateAgent() {
                        agentConfig.description;
 
     if (!description || description.length < 20) {
+        console.log('🚫 Validation failed:');
+        console.log('  - descriptionTextarea.value:', descriptionTextarea ? `"${descriptionTextarea.value.substring(0, 50)}..." (${descriptionTextarea.value.length})` : 'N/A');
+        console.log('  - chatInput.value:', chatInput ? `"${chatInput.value.substring(0, 50)}..." (${chatInput.value.length})` : 'N/A');
+        console.log('  - agentConfig.description:', agentConfig.description ? `"${agentConfig.description.substring(0, 50)}..." (${agentConfig.description.length})` : 'empty');
+        console.log('  - final description:', description ? `"${description.substring(0, 50)}..." (${description.length})` : 'empty');
+
         const currentLang = agentConfig.language || 'english';
         const dict = translations[currentLang] || translations['english'];
         alert(dict['validation.description.required'] || 'Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).');
