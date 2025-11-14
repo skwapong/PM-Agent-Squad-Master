@@ -2458,20 +2458,35 @@ function setupEventListeners() {
 }
 
 // API Connection Status Management
-function checkApiKeyStatus() {
+async function checkApiKeyStatus() {
     console.log('🔍 Checking Claude Code CLI connection...');
     console.log('  claudeAPI exists:', typeof claudeAPI !== 'undefined');
 
-    // Always show connected status since we're using local Claude Code CLI
-    updateApiStatusIndicator(true);
-    console.log('✅ Connected to Claude Code CLI via localhost:3001');
+    // Test connection with a health check
+    try {
+        const response = await fetch('http://localhost:3333/health', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-    // Add confirmation message
-    addChatMessage('assistant', getTranslation('sidebar.connected'));
+        if (response.ok) {
+            updateApiStatusIndicator(true);
+            console.log('✅ Connected to Claude Code CLI via localhost:3333');
+            addChatMessage('assistant', getTranslation('sidebar.connected'));
+        } else {
+            throw new Error('Health check failed');
+        }
+    } catch (error) {
+        console.error('❌ Connection failed:', error);
+        updateApiStatusIndicator(false);
+        // Don't add error message yet - will show when user tries to interact
+    }
 }
 
-function showApiKeyModal() {
+async function showApiKeyModal() {
     document.getElementById('apiKeyModal').classList.remove('hidden');
+    // Update the modal content with current connection status
+    await updateApiModalStatus();
 }
 
 function hideApiKeyModal() {
@@ -2482,6 +2497,93 @@ function updateApiStatusIndicator(isConnected) {
     const indicator = document.getElementById('apiStatusIndicator');
     if (indicator) {
         indicator.textContent = isConnected ? '🟢' : '🔴';
+    }
+}
+
+async function updateApiModalStatus() {
+    const container = document.getElementById('apiModalStatusContainer');
+    if (!container) return;
+
+    try {
+        const response = await fetch('http://localhost:3333/health', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            // Connected state
+            container.innerHTML = `
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">✅</span>
+                        <div>
+                            <p class="font-semibold text-green-900">Local Connection Active</p>
+                            <p class="text-sm text-green-700">Connected to Claude Code CLI on localhost:3333</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            throw new Error('Health check failed');
+        }
+    } catch (error) {
+        // Disconnected state
+        container.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl">❌</span>
+                    <div>
+                        <p class="font-semibold text-red-900">Connection Failed</p>
+                        <p class="text-sm text-red-700">Could not connect to Claude Code CLI on localhost:3333</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-3">
+                <p class="text-sm font-semibold text-blue-900 mb-3">📋 Quick Setup Steps:</p>
+                <ol class="text-sm text-blue-800 space-y-3 ml-1">
+                    <li><strong>1. Open Terminal/Command Prompt</strong>
+                        <p class="text-xs text-blue-700 mt-1 ml-4">• Windows: Press Win+R, type "cmd", press Enter</p>
+                        <p class="text-xs text-blue-700 ml-4">• Mac: Press Cmd+Space, type "terminal", press Enter</p>
+                    </li>
+                    <li><strong>2. Copy and paste these commands:</strong>
+                        <div class="bg-white rounded p-3 mt-2 ml-4 relative">
+                            <button
+                                onclick="navigator.clipboard.writeText('cd /Users/sam.kwapong/PM-Agent-Squad-Master/agent-builder-wizard/\\n./START.sh').then(() => {
+                                    const btn = event.target.closest('button');
+                                    const originalHTML = btn.innerHTML;
+                                    btn.innerHTML = '✓ Copied!';
+                                    btn.classList.add('bg-green-100');
+                                    setTimeout(() => {
+                                        btn.innerHTML = originalHTML;
+                                        btn.classList.remove('bg-green-100');
+                                    }, 2000);
+                                })"
+                                class="absolute top-2 right-2 bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded text-xs font-semibold transition-colors"
+                                title="Copy to clipboard"
+                            >
+                                📋 Copy
+                            </button>
+                            <p class="text-gray-800 font-mono text-xs pr-20">cd /Users/sam.kwapong/PM-Agent-Squad-Master/agent-builder-wizard/</p>
+                            <p class="text-gray-800 font-mono text-xs mt-1">./START.sh</p>
+                        </div>
+                        <p class="text-xs text-blue-700 mt-2 ml-4">Tip: Click the "Copy" button, then right-click in terminal to paste</p>
+                    </li>
+                    <li><strong>3. Refresh this page</strong>
+                        <p class="text-xs text-blue-700 mt-1 ml-4">Press F5 or click the refresh button in your browser</p>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                <p class="text-xs text-yellow-800 font-medium mb-2">⚙️ Technical Checklist:</p>
+                <ul class="text-xs text-yellow-700 space-y-1 ml-4">
+                    <li>• The proxy is running: <code class="bg-yellow-100 px-1 rounded">node claude-code-proxy.cjs</code></li>
+                    <li>• Your API key is configured in .env file</li>
+                    <li>• You have an active internet connection</li>
+                </ul>
+            </div>
+        `;
     }
 }
 
@@ -2588,6 +2690,8 @@ async function sendToAI() {
         if (error.name === 'AbortError' || chatAbortController?.signal.aborted) {
             addChatMessage('assistant', '⏸️ <strong>Response stopped.</strong> Feel free to ask another question!');
         } else {
+            // Update connection status to show disconnected
+            updateApiStatusIndicator(false);
             addChatMessage('assistant', `⚠️ <strong>Error:</strong> ${error.message}<br><br>Please ensure:<br>• The proxy is running (node claude-code-proxy.cjs)<br>• Your API key is configured in .env file<br>• You have an active internet connection`);
         }
     } finally {
