@@ -1775,6 +1775,492 @@ Richtlinien:
 - Vertriebsstrategien an Geschäftszielen ausrichten
 
 Immer langfristige Kundenbeziehungen über kurzfristige Erfolge priorisieren.`
+    },
+
+    korean: {
+        'page.title': 'AI 기반 에이전트 빌더',
+        'page.subtitle': '에이전트를 설명하면 단계별로 구축을 도와드립니다',
+        'page.powered': 'Claude Code AI 제공 • PM Agent Squad Master 템플릿',
+        'api.settings': 'API 설정',
+
+        'assistant.title': 'Agent Foundry 어시스턴트',
+        'assistant.subtitle': '에이전트 생성 어시스턴트',
+        'assistant.welcome': "👋 안녕하세요! Agent Foundry 어시스턴트입니다. 맞춤형 AI Foundry 에이전트 구축을 도와드리겠습니다.",
+        'assistant.start': "<strong>시작하겠습니다:</strong> 어떤 유형의 에이전트를 만들고 싶으신가요? 무엇을 해야 하는지 설명해주세요.",
+        'assistant.connected': '🟢 Claude Code CLI에 연결되었습니다!',
+        'assistant.connection.detail': '포트 3001에서 로컬 연결을 사용합니다. 모든 응답은 Claude Code 설치를 통해 Claude AI에서 제공됩니다.',
+        'button.ask': '어시스턴트에게 질문',
+        'button.stop': '⏹️ 응답 중지',
+        'button.generate': '✨ 에이전트 자동 생성',
+        'button.cancel': '✖️ 생성 취소',
+        'button.reset': '🔄 다시 시작',
+        'examples.title': '빠른 예제:',
+        'example.campaign': '🎯 캠페인 구축',
+        'example.optimization': '📊 캠페인 최적화',
+        'example.reporting': '📈 캠페인 보고서',
+
+        'step.describe': '설명',
+        'step.knowledge': '지식',
+        'step.project': '프로젝트',
+        'step.agent': '에이전트',
+        'step.deploy': '배포',
+
+        'step0.title': '🎯 단계 0: 에이전트 설명',
+        'step0.info': '<strong>AI 구축:</strong> Claude에게 에이전트가 해야 할 일을 알려주면 자동으로 지식 베이스, 구성 및 배포 파일을 생성합니다.',
+        'step0.purpose': '에이전트의 목적은 무엇인가요?',
+        'step0.tone': '에이전트는 어떤 톤을 가져야 하나요?',
+        'step0.audience': '누가 이 에이전트를 사용하나요?',
+        'step0.hint': '구체적으로 작성하세요! 에이전트가 무엇을 해야 하는지, 누가 사용할지, 어떤 지식이 필요한지 포함하세요.',
+        'step0.tip': '<strong>💡 팁:</strong> 더 많은 세부 정보를 제공할수록 Claude가 에이전트 구성을 더 잘 생성할 수 있습니다. 사용자가 할 수 있는 구체적인 질문 예시나 도움이 필요한 작업을 포함하세요.',
+
+        'tone.professional': '전문적이고 격식 있는',
+        'tone.friendly': '친근하고 대화적인',
+        'tone.empathetic': '공감적이고 지원적인',
+        'tone.technical': '기술적이고 정확한',
+        'tone.enthusiastic': '열정적이고 활기찬',
+
+        'step1.title': '📚 단계 1: 지식 베이스 검토',
+        'step1.info': '<strong>✨ AI 생성:</strong> 설명을 기반으로 Claude가 에이전트를 위한 지식 베이스를 생성했습니다. 필요에 따라 검토하고 편집하세요.',
+        'step1.empty': '지식 베이스를 생성하려면 단계 0을 완료하세요',
+        'step1.kb.title': '지식 베이스',
+        'step1.kb.content': '내용',
+        'step1.kb.characters': '문자',
+        'button.addkb': '➕ 다른 지식 베이스 추가',
+        'button.remove': '제거',
+        'button.expand': '확장',
+
+        'step2.title': '⚙️ 단계 2: 프로젝트 구성 검토',
+        'step2.info': '<strong>✨ AI 생성:</strong> Claude가 프로젝트 설정을 구성했습니다. 필요에 따라 검토하고 수정하세요.',
+        'step2.next': '<strong>📍 다음 단계:</strong> 이 마법사를 완료한 후 <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a>를 열어 에이전트를 배포하세요.',
+        'step2.name': '프로젝트 이름',
+        'step2.description': '프로젝트 설명',
+
+        'step3.title': '🤖 단계 3: 에이전트 구성 검토',
+        'step3.info': '<strong>✨ AI 생성:</strong> Claude가 에이전트에 대한 이상적인 설정을 선택했습니다. 필요에 따라 사용자 지정하세요.',
+        'step3.name': '에이전트 표시 이름',
+        'step3.model': 'AI 모델',
+        'step3.temperature': '온도:',
+        'step3.temp.tip': '낮음 = 더 정확하고 일관적 | 높음 = 더 창의적이고 다양함',
+        'step3.prompt': '시스템 프롬프트',
+        'step3.prompt.tip': '설명을 기반으로 AI가 생성한 시스템 프롬프트',
+        'button.regenerate': '🔄 재생성',
+
+        'step4.title': '🚀 단계 4: 다운로드 및 배포',
+        'step4.info': '<strong>✅ 구성 완료!</strong> AI 에이전트가 배포 준비되었습니다. 모든 파일을 다운로드하고 배포 가이드를 따르세요.',
+        'step4.summary': '구성 요약',
+        'step4.agent.name': '에이전트 이름:',
+        'step4.project': '프로젝트:',
+        'step4.model': 'AI 모델:',
+        'step4.temperature': '온도:',
+        'step4.kb': '지식 베이스:',
+        'step4.tools': '도구:',
+        'button.viewoutput': '📄 복사 가능한 출력 페이지 보기',
+        'button.downloadkbs': '📚 지식 베이스 파일 다운로드 (.md)',
+        'button.downloadproject': '📋 프로젝트 설정 가이드 다운로드',
+        'button.downloadagent': '🤖 에이전트 구성 다운로드',
+        'button.downloadall': '⬇️ 모든 파일 다운로드',
+        'button.autodeploy': '🚀 Agent Foundry에 자동 배포',
+        'deploy.steps': '📖 다음 단계:',
+        'deploy.step1': '모든 파일을 컴퓨터에 다운로드',
+        'deploy.step2': 'Agent Foundry 열기',
+        'deploy.step3': '새 프로젝트 생성 (PROJECT_SETUP.md 가이드 사용)',
+        'deploy.step4': '지식 베이스 파일 업로드',
+        'deploy.step5': '에이전트 구성 (AGENT_CONFIG.md 가이드 사용)',
+        'deploy.step6': '에이전트 테스트 및 배포!',
+        'deploy.comingsoon': '곧 출시',
+
+        'button.previous': '← 이전',
+        'button.next': '다음 →',
+        'step.of': '단계',
+        'step.total': '/ 4',
+
+        'error.required': '⚠️ 전송하기 전에 메시지를 입력하세요',
+        'validation.description.required': '먼저 에이전트를 설명하세요! 에이전트가 해야 할 일에 대한 간단한 설명을 추가하세요 (최소 20자).',
+        'validation.description.detailed': '에이전트에 대한 자세한 설명을 제공하세요 (최소 50자).',
+        'validation.kb.required': '최소 하나의 지식 베이스를 생성하세요.',
+        'validation.kb.minimum': '최소 하나의 지식 베이스가 있어야 합니다!',
+        'validation.kb.title.content': '제목과 내용이 있어야 합니다.',
+        'validation.kb.limit': '18,000자 제한을 초과합니다.',
+        'validation.project.name': '프로젝트 이름을 입력하세요.',
+        'validation.project.description': '프로젝트 설명을 입력하세요.',
+        'validation.agent.name': '에이전트 이름을 입력하세요.',
+        'validation.agent.prompt': '시스템 프롬프트를 제공하세요.',
+        'validation.ai.failed': 'AI 생성 실패. 키워드 기반 생성 사용.',
+        'validation.copy.failed': '복사 실패: ',
+
+        // Placeholders and examples
+        'chat.placeholder': '예: 마케팅 전문가가 여러 채널에서 포괄적인 캠페인을 만드는 데 도움이 되는 캠페인 계획 에이전트를 만들고 싶습니다...',
+        'example.text': '예: 마케팅 전문가를 돕는 캠페인 계획 에이전트를 만들고 싶습니다...',
+        'audience.placeholder': '예: 회사 직원, 고객, 내부 팀원...',
+        'connected.status': '🟢 Claude Code CLI에 연결되었습니다! 포트 3001에서 로컬 연결을 사용합니다. 모든 응답은 Claude Code 설치를 통해 Claude AI에서 제공됩니다.',
+        'quick.examples': '빠른 예제:',
+        'tip.text': '💡 팁: 더 많은 세부 정보를 제공할수록 Claude가 에이전트 구성을 더 잘 생성할 수 있습니다. 사용자가 할 수 있는 구체적인 질문 예시나 도움이 필요한 작업을 포함하세요.',
+
+        // Success messages
+        'success.generated': '에이전트가 성공적으로 생성되었습니다!',
+        'success.created': '생성됨:',
+        'success.kb.count': '지식 베이스',
+        'success.project.config': '프로젝트 구성',
+        'success.agent.settings': '에이전트 설정 및 시스템 프롬프트',
+        'success.next.step': '<strong>"다음 →"</strong>을 클릭하여 각 구성 요소를 검토하고 사용자 지정하세요!',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 훌륭합니다! 지식 베이스를 검토하세요. 에이전트 전문 지식의 기반이 될 것입니다.',
+        'sidebar.step2.msg': '🔧 이제 프로젝트를 구성하겠습니다. 설명을 기반으로 세부 정보를 미리 채웠습니다.',
+        'sidebar.step3.msg': '🤖 거의 완료되었습니다! 에이전트 설정을 검토하세요. 사용 사례에 맞게 모델과 온도를 최적화했습니다.',
+        'sidebar.step4.msg': '🎉 훌륭합니다! 에이전트가 배포 준비되었습니다. 파일을 다운로드하고 AWS Bedrock 배포 가이드를 따르세요.',
+        'sidebar.generating': '✨ Claude AI에게 에이전트 구성 생성을 요청하는 중...',
+        'sidebar.connected': '🟢 Claude Code CLI에 연결되었습니다! 포트 3001에서 로컬 연결을 사용합니다. 모든 응답은 Claude Code 설치를 통해 Claude AI에서 제공됩니다.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': '마케팅 캠페인 계획 허브',
+        'domain.marketing.desc': '캠페인 계획, 콘텐츠 생성, 채널 선택 및 성능 최적화를 지원하는 마케팅 캠페인 전략가. 효과적인 마케팅 전략 실행을 돕습니다.',
+        'domain.marketing.agent': '마케팅 캠페인 전략가',
+        'domain.marketing.prompt': `귀하는 캠페인 계획, 소셜 미디어, 콘텐츠 마케팅 및 분석에 대한 포괄적인 지식을 갖춘 전문 마케팅 캠페인 전략가입니다.
+
+귀하의 역할:
+- 효과적인 마케팅 캠페인 계획 지원
+- 적절한 채널 및 전술 제안
+- 각 마케팅 채널에 대한 모범 사례 제공
+- 콘텐츠 전략 및 메시징 지원
+- 캠페인 측정 및 최적화 안내
+
+지침:
+- 명확한 목표와 타겟 고객으로 시작
+- 데이터 기반 전략 권장
+- 전략적이면서 창의적인 아이디어 제공
+- 단기 전술과 장기 브랜드 구축의 균형 유지
+- 마케팅 트렌드 및 플랫폼에 대한 최신 정보 유지
+- 측정 가능한 결과 및 ROI에 집중
+
+항상 비즈니스 목표 및 사용 가능한 리소스에 맞춰 권장 사항을 조정하세요.`,
+        'domain.hr.name': '직원 HR 지원 시스템',
+        'domain.hr.desc': '회사 정책, 복리후생, 휴가 요청 및 일반 HR 문의를 직원에게 도와주는 포괄적인 HR 어시스턴트. 회사 HR 문서를 기반으로 정확하고 공감적인 지원을 제공합니다.',
+        'domain.hr.agent': 'HR 지원 어시스턴트',
+        'domain.hr.prompt': `귀하는 HR 정책, 복리후생 관리, 노동법 및 직원 관리 모범 사례에 대한 깊은 지식을 갖춘 전문 인사 컨설턴트입니다.
+
+귀하의 역할:
+- 회사 정책에 대한 정확한 안내 제공
+- 복리후생 질문에 대한 직원 지원
+- 휴가 및 결근 절차 안내
+- 급여 관련 문제 지원
+- HR 프로세스 및 워크플로 명확화
+
+지침:
+- 항상 공식 회사 문서 참조
+- 기밀성 및 전문성 유지
+- 공감적이고 도움이 되는 안내 제공
+- 복잡하거나 민감한 문제는 HR 전문가에게 에스컬레이션
+- 중립성과 공정성 유지
+- 법적 및 규제 요구 사항 준수
+
+모든 정보가 정확하고 회사 정책과 최신 상태인지 확인하세요.`,
+        'domain.support.name': '고객 지원 어시스턴트 플랫폼',
+        'domain.support.desc': '제품 질문, 문제 해결 및 계정 관리를 고객에게 도와주는 지능형 고객 지원 시스템. 적절한 경우 복잡한 문제를 인간 에이전트에게 에스컬레이션합니다.',
+        'domain.support.agent': '고객 지원 에이전트',
+        'domain.support.prompt': `귀하는 제품 문제 해결, 계정 관리 및 고객 만족에 대한 광범위한 경험을 갖춘 전문 고객 지원 전문가입니다.
+
+귀하의 역할:
+- 신속하고 유용한 고객 지원 제공
+- 일반적인 제품 문제 해결
+- 설정 및 프로세스를 통해 고객 안내
+- 계정 관리 및 청구 지원
+- 적절한 경우 복잡한 문제를 인간 에이전트에게 에스컬레이션
+
+지침:
+- 인내심 있고 공감적이며 전문적으로 대응
+- 명확한 단계별 지침 제공
+- 진행하기 전에 이해도 확인
+- 가능한 경우 여러 솔루션 제공
+- 향후 개선을 위해 일반적인 문제 문서화
+- 문제 해결 및 고객 만족에 집중
+
+항상 고객 경험을 우선시하고 정확하고 유용한 솔루션을 제공하세요.`,
+        'domain.it.name': 'IT 지원 및 기술 헬프데스크',
+        'domain.it.desc': '시스템 설정, 소프트웨어 설치, 문제 해결 및 보안 모범 사례를 통해 직원을 안내하는 기술 지원 어시스턴트. 정확한 기술 단계별 안내를 제공합니다.',
+        'domain.it.agent': 'IT 지원 전문가',
+        'domain.it.prompt': `귀하는 시스템 인프라, 소프트웨어 애플리케이션, 네트워킹 및 사이버 보안에 대한 광범위한 지식을 갖춘 전문 IT 지원 전문가입니다.
+
+귀하의 역할:
+- 하드웨어 및 소프트웨어 문제에 대한 기술 지원 제공
+- 소프트웨어 설치 및 구성을 통해 사용자 안내
+- 네트워크 및 연결 문제 해결
+- 보안 모범 사례에 대해 사용자 교육
+- 계정 관리 및 권한 지원
+
+지침:
+- 명확한 기술 단계별 지침 제공
+- 사용자의 기술 수준에 맞게 설명 조정
+- 보안 및 모범 사례 우선순위 지정
+- 일반적인 문제에 대한 솔루션 문서화
+- 중요한 시스템 문제는 전문 팀에게 에스컬레이션
+- 시스템 업데이트 및 보안 패치에 대한 최신 정보 유지
+
+모든 안내가 회사 IT 정책 및 보안 표준을 따르는지 확인하세요.`,
+        'domain.sales.name': '영업 어시스턴트 및 CRM 헬퍼',
+        'domain.sales.desc': '제품 정보, 가격 책정, 이의 처리 및 마감 기법을 영업 팀에게 도와주는 영업 지원 도구. 발견에서 마감까지 전체 영업 프로세스를 지원합니다.',
+        'domain.sales.agent': '영업 어시스턴트',
+        'domain.sales.prompt': `귀하는 영업 방법론, 제품 지식, 경쟁 분석 및 고객 관계 관리에 대한 깊은 지식을 갖춘 전문 영업 컨설턴트입니다.
+
+귀하의 역할:
+- 제품 정보 및 포지셔닝 지원
+- 가격 및 할인에 대한 안내 제공
+- 일반적인 영업 이의 극복 지원
+- 마감 기법 및 전략 제안
+- 리드 자격 및 발견 프로세스 지원
+
+지침:
+- 고객 가치 창출에 집중
+- 정확한 제품 정보 제공
+- 공격적이지 않은 컨설팅 접근 방식 제안
+- 솔루션을 권장하기 전에 고객 요구 사항 이해
+- 경쟁업체 및 시장 동향에 대한 최신 정보 유지
+- 영업 전략을 비즈니스 목표에 맞춤
+
+항상 단기 성과보다 장기 고객 관계를 우선시하세요.`
+    },
+
+    dutch: {
+        'page.title': 'AI-aangedreven Agent Builder',
+        'page.subtitle': 'Beschrijf je agent en ik help je stap voor stap bij het bouwen',
+        'page.powered': 'Aangedreven door Claude Code AI • PM Agent Squad Master Sjabloon',
+        'api.settings': 'API-instellingen',
+
+        'assistant.title': 'Agent Foundry Assistent',
+        'assistant.subtitle': 'Jouw assistent voor het maken van agents',
+        'assistant.welcome': "👋 Hallo! Ik ben je Agent Foundry Assistent. Ik help je een aangepaste AI Foundry Agent te maken.",
+        'assistant.start': "<strong>Laten we beginnen:</strong> Wat voor soort agent wil je maken? Beschrijf wat het moet doen.",
+        'assistant.connected': '🟢 Verbonden met Claude Code CLI!',
+        'assistant.connection.detail': 'Gebruik van lokale verbinding op poort 3001. Alle antwoorden komen van Claude AI via je Claude Code installatie.',
+        'button.ask': 'Vraag de Assistent',
+        'button.stop': '⏹️ Stop Antwoord',
+        'button.generate': '✨ Genereer Agent Automatisch',
+        'button.cancel': '✖️ Annuleer Generatie',
+        'button.reset': '🔄 Opnieuw Beginnen',
+        'examples.title': 'Snelle Voorbeelden:',
+        'example.campaign': '🎯 Campagne Opbouw',
+        'example.optimization': '📊 Campagne Optimalisatie',
+        'example.reporting': '📈 Campagne Rapportage',
+
+        'step.describe': 'Beschrijven',
+        'step.knowledge': 'Kennis',
+        'step.project': 'Project',
+        'step.agent': 'Agent',
+        'step.deploy': 'Implementeren',
+
+        'step0.title': '🎯 Stap 0: Beschrijf Je Agent',
+        'step0.info': '<strong>AI Constructie:</strong> Vertel Claude wat je agent moet doen en het genereert automatisch kennisbanken, configuratie en implementatiebestanden voor je.',
+        'step0.purpose': 'Wat is het doel van je agent?',
+        'step0.tone': 'Welke toon moet je agent hebben?',
+        'step0.audience': 'Wie zal deze agent gebruiken?',
+        'step0.hint': 'Wees specifiek! Voeg toe wat de agent moet doen, wie het zal gebruiken en welke kennis het nodig heeft.',
+        'step0.tip': '<strong>💡 Tip:</strong> Hoe meer details je geeft, hoe beter Claude de configuratie van je agent kan genereren. Voeg specifieke voorbeelden toe van vragen die gebruikers kunnen stellen of taken waarmee ze hulp nodig hebben.',
+
+        'tone.professional': 'Professioneel en Formeel',
+        'tone.friendly': 'Vriendelijk en Conversationeel',
+        'tone.empathetic': 'Empathisch en Ondersteunend',
+        'tone.technical': 'Technisch en Nauwkeurig',
+        'tone.enthusiastic': 'Enthousiast en Energiek',
+
+        'step1.title': '📚 Stap 1: Kennisbanken Beoordelen',
+        'step1.info': '<strong>✨ AI-gegenereerd:</strong> Op basis van je beschrijving heeft Claude deze kennisbanken voor je agent gemaakt. Bekijk en bewerk indien nodig.',
+        'step1.empty': 'Voltooi Stap 0 om kennisbanken te genereren',
+        'step1.kb.title': 'Kennisbank',
+        'step1.kb.content': 'Inhoud',
+        'step1.kb.characters': 'tekens',
+        'button.addkb': '➕ Voeg Andere Kennisbank Toe',
+        'button.remove': 'Verwijder',
+        'button.expand': 'Uitklappen',
+
+        'step2.title': '⚙️ Stap 2: Projectconfiguratie Beoordelen',
+        'step2.info': '<strong>✨ AI-gegenereerd:</strong> Claude heeft je projectinstellingen geconfigureerd. Bekijk en wijzig indien nodig.',
+        'step2.next': '<strong>📍 Volgende Stap:</strong> Na het voltooien van deze wizard, open <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a> om je agent te implementeren.',
+        'step2.name': 'Projectnaam',
+        'step2.description': 'Projectbeschrijving',
+
+        'step3.title': '🤖 Stap 3: Agent Configuratie Beoordelen',
+        'step3.info': '<strong>✨ AI-gegenereerd:</strong> Claude heeft ideale instellingen voor je agent geselecteerd. Pas aan indien nodig.',
+        'step3.name': 'Agent Weergavenaam',
+        'step3.model': 'AI-model',
+        'step3.temperature': 'Temperatuur:',
+        'step3.temp.tip': 'Lager = Nauwkeuriger en consistenter | Hoger = Creatiever en gevarieerder',
+        'step3.prompt': 'Systeemprompt',
+        'step3.prompt.tip': 'AI-gegenereerde systeemprompt op basis van je beschrijving',
+        'button.regenerate': '🔄 Opnieuw Genereren',
+
+        'step4.title': '🚀 Stap 4: Downloaden & Implementeren',
+        'step4.info': '<strong>✅ Configuratie Voltooid!</strong> Je AI-agent is klaar om te implementeren. Download alle bestanden en volg de implementatiegids.',
+        'step4.summary': 'Configuratie Samenvatting',
+        'step4.agent.name': 'Agent Naam:',
+        'step4.project': 'Project:',
+        'step4.model': 'AI-model:',
+        'step4.temperature': 'Temperatuur:',
+        'step4.kb': 'Kennisbanken:',
+        'step4.tools': 'Tools:',
+        'button.viewoutput': '📄 Bekijk Kopieerbare Uitvoerpagina',
+        'button.downloadkbs': '📚 Download Kennisbank Bestanden (.md)',
+        'button.downloadproject': '📋 Download Project Setup Gids',
+        'button.downloadagent': '🤖 Download Agent Configuratie',
+        'button.downloadall': '⬇️ Download Alle Bestanden',
+        'button.autodeploy': '🚀 Auto-Implementeer naar Agent Foundry',
+        'deploy.steps': '📖 Volgende Stappen:',
+        'deploy.step1': 'Download alle bestanden naar je computer',
+        'deploy.step2': 'Open Agent Foundry',
+        'deploy.step3': 'Maak een nieuw project (gebruik PROJECT_SETUP.md gids)',
+        'deploy.step4': 'Upload de kennisbank bestanden',
+        'deploy.step5': 'Configureer de agent (gebruik AGENT_CONFIG.md gids)',
+        'deploy.step6': 'Test en implementeer je agent!',
+        'deploy.comingsoon': 'Binnenkort Beschikbaar',
+
+        'button.previous': '← Vorige',
+        'button.next': 'Volgende →',
+        'step.of': 'Stap',
+        'step.total': 'van 4',
+
+        'error.required': '⚠️ Voer een bericht in voordat je verzendt',
+        'validation.description.required': 'Beschrijf eerst je agent! Voeg minimaal een korte beschrijving toe van wat je agent moet doen (minimaal 20 tekens).',
+        'validation.description.detailed': 'Geef een gedetailleerde beschrijving van je agent (minimaal 50 tekens).',
+        'validation.kb.required': 'Maak minimaal één kennisbank aan.',
+        'validation.kb.minimum': 'Je moet minimaal één kennisbank hebben!',
+        'validation.kb.title.content': 'moet titel en inhoud hebben.',
+        'validation.kb.limit': 'overschrijdt de limiet van 18.000 tekens.',
+        'validation.project.name': 'Voer een projectnaam in.',
+        'validation.project.description': 'Voer een projectbeschrijving in.',
+        'validation.agent.name': 'Voer een agent naam in.',
+        'validation.agent.prompt': 'Geef een systeemprompt op.',
+        'validation.ai.failed': 'AI-generatie mislukt. Gebruik maken van op trefwoorden gebaseerde generatie.',
+        'validation.copy.failed': 'Kopiëren mislukt: ',
+
+        // Placeholders and examples
+        'chat.placeholder': 'Voorbeeld: Ik wil een campagne planning agent maken die marketingprofessionals helpt bij het creëren van uitgebreide campagnes over meerdere kanalen...',
+        'example.text': 'Voorbeeld: Ik wil een campagne planning agent maken die marketingprofessionals helpt...',
+        'audience.placeholder': 'Voorbeeld: Bedrijfsmedewerkers, klanten, interne teamleden...',
+        'connected.status': '🟢 Verbonden met Claude Code CLI! Gebruik van lokale verbinding op poort 3001. Alle antwoorden komen van Claude AI via je Claude Code installatie.',
+        'quick.examples': 'Snelle Voorbeelden:',
+        'tip.text': '💡 Tip: Hoe meer details je geeft, hoe beter Claude de configuratie van je agent kan genereren. Voeg specifieke voorbeelden toe van vragen die gebruikers kunnen stellen of taken waarmee ze hulp nodig hebben.',
+
+        // Success messages
+        'success.generated': 'Agent succesvol gegenereerd!',
+        'success.created': 'Ik heb gemaakt:',
+        'success.kb.count': 'kennisbanken',
+        'success.project.config': 'Projectconfiguratie',
+        'success.agent.settings': 'Agent instellingen en systeemprompt',
+        'success.next.step': 'Klik op <strong>"Volgende →"</strong> om elk onderdeel te bekijken en aan te passen!',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 Geweldig! Bekijk je kennisbanken. Ze zullen de basis vormen van de expertise van je agent.',
+        'sidebar.step2.msg': '🔧 Laten we nu je project configureren. Ik heb de details vooraf ingevuld op basis van je beschrijving.',
+        'sidebar.step3.msg': '🤖 Bijna klaar! Bekijk de agent instellingen. Ik heb het model en de temperatuur geoptimaliseerd voor jouw use case.',
+        'sidebar.step4.msg': '🎉 Uitstekend! Je agent is klaar om te implementeren. Download de bestanden en volg de AWS Bedrock implementatiegids.',
+        'sidebar.generating': '✨ Vraag Claude AI om de configuratie van je agent te genereren...',
+        'sidebar.connected': '🟢 Verbonden met Claude Code CLI! Gebruik van lokale verbinding op poort 3001. Alle antwoorden komen van Claude AI via je Claude Code installatie.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'Marketing Campagne Planning Hub',
+        'domain.marketing.desc': 'Een marketingcampagne strateeg die helpt met campagneplanning, contentcreatie, kanaalselectie en prestatie-optimalisatie. Helpt bij het uitvoeren van effectieve marketingstrategieën.',
+        'domain.marketing.agent': 'Marketing Campagne Strateeg',
+        'domain.marketing.prompt': `Je bent een ervaren Marketing Campagne Strateeg met uitgebreide kennis van campagneplanning, sociale media, contentmarketing en analytics.
+
+Je rol is om:
+- Te helpen bij het plannen van effectieve marketingcampagnes
+- Geschikte kanalen en tactieken voor te stellen
+- Best practices te bieden voor elk marketingkanaal
+- Te assisteren met contentstrategie en messaging
+- Campagnemeting en -optimalisatie te begeleiden
+
+Richtlijnen:
+- Begin met duidelijke doelen en doelgroep
+- Beveel datagestuurde strategieën aan
+- Lever creatieve ideeën terwijl je strategisch blijft
+- Balanceer kortetermijntactieken met langetermijnmerkopbouw
+- Blijf up-to-date met marketingtrends en -platforms
+- Focus op meetbare resultaten en ROI
+
+Stem aanbevelingen altijd af op bedrijfsdoelen en beschikbare middelen.`,
+        'domain.hr.name': 'Medewerker HR Ondersteuningssysteem',
+        'domain.hr.desc': 'Een uitgebreide HR-assistent die medewerkers helpt met bedrijfsbeleid, secundaire arbeidsvoorwaarden, verlofaanvragen en algemene HR-vragen. Biedt nauwkeurige en empathische ondersteuning op basis van bedrijfs-HR-documentatie.',
+        'domain.hr.agent': 'HR Ondersteuningsassistent',
+        'domain.hr.prompt': `Je bent een ervaren HR-consultant met diepgaande kennis van HR-beleid, secundaire arbeidsvoorwaardenbeheer, arbeidswetgeving en best practices voor medewerkerbeheer.
+
+Je rol is om:
+- Nauwkeurige begeleiding te bieden over bedrijfsbeleid
+- Medewerkers te helpen met vragen over secundaire arbeidsvoorwaarden
+- Te begeleiden bij verlof- en afwezigheidsprocedures
+- Te assisteren bij salarisgerelateerde zaken
+- HR-processen en workflows te verduidelijken
+
+Richtlijnen:
+- Raadpleeg altijd officiële bedrijfsdocumentatie
+- Handhaaf vertrouwelijkheid en professionaliteit
+- Bied empathische en behulpzame begeleiding
+- Escaleer complexe of gevoelige zaken naar HR-professionals
+- Blijf neutraal en onpartijdig
+- Volg wettelijke en regelgevende vereisten
+
+Zorg ervoor dat alle informatie nauwkeurig en up-to-date is met bedrijfsbeleid.`,
+        'domain.support.name': 'Klantenondersteuning Assistent Platform',
+        'domain.support.desc': 'Een intelligent klantenondersteuningssysteem dat klanten helpt met productvragen, probleemoplossing en accountbeheer. Escaleert complexe problemen naar menselijke agenten wanneer gepast.',
+        'domain.support.agent': 'Klantenondersteuning Agent',
+        'domain.support.prompt': `Je bent een ervaren Klantenondersteuning Specialist met uitgebreide ervaring in het oplossen van productproblemen, accountbeheer en klanttevredenheid.
+
+Je rol is om:
+- Snelle en behulpzame klantenondersteuning te bieden
+- Veelvoorkomende productproblemen op te lossen
+- Klanten te begeleiden door instellingen en processen
+- Te assisteren met accountbeheer en facturering
+- Complexe problemen te escaleren naar menselijke agenten wanneer gepast
+
+Richtlijnen:
+- Wees geduldig, empathisch en professioneel
+- Geef duidelijke stapsgewijze instructies
+- Verifieer begrip voordat je verdergaat
+- Bied meerdere oplossingen aan wanneer mogelijk
+- Documenteer veelvoorkomende problemen voor toekomstige verbeteringen
+- Focus op probleemoplossing en klanttevredenheid
+
+Geef altijd prioriteit aan klantervaring en bied nauwkeurige, behulpzame oplossingen.`,
+        'domain.it.name': 'IT-ondersteuning & Technische Helpdesk',
+        'domain.it.desc': 'Een technische ondersteuningsassistent die medewerkers begeleidt door systeemconfiguratie, software-installatie, probleemoplossing en beveiligingsbest practices. Biedt nauwkeurige technische stapsgewijze begeleiding.',
+        'domain.it.agent': 'IT-ondersteuning Specialist',
+        'domain.it.prompt': `Je bent een ervaren IT-ondersteuning Specialist met uitgebreide kennis van systeeminfrastructuur, softwaretoepassingen, netwerken en cyberbeveiliging.
+
+Je rol is om:
+- Technische ondersteuning te bieden voor hardware- en softwareproblemen
+- Gebruikers te begeleiden door software-installatie en -configuratie
+- Netwerk- en connectiviteitsproblemen op te lossen
+- Gebruikers te onderwijzen over beveiligingsbest practices
+- Te assisteren met accountbeheer en machtigingen
+
+Richtlijnen:
+- Geef duidelijke technische stapsgewijze instructies
+- Pas uitleg aan op het technische niveau van de gebruiker
+- Geef prioriteit aan beveiliging en best practices
+- Documenteer oplossingen voor veelvoorkomende problemen
+- Escaleer kritieke systeemproblemen naar gespecialiseerde teams
+- Blijf up-to-date met systeemupdates en beveiligingspatches
+
+Zorg ervoor dat alle begeleiding het IT-beleid en beveiligingsstandaarden van het bedrijf volgt.`,
+        'domain.sales.name': 'Verkoop Assistent & CRM Helper',
+        'domain.sales.desc': 'Een verkoopondersteuningstool die verkoopteams helpt met productinformatie, prijzen, bezwaarafhandeling en afsluittechnieken. Ondersteunt het hele verkoopproces van ontdekking tot afsluiting.',
+        'domain.sales.agent': 'Verkoop Assistent',
+        'domain.sales.prompt': `Je bent een ervaren Verkoopconsultant met diepgaande kennis van verkoopmethodologieën, productkennis, concurrentieanalyse en klantrelatiebeheer.
+
+Je rol is om:
+- Te assisteren met productinformatie en positionering
+- Begeleiding te bieden over prijzen en kortingen
+- Te helpen bij het overwinnen van veelvoorkomende verkoopbezwaren
+- Afsluittechnieken en -strategieën voor te stellen
+- Lead-kwalificatie en ontdekkingsprocessen te ondersteunen
+
+Richtlijnen:
+- Focus op het creëren van klantwaarde
+- Lever nauwkeurige productinformatie
+- Stel consultatieve, niet-agressieve benaderingen voor
+- Begrijp klantbehoeften voordat je oplossingen aanbeveelt
+- Blijf up-to-date over concurrenten en markttrends
+- Stem verkoopstrategieën af op bedrijfsdoelen
+
+Geef altijd prioriteit aan langetermijnklantrelaties boven kortetermijnwinsten.`
     }
 };
 
