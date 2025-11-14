@@ -33,11 +33,56 @@ let chatAbortController = null;
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     checkApiKeyStatus();
+    loadPreferredLanguage();
     showTypingIndicator('Initializing AI assistant...');
     setTimeout(() => {
         removeTypingIndicator();
     }, 1000);
 });
+
+// Load preferred language from localStorage
+function loadPreferredLanguage() {
+    const savedLanguage = localStorage.getItem('preferredLanguage');
+    if (savedLanguage) {
+        agentConfig.language = savedLanguage;
+        const globalLanguage = document.getElementById('globalLanguage');
+        if (globalLanguage) {
+            globalLanguage.value = savedLanguage;
+            updatePageLanguage(savedLanguage);
+        }
+    }
+}
+
+// Function to update page UI based on language selection
+function updatePageLanguage(language) {
+    // This will affect the entire page interface
+    const languageMap = {
+        'english': 'en',
+        'spanish': 'es',
+        'french': 'fr',
+        'german': 'de',
+        'japanese': 'ja',
+        'chinese': 'zh-CN',
+        'chinese-traditional': 'zh-TW',
+        'portuguese': 'pt',
+        'italian': 'it',
+        'korean': 'ko',
+        'dutch': 'nl',
+        'russian': 'ru',
+        'arabic': 'ar',
+        'hindi': 'hi',
+        'multilingual': 'auto'
+    };
+
+    const langCode = languageMap[language] || 'en';
+    document.documentElement.lang = langCode;
+
+    // Store in localStorage for persistence
+    localStorage.setItem('preferredLanguage', language);
+
+    // Visual feedback
+    console.log(`Page language set to: ${language} (${langCode})`);
+}
 
 // Event Listeners
 function setupEventListeners() {
@@ -88,35 +133,14 @@ function setupEventListeners() {
         });
     }
 
-    // Language toggle
-    const languageToggle = document.getElementById('languageToggle');
-    const languageSelector = document.getElementById('languageSelector');
-    const languageOffMessage = document.getElementById('languageOffMessage');
-    const agentLanguage = document.getElementById('agentLanguage');
-
-    if (languageToggle && languageSelector && languageOffMessage) {
-        languageToggle.addEventListener('change', function() {
-            if (this.checked) {
-                // Show language selector, hide message
-                languageSelector.style.display = 'block';
-                languageOffMessage.style.display = 'none';
-                // Set language to first option (multilingual)
-                if (agentLanguage) {
-                    agentConfig.language = agentLanguage.value;
-                }
-            } else {
-                // Hide language selector, show message
-                languageSelector.style.display = 'none';
-                languageOffMessage.style.display = 'block';
-                // Reset to English
-                agentConfig.language = 'english';
-            }
-        });
-    }
-
-    if (agentLanguage) {
-        agentLanguage.addEventListener('change', function() {
+    // Global Language Selector (in header)
+    const globalLanguage = document.getElementById('globalLanguage');
+    if (globalLanguage) {
+        globalLanguage.addEventListener('change', function() {
             agentConfig.language = this.value;
+
+            // Update UI text based on language selection
+            updatePageLanguage(this.value);
         });
     }
 
