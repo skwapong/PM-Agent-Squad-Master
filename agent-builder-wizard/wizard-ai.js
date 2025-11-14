@@ -245,6 +245,97 @@ const translations = {
         'button.previous': '← Anterior'
     },
 
+    japanese: {
+        // Header
+        'page.title': 'AI搭載エージェントビルダー',
+        'page.subtitle': 'エージェントを説明すれば、ステップバイステップで構築をサポートします',
+        'page.powered': 'Claude Code AI • PM Agent Squad Masterテンプレート',
+        'api.settings': 'API設定',
+
+        // Assistant Panel
+        'assistant.title': 'Agent Foundryアシスタント',
+        'assistant.subtitle': 'エージェント構築アシスタント',
+        'assistant.welcome': '👋 こんにちは！Agent Foundryアシスタントです。カスタムAI Foundryエージェントの構築をお手伝いします。',
+        'assistant.start': '<strong>始めましょう：</strong>どのようなエージェントを構築したいですか？その機能を説明してください。',
+        'assistant.connected': '🟢 Claude Code CLIに接続しました！',
+        'assistant.connection.detail': 'ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。',
+        'button.ask': 'アシスタントに質問',
+        'button.stop': '⏹️ 応答を停止',
+        'button.generate': '✨ エージェントを自動生成',
+        'button.cancel': '✖️ 生成をキャンセル',
+        'button.reset': '🔄 最初からやり直す',
+        'examples.title': 'クイック例：',
+        'example.campaign': '🎯 キャンペーン構築',
+        'example.optimization': '📊 キャンペーン最適化',
+        'example.reporting': '📈 キャンペーンレポート',
+
+        // Steps
+        'step.describe': '説明',
+        'step.knowledge': 'ナレッジ',
+        'step.project': 'プロジェクト',
+        'step.agent': 'エージェント',
+        'step.deploy': 'デプロイ',
+
+        // Step 0
+        'step0.title': '🎯 ステップ0：エージェントを説明',
+        'step0.info': '<strong>AI搭載構築：</strong>Claudeにエージェントが必要とすることを伝えれば、ナレッジベース、設定、デプロイメントファイルを自動生成します。',
+        'step0.purpose': 'エージェントの目的は何ですか？',
+        'step0.tone': 'エージェントのトーンは？',
+        'step0.audience': '誰がこのエージェントを使用しますか？',
+        'step0.tip': '<strong>💡 ヒント：</strong>詳細を提供するほど、Claudeはより良いエージェント設定を生成できます。ユーザーが尋ねる可能性のある質問や必要なタスクの具体例を含めてください。',
+
+        // Tone options
+        'tone.professional': 'プロフェッショナル＆フォーマル',
+        'tone.friendly': 'フレンドリー＆会話的',
+        'tone.empathetic': '共感的＆サポート的',
+        'tone.technical': '技術的＆正確',
+        'tone.enthusiastic': '熱意的＆エネルギッシュ',
+
+        // Step 1
+        'step1.title': '📚 ステップ1：ナレッジベースを確認',
+        'step1.info': '<strong>✨ AI生成：</strong>あなたの説明に基づいて、Claudeがエージェント用のナレッジベースを作成しました。必要に応じて確認・編集してください。',
+        'step1.empty': 'ステップ0を完了してナレッジベースを生成',
+        'button.addkb': '➕ ナレッジベースを追加',
+
+        // Step 2
+        'step2.title': '⚙️ ステップ2：プロジェクト設定を確認',
+        'step2.info': '<strong>✨ AI生成：</strong>Claudeがプロジェクト設定を構成しました。必要に応じて確認・変更してください。',
+        'step2.next': '<strong>📍 次のステップ：</strong>このウィザードを完了したら、<a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a>を開いてエージェントをデプロイしてください。',
+        'step2.name': 'プロジェクト名',
+        'step2.description': 'プロジェクト説明',
+
+        // Step 3
+        'step3.title': '🤖 ステップ3：エージェント設定を確認',
+        'step3.info': '<strong>✨ AI生成：</strong>Claudeがエージェントの最適な設定を選択しました。必要に応じてカスタマイズしてください。',
+        'step3.name': 'エージェント表示名',
+        'step3.model': 'AIモデル',
+        'step3.temperature': '温度：',
+        'step3.temp.tip': '低 = より正確で一貫性 | 高 = より創造的で多様性',
+        'step3.prompt': 'システムプロンプト',
+        'step3.prompt.tip': '説明に基づいてAI生成されたシステムプロンプト',
+        'button.regenerate': '🔄 再生成',
+
+        // Step 4
+        'step4.title': '🚀 ステップ4：ダウンロード＆デプロイ',
+        'step4.info': '<strong>✅ 設定完了！</strong>AIエージェントのデプロイ準備が整いました。すべてのファイルをダウンロードしてデプロイメントガイドに従ってください。',
+        'button.viewoutput': '📄 コピー可能な出力ページを表示',
+        'button.downloadkbs': '📚 ナレッジベースファイルをダウンロード（.md）',
+        'button.downloadproject': '📋 プロジェクト設定ガイドをダウンロード',
+        'button.downloadagent': '🤖 エージェント設定をダウンロード',
+        'button.downloadall': '⬇️ すべてのファイルをダウンロード',
+        'button.autodeploy': '🚀 Agent Foundryに自動デプロイ',
+        'deploy.steps': '📖 次のステップ：',
+
+        // Navigation
+        'button.previous': '← 前へ',
+        'button.next': '次へ →',
+        'step.of': 'ステップ',
+        'step.total': '/ 4',
+
+        // Validation
+        'error.required': '⚠️ 送信する前にメッセージを入力してください'
+    },
+
     french: {
         'page.title': 'Constructeur d\'Agents IA',
         'page.subtitle': 'Décrivez votre agent et je vous aiderai à le construire étape par étape',
