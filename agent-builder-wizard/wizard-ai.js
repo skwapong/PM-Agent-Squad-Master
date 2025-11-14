@@ -53,6 +53,208 @@ function loadPreferredLanguage() {
     }
 }
 
+// Translation dictionaries
+const translations = {
+    english: {
+        // Header
+        'page.title': 'AI-Powered Agent Builder',
+        'page.subtitle': "Describe your agent, and I'll help you build it step-by-step",
+        'page.powered': 'Powered by Claude Code AI • PM Agent Squad Master Template',
+        'api.settings': 'API Settings',
+
+        // Assistant Panel
+        'assistant.title': 'Agent Foundry Assistant',
+        'assistant.subtitle': 'Your agent building assistant',
+        'assistant.welcome': "👋 Hi! I'm your Agent Foundry Assistant. I'll help you build a custom AI Foundry Agent.",
+        'assistant.start': "<strong>Let's start:</strong> What kind of agent do you want to build? Describe what it should do.",
+        'assistant.connected': '🟢 Connected to Claude Code CLI!',
+        'assistant.connection.detail': 'Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.',
+        'button.ask': 'Ask Assistant',
+        'button.stop': '⏹️ Stop Response',
+        'button.generate': '✨ Auto-Generate Agent',
+        'button.cancel': '✖️ Cancel Generation',
+        'button.reset': '🔄 Start Over',
+        'examples.title': 'Quick Examples:',
+        'example.campaign': '🎯 Campaign Building',
+        'example.optimization': '📊 Campaign Optimization',
+        'example.reporting': '📈 Campaign Reporting',
+
+        // Steps
+        'step.describe': 'Describe',
+        'step.knowledge': 'Knowledge',
+        'step.project': 'Project',
+        'step.agent': 'Agent',
+        'step.deploy': 'Deploy',
+
+        // Step 0
+        'step0.title': '🎯 Step 0: Describe Your Agent',
+        'step0.info': '<strong>AI-Powered Building:</strong> Tell Claude what your agent needs to do, and it will automatically generate knowledge bases, configuration, and deployment files for you.',
+        'step0.purpose': "What is your agent's purpose?",
+        'step0.tone': 'What tone should your agent have?',
+        'step0.audience': 'Who will use this agent?',
+        'step0.tip': '<strong>💡 Tip:</strong> The more detail you provide, the better Claude can generate your agent configuration. Include specific examples of questions users might ask or tasks they need help with.',
+
+        // Tone options
+        'tone.professional': 'Professional & Formal',
+        'tone.friendly': 'Friendly & Conversational',
+        'tone.empathetic': 'Empathetic & Supportive',
+        'tone.technical': 'Technical & Precise',
+        'tone.enthusiastic': 'Enthusiastic & Energetic',
+
+        // Step 1
+        'step1.title': '📚 Step 1: Review Knowledge Bases',
+        'step1.info': '<strong>✨ AI-Generated:</strong> Based on your description, Claude has created these knowledge bases for your agent. Review and edit as needed.',
+        'step1.empty': 'Complete Step 0 to generate knowledge bases',
+        'button.addkb': '➕ Add Another Knowledge Base',
+
+        // Step 2
+        'step2.title': '⚙️ Step 2: Review Project Setup',
+        'step2.info': '<strong>✨ AI-Generated:</strong> Claude has configured your project settings. Review and modify if needed.',
+        'step2.next': '<strong>📍 Next Step:</strong> After completing this wizard, open <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a> to deploy your agent.',
+        'step2.name': 'Project Name',
+        'step2.description': 'Project Description',
+
+        // Step 3
+        'step3.title': '🤖 Step 3: Review Agent Configuration',
+        'step3.info': '<strong>✨ AI-Generated:</strong> Claude has selected optimal settings for your agent. Customize if needed.',
+        'step3.name': 'Agent Display Name',
+        'step3.model': 'AI Model',
+        'step3.temperature': 'Temperature:',
+        'step3.temp.tip': 'Lower = More precise and consistent | Higher = More creative and varied',
+        'step3.prompt': 'System Prompt',
+        'step3.prompt.tip': 'AI-generated system prompt based on your description',
+        'button.regenerate': '🔄 Regenerate',
+
+        // Step 4
+        'step4.title': '🚀 Step 4: Download & Deploy',
+        'step4.info': '<strong>✅ Configuration Complete!</strong> Your AI agent is ready to deploy. Download all files and follow the deployment guide.',
+        'button.viewoutput': '📄 View Copyable Output Webpage',
+        'button.downloadkbs': '📚 Download Knowledge Base Files (.md)',
+        'button.downloadproject': '📋 Download Project Setup Guide',
+        'button.downloadagent': '🤖 Download Agent Configuration',
+        'button.downloadall': '⬇️ Download All Files',
+        'button.autodeploy': '🚀 Auto-Deploy to Agent Foundry',
+        'deploy.steps': '📖 Next Steps:',
+
+        // Navigation
+        'button.previous': '← Previous',
+        'button.next': 'Next →',
+        'step.of': 'Step',
+        'step.total': 'of 4',
+
+        // Validation
+        'error.required': '⚠️ Please enter a message before sending'
+    },
+
+    portuguese: {
+        'page.title': 'Construtor de Agentes com IA',
+        'page.subtitle': 'Descreva seu agente e eu te ajudarei a construí-lo passo a passo',
+        'page.powered': 'Desenvolvido por Claude Code AI • Modelo PM Agent Squad Master',
+        'api.settings': 'Configurações da API',
+
+        'assistant.title': 'Assistente Agent Foundry',
+        'assistant.subtitle': 'Seu assistente de construção de agentes',
+        'assistant.welcome': "👋 Olá! Sou seu Assistente Agent Foundry. Vou ajudá-lo a construir um Agente AI Foundry personalizado.",
+        'assistant.start': "<strong>Vamos começar:</strong> Que tipo de agente você quer construir? Descreva o que ele deve fazer.",
+        'assistant.connected': '🟢 Conectado ao Claude Code CLI!',
+        'assistant.connection.detail': 'Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.',
+        'button.ask': 'Perguntar ao Assistente',
+        'button.stop': '⏹️ Parar Resposta',
+        'button.generate': '✨ Gerar Agente Automaticamente',
+        'button.cancel': '✖️ Cancelar Geração',
+        'button.reset': '🔄 Recomeçar',
+        'examples.title': 'Exemplos Rápidos:',
+        'example.campaign': '🎯 Construção de Campanha',
+        'example.optimization': '📊 Otimização de Campanha',
+        'example.reporting': '📈 Relatórios de Campanha',
+
+        'step.describe': 'Descrever',
+        'step.knowledge': 'Conhecimento',
+        'step.project': 'Projeto',
+        'step.agent': 'Agente',
+        'step.deploy': 'Implantar',
+
+        'step0.title': '🎯 Passo 0: Descreva Seu Agente',
+        'step0.info': '<strong>Construção com IA:</strong> Diga ao Claude o que seu agente precisa fazer, e ele irá gerar automaticamente bases de conhecimento, configuração e arquivos de implantação para você.',
+        'step0.purpose': 'Qual é o propósito do seu agente?',
+        'step0.tone': 'Que tom seu agente deve ter?',
+        'step0.audience': 'Quem usará este agente?',
+        'step0.tip': '<strong>💡 Dica:</strong> Quanto mais detalhes você fornecer, melhor o Claude pode gerar a configuração do seu agente. Inclua exemplos específicos de perguntas que os usuários podem fazer ou tarefas com as quais precisam de ajuda.',
+
+        'tone.professional': 'Profissional e Formal',
+        'tone.friendly': 'Amigável e Conversacional',
+        'tone.empathetic': 'Empático e Solidário',
+        'tone.technical': 'Técnico e Preciso',
+        'tone.enthusiastic': 'Entusiasmado e Energético',
+
+        'step1.title': '📚 Passo 1: Revisar Bases de Conhecimento',
+        'step1.info': '<strong>✨ Gerado por IA:</strong> Com base na sua descrição, o Claude criou essas bases de conhecimento para seu agente. Revise e edite conforme necessário.',
+        'step1.empty': 'Complete o Passo 0 para gerar bases de conhecimento',
+        'button.addkb': '➕ Adicionar Outra Base de Conhecimento',
+
+        'step2.title': '⚙️ Passo 2: Revisar Configuração do Projeto',
+        'step2.info': '<strong>✨ Gerado por IA:</strong> O Claude configurou as definições do seu projeto. Revise e modifique se necessário.',
+        'step2.next': '<strong>📍 Próximo Passo:</strong> Após completar este assistente, abra <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a> para implantar seu agente.',
+        'step2.name': 'Nome do Projeto',
+        'step2.description': 'Descrição do Projeto',
+
+        'step3.title': '🤖 Passo 3: Revisar Configuração do Agente',
+        'step3.info': '<strong>✨ Gerado por IA:</strong> O Claude selecionou configurações ideais para seu agente. Personalize se necessário.',
+        'step3.name': 'Nome de Exibição do Agente',
+        'step3.model': 'Modelo de IA',
+        'step3.temperature': 'Temperatura:',
+        'step3.temp.tip': 'Menor = Mais preciso e consistente | Maior = Mais criativo e variado',
+        'step3.prompt': 'Prompt do Sistema',
+        'step3.prompt.tip': 'Prompt do sistema gerado por IA com base na sua descrição',
+        'button.regenerate': '🔄 Regenerar',
+
+        'step4.title': '🚀 Passo 4: Baixar e Implantar',
+        'step4.info': '<strong>✅ Configuração Completa!</strong> Seu agente de IA está pronto para implantar. Baixe todos os arquivos e siga o guia de implantação.',
+        'button.viewoutput': '📄 Ver Página de Saída Copiável',
+        'button.downloadkbs': '📚 Baixar Arquivos de Base de Conhecimento (.md)',
+        'button.downloadproject': '📋 Baixar Guia de Configuração do Projeto',
+        'button.downloadagent': '🤖 Baixar Configuração do Agente',
+        'button.downloadall': '⬇️ Baixar Todos os Arquivos',
+        'button.autodeploy': '🚀 Implantar Automaticamente no Agent Foundry',
+        'deploy.steps': '📖 Próximos Passos:',
+
+        'button.previous': '← Anterior',
+        'button.next': 'Próximo →',
+        'step.of': 'Passo',
+        'step.total': 'de 4',
+
+        'error.required': '⚠️ Por favor, digite uma mensagem antes de enviar'
+    },
+
+    spanish: {
+        'page.title': 'Constructor de Agentes con IA',
+        'page.subtitle': 'Describe tu agente y te ayudaré a construirlo paso a paso',
+        'page.powered': 'Desarrollado por Claude Code AI • Plantilla PM Agent Squad Master',
+        'api.settings': 'Configuración de API',
+
+        'assistant.title': 'Asistente Agent Foundry',
+        'assistant.subtitle': 'Tu asistente de construcción de agentes',
+        'assistant.welcome': "👋 ¡Hola! Soy tu Asistente Agent Foundry. Te ayudaré a construir un Agente AI Foundry personalizado.",
+        'assistant.start': "<strong>Empecemos:</strong> ¿Qué tipo de agente quieres construir? Describe lo que debe hacer.",
+        'button.ask': 'Preguntar al Asistente',
+        'button.generate': '✨ Auto-Generar Agente',
+        'step.describe': 'Describir',
+        'step0.title': '🎯 Paso 0: Describe Tu Agente',
+        'step0.purpose': '¿Cuál es el propósito de tu agente?',
+        'button.next': 'Siguiente →',
+        'button.previous': '← Anterior'
+    },
+
+    french: {
+        'page.title': 'Constructeur d\'Agents IA',
+        'page.subtitle': 'Décrivez votre agent et je vous aiderai à le construire étape par étape',
+        'assistant.title': 'Assistant Agent Foundry',
+        'button.ask': 'Demander à l\'Assistant',
+        'step0.title': '🎯 Étape 0: Décrivez Votre Agent',
+        'button.next': 'Suivant →'
+    }
+};
+
 // Function to update page UI based on language selection
 function updatePageLanguage(language) {
     // This will affect the entire page interface
@@ -80,8 +282,30 @@ function updatePageLanguage(language) {
     // Store in localStorage for persistence
     localStorage.setItem('preferredLanguage', language);
 
+    // Apply translations to the page
+    applyTranslations(language);
+
     // Visual feedback
     console.log(`Page language set to: ${language} (${langCode})`);
+}
+
+// Apply translations to all elements with data-i18n attribute
+function applyTranslations(language) {
+    const dict = translations[language] || translations['english'];
+
+    // Translate all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (dict[key]) {
+            if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                element.placeholder = dict[key];
+            } else {
+                element.innerHTML = dict[key];
+            }
+        }
+    });
+
+    console.log(`Applied ${language} translations to page`);
 }
 
 // Event Listeners
