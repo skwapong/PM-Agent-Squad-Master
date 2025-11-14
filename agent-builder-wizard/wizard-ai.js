@@ -145,6 +145,18 @@ const translations = {
 
         // Validation
         'error.required': '⚠️ Please enter a message before sending',
+        'validation.description.required': 'Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).',
+        'validation.description.detailed': 'Please provide a detailed description of your agent (at least 50 characters).',
+        'validation.kb.required': 'Please create at least one knowledge base.',
+        'validation.kb.minimum': 'You must have at least one knowledge base!',
+        'validation.kb.title.content': 'must have both a title and content.',
+        'validation.kb.limit': 'exceeds the 18,000 character limit.',
+        'validation.project.name': 'Please enter a project name.',
+        'validation.project.description': 'Please enter a project description.',
+        'validation.agent.name': 'Please enter an agent name.',
+        'validation.agent.prompt': 'Please provide a system prompt.',
+        'validation.ai.failed': 'AI generation failed. Using keyword-based generation instead.',
+        'validation.copy.failed': 'Failed to copy: ',
 
         // Placeholders and examples
         'chat.placeholder': 'Example: I want to build a campaign planning agent that helps marketers create comprehensive marketing campaigns across multiple channels...',
@@ -234,6 +246,18 @@ const translations = {
         'step.total': 'de 4',
 
         'error.required': '⚠️ Por favor, digite uma mensagem antes de enviar',
+        'validation.description.required': 'Por favor, descreva seu agente primeiro! Adicione pelo menos uma breve descrição do que seu agente deve fazer (mínimo de 20 caracteres).',
+        'validation.description.detailed': 'Por favor, forneça uma descrição detalhada do seu agente (pelo menos 50 caracteres).',
+        'validation.kb.required': 'Por favor, crie pelo menos uma base de conhecimento.',
+        'validation.kb.minimum': 'Você deve ter pelo menos uma base de conhecimento!',
+        'validation.kb.title.content': 'deve ter título e conteúdo.',
+        'validation.kb.limit': 'excede o limite de 18.000 caracteres.',
+        'validation.project.name': 'Por favor, insira um nome de projeto.',
+        'validation.project.description': 'Por favor, insira uma descrição do projeto.',
+        'validation.agent.name': 'Por favor, insira um nome de agente.',
+        'validation.agent.prompt': 'Por favor, forneça um prompt do sistema.',
+        'validation.ai.failed': 'Geração de IA falhou. Usando geração baseada em palavras-chave.',
+        'validation.copy.failed': 'Falha ao copiar: ',
 
         // Placeholders and examples
         'chat.placeholder': 'Exemplo: Quero construir um agente de planejamento de campanhas que ajuda profissionais de marketing a criar campanhas abrangentes em múltiplos canais...',
@@ -353,6 +377,18 @@ const translations = {
 
         // Validation
         'error.required': '⚠️ 送信する前にメッセージを入力してください',
+        'validation.description.required': 'まずエージェントを説明してください！エージェントが何をすべきかの簡単な説明を追加してください（最低20文字）。',
+        'validation.description.detailed': 'エージェントの詳細な説明を提供してください（最低50文字）。',
+        'validation.kb.required': '少なくとも1つのナレッジベースを作成してください。',
+        'validation.kb.minimum': '少なくとも1つのナレッジベースが必要です！',
+        'validation.kb.title.content': 'タイトルとコンテンツの両方が必要です。',
+        'validation.kb.limit': '18,000文字の制限を超えています。',
+        'validation.project.name': 'プロジェクト名を入力してください。',
+        'validation.project.description': 'プロジェクトの説明を入力してください。',
+        'validation.agent.name': 'エージェント名を入力してください。',
+        'validation.agent.prompt': 'システムプロンプトを提供してください。',
+        'validation.ai.failed': 'AI生成に失敗しました。キーワードベースの生成を使用します。',
+        'validation.copy.failed': 'コピーに失敗しました：',
 
         // Placeholders and examples
         'chat.placeholder': '例：マルチチャネルでの包括的なマーケティングキャンペーンの作成をマーケターに支援するキャンペーン計画エージェントを構築したいです...',
@@ -435,6 +471,13 @@ function applyTranslations(language) {
     }
 
     console.log(`Applied ${language} translations to page`);
+}
+
+// Get translated message
+function getTranslation(key, fallback = '') {
+    const currentLang = agentConfig.language || 'english';
+    const dict = translations[currentLang] || translations['english'];
+    return dict[key] || fallback || key;
 }
 
 // Event Listeners
@@ -934,7 +977,9 @@ async function generateAgent() {
                        agentConfig.description;
 
     if (!description || description.length < 20) {
-        alert('Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).');
+        const currentLang = agentConfig.language || 'english';
+        const dict = translations[currentLang] || translations['english'];
+        alert(dict['validation.description.required'] || 'Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).');
         // Focus on the appropriate input field
         if (chatInput) {
             chatInput.focus();
@@ -1084,7 +1129,7 @@ async function generateAgent() {
         if (cancelBtn) cancelBtn.style.display = 'none';
 
         // Fallback to keyword-based generation
-        alert('AI generation failed. Using keyword-based generation instead.');
+        alert(getTranslation('validation.ai.failed', 'AI generation failed. Using keyword-based generation instead.'));
 
         // Detect domain from description
         const descriptionLower = description.toLowerCase();
@@ -2840,7 +2885,7 @@ function addKnowledgeBase(name = '', content = '') {
 // Remove Knowledge Base
 function removeKnowledgeBase(kbId) {
     if (knowledgeBases.length <= 1) {
-        alert('You must have at least one knowledge base!');
+        alert(getTranslation('validation.kb.minimum', 'You must have at least one knowledge base!'));
         return;
     }
 
@@ -3038,7 +3083,7 @@ function validateAgentDescription() {
     const description = document.getElementById('agentDescription').value.trim();
 
     if (!description || description.length < 50) {
-        alert('Please provide a detailed description of your agent (at least 50 characters).');
+        alert(getTranslation('validation.description.detailed', 'Please provide a detailed description of your agent (at least 50 characters).'));
         return false;
     }
 
@@ -3048,18 +3093,19 @@ function validateAgentDescription() {
 
 function validateKnowledgeBases() {
     if (knowledgeBases.length < 1) {
-        alert('Please create at least one knowledge base.');
+        alert(getTranslation('validation.kb.required', 'Please create at least one knowledge base.'));
         return false;
     }
 
     for (const kb of knowledgeBases) {
         if (!kb.name || !kb.content) {
-            alert(`Knowledge base "${kb.name || 'Untitled'}" must have both a title and content.`);
+            const kbName = kb.name || 'Untitled';
+            alert(`${getTranslation('validation.kb.title.content', kbName + ' must have both a title and content.')}`);
             return false;
         }
 
         if (kb.content.length > 18000) {
-            alert(`Knowledge base "${kb.name}" exceeds the 18,000 character limit.`);
+            alert(`${kb.name} ${getTranslation('validation.kb.limit', 'exceeds the 18,000 character limit.')}`);
             return false;
         }
     }
@@ -3072,12 +3118,12 @@ function validateProjectConfig() {
     const projectDesc = document.getElementById('projectDescription').value.trim();
 
     if (!projectName) {
-        alert('Please enter a project name.');
+        alert(getTranslation('validation.project.name', 'Please enter a project name.'));
         return false;
     }
 
     if (!projectDesc) {
-        alert('Please enter a project description.');
+        alert(getTranslation('validation.project.description', 'Please enter a project description.'));
         return false;
     }
 
@@ -3091,12 +3137,12 @@ function validateAgentConfig() {
     const systemPrompt = document.getElementById('systemPrompt').value.trim();
 
     if (!agentName) {
-        alert('Please enter an agent name.');
+        alert(getTranslation('validation.agent.name', 'Please enter an agent name.'));
         return false;
     }
 
     if (!systemPrompt) {
-        alert('Please provide a system prompt.');
+        alert(getTranslation('validation.agent.prompt', 'Please provide a system prompt.'));
         return false;
     }
 
@@ -3860,7 +3906,7 @@ function viewOutputWebpage() {
                     button.style.background = '#667eea';
                 }, 2000);
             }).catch(err => {
-                alert('Failed to copy: ' + err);
+                alert(getTranslation('validation.copy.failed', 'Failed to copy: ') + err);
             });
         }
     </script>
