@@ -561,13 +561,237 @@ Sempre priorize relacionamentos de longo prazo com clientes em vez de vitórias 
         'assistant.subtitle': 'Tu asistente de construcción de agentes',
         'assistant.welcome': "👋 ¡Hola! Soy tu Asistente Agent Foundry. Te ayudaré a construir un Agente AI Foundry personalizado.",
         'assistant.start': "<strong>Empecemos:</strong> ¿Qué tipo de agente quieres construir? Describe lo que debe hacer.",
+        'assistant.connected': '🟢 ¡Conectado a Claude Code CLI!',
+        'assistant.connection.detail': 'Usando conexión local en el puerto 3001. Todas las respuestas provienen de Claude AI a través de tu instalación de Claude Code.',
         'button.ask': 'Preguntar al Asistente',
-        'button.generate': '✨ Auto-Generar Agente',
+        'button.stop': '⏹️ Detener Respuesta',
+        'button.generate': '✨ Generar Agente Automáticamente',
+        'button.cancel': '✖️ Cancelar Generación',
+        'button.reset': '🔄 Empezar de Nuevo',
+        'examples.title': 'Ejemplos Rápidos:',
+        'example.campaign': '🎯 Construcción de Campaña',
+        'example.optimization': '📊 Optimización de Campaña',
+        'example.reporting': '📈 Informes de Campaña',
+
         'step.describe': 'Describir',
+        'step.knowledge': 'Conocimiento',
+        'step.project': 'Proyecto',
+        'step.agent': 'Agente',
+        'step.deploy': 'Desplegar',
+
         'step0.title': '🎯 Paso 0: Describe Tu Agente',
+        'step0.info': '<strong>Construcción con IA:</strong> Dile a Claude lo que tu agente necesita hacer, y generará automáticamente bases de conocimiento, configuración y archivos de despliegue para ti.',
         'step0.purpose': '¿Cuál es el propósito de tu agente?',
+        'step0.tone': '¿Qué tono debe tener tu agente?',
+        'step0.audience': '¿Quién usará este agente?',
+        'step0.hint': '¡Sé específico! Incluye qué debe hacer el agente, quién lo usará y qué conocimiento necesita.',
+        'step0.tip': '<strong>💡 Consejo:</strong> Cuantos más detalles proporciones, mejor podrá Claude generar la configuración de tu agente. Incluye ejemplos específicos de preguntas que los usuarios puedan hacer o tareas con las que necesiten ayuda.',
+
+        'tone.professional': 'Profesional y Formal',
+        'tone.friendly': 'Amigable y Conversacional',
+        'tone.empathetic': 'Empático y Solidario',
+        'tone.technical': 'Técnico y Preciso',
+        'tone.enthusiastic': 'Entusiasta y Enérgico',
+
+        'step1.title': '📚 Paso 1: Revisar Bases de Conocimiento',
+        'step1.info': '<strong>✨ Generado por IA:</strong> Basado en tu descripción, Claude creó estas bases de conocimiento para tu agente. Revisa y edita según sea necesario.',
+        'step1.empty': 'Completa el Paso 0 para generar bases de conocimiento',
+        'step1.kb.title': 'Base de Conocimiento',
+        'step1.kb.content': 'Contenido',
+        'step1.kb.characters': 'caracteres',
+        'button.addkb': '➕ Agregar Otra Base de Conocimiento',
+        'button.remove': 'Eliminar',
+        'button.expand': 'Expandir',
+
+        'step2.title': '⚙️ Paso 2: Revisar Configuración del Proyecto',
+        'step2.info': '<strong>✨ Generado por IA:</strong> Claude configuró las definiciones de tu proyecto. Revisa y modifica si es necesario.',
+        'step2.next': '<strong>📍 Siguiente Paso:</strong> Después de completar este asistente, abre <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a> para desplegar tu agente.',
+        'step2.name': 'Nombre del Proyecto',
+        'step2.description': 'Descripción del Proyecto',
+
+        'step3.title': '🤖 Paso 3: Revisar Configuración del Agente',
+        'step3.info': '<strong>✨ Generado por IA:</strong> Claude seleccionó configuraciones ideales para tu agente. Personaliza si es necesario.',
+        'step3.name': 'Nombre para Mostrar del Agente',
+        'step3.model': 'Modelo de IA',
+        'step3.temperature': 'Temperatura:',
+        'step3.temp.tip': 'Menor = Más preciso y consistente | Mayor = Más creativo y variado',
+        'step3.prompt': 'Prompt del Sistema',
+        'step3.prompt.tip': 'Prompt del sistema generado por IA basado en tu descripción',
+        'button.regenerate': '🔄 Regenerar',
+
+        'step4.title': '🚀 Paso 4: Descargar y Desplegar',
+        'step4.info': '<strong>✅ ¡Configuración Completa!</strong> Tu agente de IA está listo para desplegar. Descarga todos los archivos y sigue la guía de despliegue.',
+        'step4.summary': 'Resumen de Configuración',
+        'step4.agent.name': 'Nombre del Agente:',
+        'step4.project': 'Proyecto:',
+        'step4.model': 'Modelo de IA:',
+        'step4.temperature': 'Temperatura:',
+        'step4.kb': 'Bases de Conocimiento:',
+        'step4.tools': 'Herramientas:',
+        'button.viewoutput': '📄 Ver Página de Salida Copiable',
+        'button.downloadkbs': '📚 Descargar Archivos de Base de Conocimiento (.md)',
+        'button.downloadproject': '📋 Descargar Guía de Configuración del Proyecto',
+        'button.downloadagent': '🤖 Descargar Configuración del Agente',
+        'button.downloadall': '⬇️ Descargar Todos los Archivos',
+        'button.autodeploy': '🚀 Auto-Desplegar en Agent Foundry',
+        'deploy.steps': '📖 Próximos Pasos:',
+        'deploy.step1': 'Descarga todos los archivos a tu computadora',
+        'deploy.step2': 'Abre Agent Foundry',
+        'deploy.step3': 'Crea un nuevo proyecto (usa la guía PROJECT_SETUP.md)',
+        'deploy.step4': 'Sube los archivos de la base de conocimiento',
+        'deploy.step5': 'Configura el agente (usa la guía AGENT_CONFIG.md)',
+        'deploy.step6': '¡Prueba y despliega tu agente!',
+        'deploy.comingsoon': 'Próximamente',
+
+        'button.previous': '← Anterior',
         'button.next': 'Siguiente →',
-        'button.previous': '← Anterior'
+        'step.of': 'Paso',
+        'step.total': 'de 4',
+
+        'error.required': '⚠️ Por favor, escribe un mensaje antes de enviar',
+        'validation.description.required': '¡Por favor, describe tu agente primero! Agrega al menos una breve descripción de lo que debe hacer tu agente (mínimo 20 caracteres).',
+        'validation.description.detailed': 'Por favor, proporciona una descripción detallada de tu agente (al menos 50 caracteres).',
+        'validation.kb.required': 'Por favor, crea al menos una base de conocimiento.',
+        'validation.kb.minimum': '¡Debes tener al menos una base de conocimiento!',
+        'validation.kb.title.content': 'debe tener título y contenido.',
+        'validation.kb.limit': 'excede el límite de 18,000 caracteres.',
+        'validation.project.name': 'Por favor, ingresa un nombre de proyecto.',
+        'validation.project.description': 'Por favor, ingresa una descripción del proyecto.',
+        'validation.agent.name': 'Por favor, ingresa un nombre de agente.',
+        'validation.agent.prompt': 'Por favor, proporciona un prompt del sistema.',
+        'validation.ai.failed': 'La generación de IA falló. Usando generación basada en palabras clave.',
+        'validation.copy.failed': 'Error al copiar: ',
+
+        // Placeholders and examples
+        'chat.placeholder': 'Ejemplo: Quiero construir un agente de planificación de campañas que ayude a los profesionales de marketing a crear campañas integrales en múltiples canales...',
+        'example.text': 'Ejemplo: Quiero construir un agente de planificación de campañas que ayude a los profesionales de marketing...',
+        'audience.placeholder': 'Ejemplo: Empleados de la empresa, clientes, miembros internos del equipo...',
+        'connected.status': '🟢 ¡Conectado a Claude Code CLI! Usando conexión local en el puerto 3001. Todas las respuestas provienen de Claude AI a través de tu instalación de Claude Code.',
+        'quick.examples': 'Ejemplos Rápidos:',
+        'tip.text': '💡 Consejo: Cuantos más detalles proporciones, mejor podrá Claude generar la configuración de tu agente. Incluye ejemplos específicos de preguntas que los usuarios puedan hacer o tareas con las que necesiten ayuda.',
+
+        // Success messages
+        'success.generated': '¡Agente generado con éxito!',
+        'success.created': 'He creado:',
+        'success.kb.count': 'bases de conocimiento',
+        'success.project.config': 'Configuración del proyecto',
+        'success.agent.settings': 'Configuraciones y prompt del sistema del agente',
+        'success.next.step': '¡Haz clic en <strong>"Siguiente →"</strong> para revisar y personalizar cada componente!',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 ¡Genial! Revisa tus bases de conocimiento. Serán la base de la experiencia de tu agente.',
+        'sidebar.step2.msg': '🔧 Ahora configuremos tu proyecto. He pre-rellenado los detalles basándome en tu descripción.',
+        'sidebar.step3.msg': '🤖 ¡Casi listo! Revisa la configuración del agente. He optimizado el modelo y la temperatura para tu caso de uso.',
+        'sidebar.step4.msg': '🎉 ¡Excelente! Tu agente está listo para desplegar. Descarga los archivos y sigue la guía de despliegue de AWS Bedrock.',
+        'sidebar.generating': '✨ Pidiendo a Claude AI que genere la configuración de tu agente...',
+        'sidebar.connected': '🟢 ¡Conectado a Claude Code CLI! Usando conexión local en el puerto 3001. Todas las respuestas provienen de Claude AI a través de tu instalación de Claude Code.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'Centro de Planificación de Campañas de Marketing',
+        'domain.marketing.desc': 'Un estratega de campañas de marketing que ayuda con la planificación de campañas, creación de contenido, selección de canales y optimización del rendimiento. Ayuda a ejecutar estrategias de marketing efectivas.',
+        'domain.marketing.agent': 'Estratega de Campañas de Marketing',
+        'domain.marketing.prompt': `Eres un Estratega de Campañas de Marketing experto con conocimiento integral de planificación de campañas, redes sociales, marketing de contenidos y análisis.
+
+Tu rol es:
+- Ayudar a planificar campañas de marketing efectivas
+- Sugerir canales y tácticas apropiados
+- Proporcionar mejores prácticas para cada canal de marketing
+- Asistir con estrategia de contenido y mensajes
+- Guiar la medición y optimización de campañas
+
+Directrices:
+- Comenzar con objetivos claros y audiencia objetivo
+- Recomendar estrategias basadas en datos
+- Proporcionar ideas creativas mientras se mantiene estratégico
+- Equilibrar tácticas a corto plazo con construcción de marca a largo plazo
+- Mantenerse actualizado con tendencias y plataformas de marketing
+- Enfocarse en resultados medibles y ROI
+
+Siempre alinear las recomendaciones con los objetivos del negocio y los recursos disponibles.`,
+        'domain.hr.name': 'Sistema de Soporte de RRHH para Empleados',
+        'domain.hr.desc': 'Un asistente integral de RRHH que ayuda a los empleados con políticas de la empresa, beneficios, solicitudes de tiempo libre y consultas generales de RRHH. Proporciona soporte preciso y empático basado en la documentación de RRHH de la empresa.',
+        'domain.hr.agent': 'Asistente de Soporte de RRHH',
+        'domain.hr.prompt': `Eres un Consultor de Recursos Humanos experto con profundo conocimiento de políticas de RRHH, administración de beneficios, leyes laborales y mejores prácticas de gestión de empleados.
+
+Tu rol es:
+- Proporcionar orientación precisa sobre políticas de la empresa
+- Ayudar a los empleados con preguntas sobre beneficios
+- Guiar sobre procedimientos de tiempo libre y licencias
+- Asistir con asuntos relacionados con nómina
+- Aclarar procesos y flujos de trabajo de RRHH
+
+Directrices:
+- Siempre consultar la documentación oficial de la empresa
+- Mantener confidencialidad y profesionalismo
+- Proporcionar orientación empática y útil
+- Escalar asuntos complejos o sensibles a profesionales de RRHH
+- Mantener neutralidad e imparcialidad
+- Seguir requisitos legales y regulatorios
+
+Asegurar que toda la información sea precisa y esté actualizada con las políticas de la empresa.`,
+        'domain.support.name': 'Plataforma de Asistente de Atención al Cliente',
+        'domain.support.desc': 'Un sistema inteligente de atención al cliente que ayuda a los clientes con preguntas sobre productos, solución de problemas y gestión de cuentas. Escala problemas complejos a agentes humanos cuando es apropiado.',
+        'domain.support.agent': 'Agente de Atención al Cliente',
+        'domain.support.prompt': `Eres un Especialista en Atención al Cliente experto con amplia experiencia en solución de problemas de productos, gestión de cuentas y satisfacción del cliente.
+
+Tu rol es:
+- Proporcionar atención al cliente rápida y útil
+- Solucionar problemas comunes de productos
+- Guiar a los clientes a través de configuraciones y procesos
+- Asistir con gestión de cuentas y facturación
+- Escalar problemas complejos a agentes humanos cuando sea apropiado
+
+Directrices:
+- Ser paciente, empático y profesional
+- Proporcionar instrucciones claras paso a paso
+- Verificar la comprensión antes de continuar
+- Ofrecer múltiples soluciones cuando sea posible
+- Documentar problemas comunes para mejoras futuras
+- Enfocarse en la resolución de problemas y satisfacción del cliente
+
+Siempre priorizar la experiencia del cliente y proporcionar soluciones precisas y útiles.`,
+        'domain.it.name': 'Mesa de Ayuda de Soporte de TI y Técnico',
+        'domain.it.desc': 'Un asistente de soporte técnico que guía a los empleados a través de la configuración del sistema, instalación de software, solución de problemas y mejores prácticas de seguridad. Proporciona orientación técnica precisa y paso a paso.',
+        'domain.it.agent': 'Especialista en Soporte de TI',
+        'domain.it.prompt': `Eres un Especialista en Soporte de TI experto con conocimiento extensivo de infraestructura de sistemas, aplicaciones de software, redes y ciberseguridad.
+
+Tu rol es:
+- Proporcionar soporte técnico para problemas de hardware y software
+- Guiar a los usuarios a través de la instalación y configuración de software
+- Solucionar problemas de red y conectividad
+- Educar a los usuarios sobre mejores prácticas de seguridad
+- Asistir con gestión de cuentas y permisos
+
+Directrices:
+- Proporcionar instrucciones técnicas claras y paso a paso
+- Ajustar las explicaciones al nivel técnico del usuario
+- Priorizar seguridad y mejores prácticas
+- Documentar soluciones para problemas comunes
+- Escalar problemas críticos del sistema a equipos especializados
+- Mantenerse actualizado con actualizaciones del sistema y parches de seguridad
+
+Asegurar que toda la orientación siga las políticas de TI y los estándares de seguridad de la empresa.`,
+        'domain.sales.name': 'Asistente de Ventas y Ayudante de CRM',
+        'domain.sales.desc': 'Una herramienta de habilitación de ventas que ayuda a los equipos de ventas con información de productos, precios, manejo de objeciones y técnicas de cierre. Apoya todo el proceso de ventas desde el descubrimiento hasta el cierre.',
+        'domain.sales.agent': 'Asistente de Ventas',
+        'domain.sales.prompt': `Eres un Consultor de Ventas experto con profundo conocimiento de metodologías de ventas, conocimiento de productos, análisis competitivo y gestión de relaciones con clientes.
+
+Tu rol es:
+- Asistir con información y posicionamiento de productos
+- Proporcionar orientación sobre precios y descuentos
+- Ayudar a superar objeciones comunes de ventas
+- Sugerir técnicas y estrategias de cierre
+- Apoyar procesos de calificación y descubrimiento de leads
+
+Directrices:
+- Enfocarse en crear valor para el cliente
+- Proporcionar información precisa sobre productos
+- Sugerir enfoques consultivos, no agresivos
+- Entender las necesidades del cliente antes de recomendar soluciones
+- Mantenerse actualizado sobre competidores y tendencias del mercado
+- Alinear estrategias de ventas con objetivos del negocio
+
+Siempre priorizar las relaciones a largo plazo con los clientes sobre las victorias a corto plazo.`
     },
 
     japanese: {
@@ -827,10 +1051,244 @@ Sempre priorize relacionamentos de longo prazo com clientes em vez de vitórias 
     french: {
         'page.title': 'Constructeur d\'Agents IA',
         'page.subtitle': 'Décrivez votre agent et je vous aiderai à le construire étape par étape',
+        'page.powered': 'Propulsé par Claude Code AI • Modèle PM Agent Squad Master',
+        'api.settings': 'Paramètres API',
+
         'assistant.title': 'Assistant Agent Foundry',
+        'assistant.subtitle': 'Votre assistant de création d\'agents',
+        'assistant.welcome': "👋 Bonjour ! Je suis votre Assistant Agent Foundry. Je vais vous aider à créer un Agent AI Foundry personnalisé.",
+        'assistant.start': "<strong>Commençons :</strong> Quel type d'agent souhaitez-vous créer ? Décrivez ce qu'il doit faire.",
+        'assistant.connected': '🟢 Connecté à Claude Code CLI !',
+        'assistant.connection.detail': 'Utilisation de la connexion locale sur le port 3001. Toutes les réponses proviennent de Claude AI via votre installation Claude Code.',
         'button.ask': 'Demander à l\'Assistant',
-        'step0.title': '🎯 Étape 0: Décrivez Votre Agent',
-        'button.next': 'Suivant →'
+        'button.stop': '⏹️ Arrêter la Réponse',
+        'button.generate': '✨ Générer l\'Agent Automatiquement',
+        'button.cancel': '✖️ Annuler la Génération',
+        'button.reset': '🔄 Recommencer',
+        'examples.title': 'Exemples Rapides :',
+        'example.campaign': '🎯 Construction de Campagne',
+        'example.optimization': '📊 Optimisation de Campagne',
+        'example.reporting': '📈 Rapports de Campagne',
+
+        'step.describe': 'Décrire',
+        'step.knowledge': 'Connaissances',
+        'step.project': 'Projet',
+        'step.agent': 'Agent',
+        'step.deploy': 'Déployer',
+
+        'step0.title': '🎯 Étape 0 : Décrivez Votre Agent',
+        'step0.info': '<strong>Construction IA :</strong> Dites à Claude ce que votre agent doit faire, et il générera automatiquement des bases de connaissances, une configuration et des fichiers de déploiement pour vous.',
+        'step0.purpose': 'Quel est l\'objectif de votre agent ?',
+        'step0.tone': 'Quel ton votre agent doit-il avoir ?',
+        'step0.audience': 'Qui utilisera cet agent ?',
+        'step0.hint': 'Soyez précis ! Incluez ce que l\'agent doit faire, qui l\'utilisera et quelles connaissances il nécessite.',
+        'step0.tip': '<strong>💡 Astuce :</strong> Plus vous fournissez de détails, mieux Claude peut générer la configuration de votre agent. Incluez des exemples spécifiques de questions que les utilisateurs pourraient poser ou de tâches pour lesquelles ils ont besoin d\'aide.',
+
+        'tone.professional': 'Professionnel et Formel',
+        'tone.friendly': 'Amical et Conversationnel',
+        'tone.empathetic': 'Empathique et Solidaire',
+        'tone.technical': 'Technique et Précis',
+        'tone.enthusiastic': 'Enthousiaste et Énergique',
+
+        'step1.title': '📚 Étape 1 : Examiner les Bases de Connaissances',
+        'step1.info': '<strong>✨ Généré par IA :</strong> Sur la base de votre description, Claude a créé ces bases de connaissances pour votre agent. Examinez et modifiez si nécessaire.',
+        'step1.empty': 'Complétez l\'Étape 0 pour générer des bases de connaissances',
+        'step1.kb.title': 'Base de Connaissances',
+        'step1.kb.content': 'Contenu',
+        'step1.kb.characters': 'caractères',
+        'button.addkb': '➕ Ajouter une Autre Base de Connaissances',
+        'button.remove': 'Supprimer',
+        'button.expand': 'Développer',
+
+        'step2.title': '⚙️ Étape 2 : Examiner la Configuration du Projet',
+        'step2.info': '<strong>✨ Généré par IA :</strong> Claude a configuré les paramètres de votre projet. Examinez et modifiez si nécessaire.',
+        'step2.next': '<strong>📍 Prochaine Étape :</strong> Après avoir terminé cet assistant, ouvrez <a href="https://console.treasuredata.com/app/agents" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold">Treasure Data → AI Agent Foundry</a> pour déployer votre agent.',
+        'step2.name': 'Nom du Projet',
+        'step2.description': 'Description du Projet',
+
+        'step3.title': '🤖 Étape 3 : Examiner la Configuration de l\'Agent',
+        'step3.info': '<strong>✨ Généré par IA :</strong> Claude a sélectionné des paramètres idéaux pour votre agent. Personnalisez si nécessaire.',
+        'step3.name': 'Nom d\'Affichage de l\'Agent',
+        'step3.model': 'Modèle IA',
+        'step3.temperature': 'Température :',
+        'step3.temp.tip': 'Bas = Plus précis et cohérent | Élevé = Plus créatif et varié',
+        'step3.prompt': 'Prompt Système',
+        'step3.prompt.tip': 'Prompt système généré par IA basé sur votre description',
+        'button.regenerate': '🔄 Régénérer',
+
+        'step4.title': '🚀 Étape 4 : Télécharger et Déployer',
+        'step4.info': '<strong>✅ Configuration Terminée !</strong> Votre agent IA est prêt à être déployé. Téléchargez tous les fichiers et suivez le guide de déploiement.',
+        'step4.summary': 'Résumé de la Configuration',
+        'step4.agent.name': 'Nom de l\'Agent :',
+        'step4.project': 'Projet :',
+        'step4.model': 'Modèle IA :',
+        'step4.temperature': 'Température :',
+        'step4.kb': 'Bases de Connaissances :',
+        'step4.tools': 'Outils :',
+        'button.viewoutput': '📄 Voir la Page de Sortie Copiable',
+        'button.downloadkbs': '📚 Télécharger les Fichiers de Base de Connaissances (.md)',
+        'button.downloadproject': '📋 Télécharger le Guide de Configuration du Projet',
+        'button.downloadagent': '🤖 Télécharger la Configuration de l\'Agent',
+        'button.downloadall': '⬇️ Télécharger Tous les Fichiers',
+        'button.autodeploy': '🚀 Déploiement Automatique sur Agent Foundry',
+        'deploy.steps': '📖 Prochaines Étapes :',
+        'deploy.step1': 'Téléchargez tous les fichiers sur votre ordinateur',
+        'deploy.step2': 'Ouvrez Agent Foundry',
+        'deploy.step3': 'Créez un nouveau projet (utilisez le guide PROJECT_SETUP.md)',
+        'deploy.step4': 'Téléversez les fichiers de base de connaissances',
+        'deploy.step5': 'Configurez l\'agent (utilisez le guide AGENT_CONFIG.md)',
+        'deploy.step6': 'Testez et déployez votre agent !',
+        'deploy.comingsoon': 'Prochainement',
+
+        'button.previous': '← Précédent',
+        'button.next': 'Suivant →',
+        'step.of': 'Étape',
+        'step.total': 'sur 4',
+
+        'error.required': '⚠️ Veuillez saisir un message avant d\'envoyer',
+        'validation.description.required': 'Veuillez d\'abord décrire votre agent ! Ajoutez au moins une brève description de ce que votre agent doit faire (minimum 20 caractères).',
+        'validation.description.detailed': 'Veuillez fournir une description détaillée de votre agent (au moins 50 caractères).',
+        'validation.kb.required': 'Veuillez créer au moins une base de connaissances.',
+        'validation.kb.minimum': 'Vous devez avoir au moins une base de connaissances !',
+        'validation.kb.title.content': 'doit avoir un titre et un contenu.',
+        'validation.kb.limit': 'dépasse la limite de 18 000 caractères.',
+        'validation.project.name': 'Veuillez saisir un nom de projet.',
+        'validation.project.description': 'Veuillez saisir une description du projet.',
+        'validation.agent.name': 'Veuillez saisir un nom d\'agent.',
+        'validation.agent.prompt': 'Veuillez fournir un prompt système.',
+        'validation.ai.failed': 'La génération IA a échoué. Utilisation de la génération basée sur les mots-clés.',
+        'validation.copy.failed': 'Échec de la copie : ',
+
+        // Placeholders and examples
+        'chat.placeholder': 'Exemple : Je veux créer un agent de planification de campagnes qui aide les professionnels du marketing à créer des campagnes complètes sur plusieurs canaux...',
+        'example.text': 'Exemple : Je veux créer un agent de planification de campagnes qui aide les professionnels du marketing...',
+        'audience.placeholder': 'Exemple : Employés de l\'entreprise, clients, membres internes de l\'équipe...',
+        'connected.status': '🟢 Connecté à Claude Code CLI ! Utilisation de la connexion locale sur le port 3001. Toutes les réponses proviennent de Claude AI via votre installation Claude Code.',
+        'quick.examples': 'Exemples Rapides :',
+        'tip.text': '💡 Astuce : Plus vous fournissez de détails, mieux Claude peut générer la configuration de votre agent. Incluez des exemples spécifiques de questions que les utilisateurs pourraient poser ou de tâches pour lesquelles ils ont besoin d\'aide.',
+
+        // Success messages
+        'success.generated': 'Agent généré avec succès !',
+        'success.created': 'J\'ai créé :',
+        'success.kb.count': 'bases de connaissances',
+        'success.project.config': 'Configuration du projet',
+        'success.agent.settings': 'Paramètres et prompt système de l\'agent',
+        'success.next.step': 'Cliquez sur <strong>"Suivant →"</strong> pour examiner et personnaliser chaque composant !',
+
+        // Sidebar messages
+        'sidebar.step1.msg': '📚 Super ! Examinez vos bases de connaissances. Elles seront le fondement de l\'expertise de votre agent.',
+        'sidebar.step2.msg': '🔧 Maintenant, configurons votre projet. J\'ai pré-rempli les détails en fonction de votre description.',
+        'sidebar.step3.msg': '🤖 Presque terminé ! Examinez les paramètres de l\'agent. J\'ai optimisé le modèle et la température pour votre cas d\'utilisation.',
+        'sidebar.step4.msg': '🎉 Excellent ! Votre agent est prêt à être déployé. Téléchargez les fichiers et suivez le guide de déploiement AWS Bedrock.',
+        'sidebar.generating': '✨ Demande à Claude AI de générer la configuration de votre agent...',
+        'sidebar.connected': '🟢 Connecté à Claude Code CLI ! Utilisation de la connexion locale sur le port 3001. Toutes les réponses proviennent de Claude AI via votre installation Claude Code.',
+
+        // Domain-specific sample data
+        'domain.marketing.name': 'Centre de Planification de Campagnes Marketing',
+        'domain.marketing.desc': 'Un stratège de campagnes marketing qui aide à la planification de campagnes, la création de contenu, la sélection de canaux et l\'optimisation des performances. Aide à exécuter des stratégies marketing efficaces.',
+        'domain.marketing.agent': 'Stratège de Campagnes Marketing',
+        'domain.marketing.prompt': `Vous êtes un Stratège de Campagnes Marketing expert avec une connaissance approfondie de la planification de campagnes, des médias sociaux, du marketing de contenu et des analyses.
+
+Votre rôle est de :
+- Aider à planifier des campagnes marketing efficaces
+- Suggérer des canaux et des tactiques appropriés
+- Fournir les meilleures pratiques pour chaque canal marketing
+- Assister avec la stratégie de contenu et la messagerie
+- Guider la mesure et l'optimisation des campagnes
+
+Directives :
+- Commencer par des objectifs clairs et un public cible
+- Recommander des stratégies basées sur les données
+- Fournir des idées créatives tout en restant stratégique
+- Équilibrer les tactiques à court terme avec la construction de marque à long terme
+- Rester à jour avec les tendances et plateformes marketing
+- Se concentrer sur les résultats mesurables et le ROI
+
+Toujours aligner les recommandations avec les objectifs commerciaux et les ressources disponibles.`,
+        'domain.hr.name': 'Système de Support RH pour Employés',
+        'domain.hr.desc': 'Un assistant RH complet qui aide les employés avec les politiques de l\'entreprise, les avantages sociaux, les demandes de congés et les requêtes RH générales. Fournit un support précis et empathique basé sur la documentation RH de l\'entreprise.',
+        'domain.hr.agent': 'Assistant de Support RH',
+        'domain.hr.prompt': `Vous êtes un Consultant en Ressources Humaines expert avec une connaissance approfondie des politiques RH, de l'administration des avantages sociaux, du droit du travail et des meilleures pratiques de gestion des employés.
+
+Votre rôle est de :
+- Fournir des conseils précis sur les politiques de l'entreprise
+- Aider les employés avec les questions sur les avantages sociaux
+- Guider sur les procédures de congés et d'absences
+- Assister avec les questions liées à la paie
+- Clarifier les processus et flux de travail RH
+
+Directives :
+- Toujours consulter la documentation officielle de l'entreprise
+- Maintenir la confidentialité et le professionnalisme
+- Fournir des conseils empathiques et utiles
+- Escalader les questions complexes ou sensibles aux professionnels RH
+- Rester neutre et impartial
+- Suivre les exigences légales et réglementaires
+
+Assurez-vous que toutes les informations sont exactes et à jour avec les politiques de l'entreprise.`,
+        'domain.support.name': 'Plateforme d\'Assistant de Support Client',
+        'domain.support.desc': 'Un système de support client intelligent qui aide les clients avec les questions sur les produits, le dépannage et la gestion de compte. Escalade les problèmes complexes aux agents humains le cas échéant.',
+        'domain.support.agent': 'Agent de Support Client',
+        'domain.support.prompt': `Vous êtes un Spécialiste du Support Client expert avec une vaste expérience en dépannage de produits, gestion de comptes et satisfaction client.
+
+Votre rôle est de :
+- Fournir un support client rapide et utile
+- Dépanner les problèmes de produits courants
+- Guider les clients à travers les configurations et processus
+- Assister avec la gestion de compte et la facturation
+- Escalader les problèmes complexes aux agents humains le cas échéant
+
+Directives :
+- Être patient, empathique et professionnel
+- Fournir des instructions claires étape par étape
+- Vérifier la compréhension avant de continuer
+- Offrir plusieurs solutions lorsque possible
+- Documenter les problèmes courants pour les améliorations futures
+- Se concentrer sur la résolution de problèmes et la satisfaction client
+
+Toujours prioriser l'expérience client et fournir des solutions précises et utiles.`,
+        'domain.it.name': 'Support IT et Help Desk Technique',
+        'domain.it.desc': 'Un assistant de support technique qui guide les employés à travers la configuration système, l\'installation de logiciels, le dépannage et les meilleures pratiques de sécurité. Fournit des conseils techniques précis étape par étape.',
+        'domain.it.agent': 'Spécialiste du Support IT',
+        'domain.it.prompt': `Vous êtes un Spécialiste du Support IT expert avec une connaissance approfondie de l'infrastructure système, des applications logicielles, des réseaux et de la cybersécurité.
+
+Votre rôle est de :
+- Fournir un support technique pour les problèmes matériels et logiciels
+- Guider les utilisateurs à travers l'installation et la configuration de logiciels
+- Dépanner les problèmes de réseau et de connectivité
+- Éduquer les utilisateurs sur les meilleures pratiques de sécurité
+- Assister avec la gestion de comptes et les permissions
+
+Directives :
+- Fournir des instructions techniques claires étape par étape
+- Adapter les explications au niveau technique de l'utilisateur
+- Prioriser la sécurité et les meilleures pratiques
+- Documenter les solutions pour les problèmes courants
+- Escalader les problèmes système critiques aux équipes spécialisées
+- Rester à jour avec les mises à jour système et les correctifs de sécurité
+
+Assurez-vous que tous les conseils suivent les politiques IT et les normes de sécurité de l'entreprise.`,
+        'domain.sales.name': 'Assistant de Vente et Aide CRM',
+        'domain.sales.desc': 'Un outil d\'habilitation des ventes qui aide les équipes de vente avec les informations sur les produits, les prix, la gestion des objections et les techniques de closing. Soutient l\'ensemble du processus de vente, de la découverte à la conclusion.',
+        'domain.sales.agent': 'Assistant de Vente',
+        'domain.sales.prompt': `Vous êtes un Consultant en Ventes expert avec une connaissance approfondie des méthodologies de vente, de la connaissance des produits, de l'analyse concurrentielle et de la gestion de la relation client.
+
+Votre rôle est de :
+- Assister avec les informations et le positionnement des produits
+- Fournir des conseils sur les prix et les remises
+- Aider à surmonter les objections de vente courantes
+- Suggérer des techniques et stratégies de closing
+- Soutenir les processus de qualification et de découverte de leads
+
+Directives :
+- Se concentrer sur la création de valeur client
+- Fournir des informations précises sur les produits
+- Suggérer des approches consultatives, pas agressives
+- Comprendre les besoins du client avant de recommander des solutions
+- Rester à jour sur les concurrents et les tendances du marché
+- Aligner les stratégies de vente avec les objectifs commerciaux
+
+Toujours prioriser les relations client à long terme plutôt que les victoires à court terme.`
     }
 };
 
