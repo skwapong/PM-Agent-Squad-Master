@@ -148,6 +148,13 @@ const translations = {
         'button.downloadall': '⬇️ Download All Files',
         'button.autodeploy': '🚀 Auto-Deploy to Agent Foundry',
         'deploy.steps': '📖 Next Steps:',
+        'deploy.step1': 'Download all files to your computer',
+        'deploy.step2': 'Open Agent Foundry',
+        'deploy.step3': 'Create new project (use PROJECT_SETUP.md guide)',
+        'deploy.step4': 'Upload knowledge base files',
+        'deploy.step5': 'Configure agent (use AGENT_CONFIG.md guide)',
+        'deploy.step6': 'Test and deploy your agent!',
+        'deploy.comingsoon': 'Coming Soon',
 
         // Navigation
         'button.previous': '← Previous',
@@ -279,6 +286,13 @@ const translations = {
         'button.downloadall': '⬇️ Baixar Todos os Arquivos',
         'button.autodeploy': '🚀 Implantar Automaticamente no Agent Foundry',
         'deploy.steps': '📖 Próximos Passos:',
+        'deploy.step1': 'Baixe todos os arquivos para o seu computador',
+        'deploy.step2': 'Abra o Agent Foundry',
+        'deploy.step3': 'Crie um novo projeto (use o guia PROJECT_SETUP.md)',
+        'deploy.step4': 'Carregue os arquivos da base de conhecimento',
+        'deploy.step5': 'Configure o agente (use o guia AGENT_CONFIG.md)',
+        'deploy.step6': 'Teste e implante seu agente!',
+        'deploy.comingsoon': 'Em Breve',
 
         'button.previous': '← Anterior',
         'button.next': 'Próximo →',
@@ -436,6 +450,13 @@ const translations = {
         'button.downloadall': '⬇️ すべてのファイルをダウンロード',
         'button.autodeploy': '🚀 Agent Foundryに自動デプロイ',
         'deploy.steps': '📖 次のステップ：',
+        'deploy.step1': 'すべてのファイルをコンピュータにダウンロード',
+        'deploy.step2': 'Agent Foundryを開く',
+        'deploy.step3': '新しいプロジェクトを作成（PROJECT_SETUP.mdガイドを使用）',
+        'deploy.step4': 'ナレッジベースファイルをアップロード',
+        'deploy.step5': 'エージェントを設定（AGENT_CONFIG.mdガイドを使用）',
+        'deploy.step6': 'エージェントをテストしてデプロイ！',
+        'deploy.comingsoon': '近日公開',
 
         // Navigation
         'button.previous': '← 前へ',
