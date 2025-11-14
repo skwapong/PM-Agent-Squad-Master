@@ -260,19 +260,14 @@ function updatePageLanguage(language) {
     // This will affect the entire page interface
     const languageMap = {
         'english': 'en',
+        'japanese': 'ja',
+        'portuguese': 'pt',
         'spanish': 'es',
         'french': 'fr',
         'german': 'de',
-        'japanese': 'ja',
-        'chinese': 'zh-CN',
-        'chinese-traditional': 'zh-TW',
-        'portuguese': 'pt',
         'italian': 'it',
         'korean': 'ko',
         'dutch': 'nl',
-        'russian': 'ru',
-        'arabic': 'ar',
-        'hindi': 'hi',
         'multilingual': 'auto'
     };
 
@@ -766,19 +761,14 @@ async function generateAgent() {
         // Get language preference
         const languageMap = {
             'english': 'English',
+            'japanese': 'Japanese',
+            'portuguese': 'Portuguese',
             'spanish': 'Spanish',
             'french': 'French',
             'german': 'German',
-            'japanese': 'Japanese',
-            'chinese': 'Simplified Chinese',
-            'chinese-traditional': 'Traditional Chinese',
-            'portuguese': 'Portuguese',
             'italian': 'Italian',
             'korean': 'Korean',
             'dutch': 'Dutch',
-            'russian': 'Russian',
-            'arabic': 'Arabic',
-            'hindi': 'Hindi',
             'multilingual': 'multiple languages (multilingual)'
         };
         const languageName = languageMap[agentConfig.language] || 'English';
