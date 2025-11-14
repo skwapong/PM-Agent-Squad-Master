@@ -431,6 +431,9 @@ function updatePageLanguage(language) {
     // Store in localStorage for persistence
     localStorage.setItem('preferredLanguage', language);
 
+    // Update agentConfig language so Quick Examples work correctly
+    agentConfig.language = language;
+
     // Apply translations to the page
     applyTranslations(language);
 
