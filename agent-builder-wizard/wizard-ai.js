@@ -1011,6 +1011,12 @@ async function generateAgent() {
     // Update agentConfig with current value
     agentConfig.description = description;
 
+    // Also populate the agentDescription textarea if it exists (for Step 0 validation)
+    const descTextarea = document.getElementById('agentDescription');
+    if (descTextarea && !descTextarea.value.trim()) {
+        descTextarea.value = description;
+    }
+
     showTypingIndicator('✨ Asking Claude AI to generate your agent configuration...');
 
     try {
