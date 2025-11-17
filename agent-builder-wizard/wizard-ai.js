@@ -7311,25 +7311,25 @@ function setupDragAndDrop() {
     loadSavedLayout();
 
     draggableSections.forEach(section => {
-        // Only allow dragging from drag handles, not the entire section
-        const dragHandles = section.querySelectorAll('.drag-handle');
+        // Only allow dragging from drag handle areas (the header section)
+        const dragHandleAreas = section.querySelectorAll('.drag-handle-area');
 
-        dragHandles.forEach(handle => {
-            handle.addEventListener('mousedown', function(e) {
-                // Enable dragging on the parent section
+        dragHandleAreas.forEach(handleArea => {
+            handleArea.addEventListener('mousedown', function(e) {
+                // Only enable dragging if mousedown is on the handle area
                 section.setAttribute('draggable', 'true');
             });
         });
 
-        // Disable dragging when mouse is released
-        section.addEventListener('mouseup', function() {
+        // Disable dragging when mouse is released anywhere
+        document.addEventListener('mouseup', function() {
             section.setAttribute('draggable', 'false');
         });
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
-            // Only allow drag if initiated from drag handle
-            if (!e.target.classList.contains('drag-handle') && !e.target.closest('.drag-handle')) {
+            // Only allow drag if initiated from drag handle area
+            if (!e.target.closest('.drag-handle-area')) {
                 e.preventDefault();
                 return;
             }
