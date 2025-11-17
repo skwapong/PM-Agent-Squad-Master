@@ -747,16 +747,49 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                                     <span data-i18n="step3.model">AI Model</span> <span class="text-red-500">*</span>
                                 </label>
                                 <select id="modelSelect" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                                    <option value="anthropic.claude-3-5-sonnet-20241022-v2:0">Claude 3.5 Sonnet v2 (Recommended)</option>
-                                    <option value="anthropic.claude-3-5-haiku-20241022-v1:0">Claude 3.5 Haiku</option>
-                                    <option value="anthropic.claude-3-opus-20240229-v1:0">Claude 3 Opus</option>
-                                    <option value="openai.gpt-4o">GPT-4o</option>
-                                    <option value="openai.gpt-4o-mini">GPT-4o Mini</option>
-                                    <option value="amazon.nova-pro-v1:0">Amazon Nova Pro</option>
-                                    <option value="amazon.nova-lite-v1:0">Amazon Nova Lite</option>
-                                    <option value="meta.llama3-1-405b-instruct-v1:0">Llama 3.1 405B</option>
+                                    <!-- Top 3 Recommendations -->
+                                    <optgroup label="🏆 Recommended (Top 3)">
+                                        <option value="anthropic.claude-3-5-sonnet-20241022-v2:0">🥇 Claude 3.5 Sonnet v2 - Best Overall</option>
+                                        <option value="anthropic.claude-3-5-haiku-20241022-v1:0">🥈 Claude 3.5 Haiku - Fast & Cost-Effective</option>
+                                        <option value="openai.gpt-4o">🥉 GPT-4o - OpenAI Flagship</option>
+                                    </optgroup>
+
+                                    <!-- Anthropic Claude -->
+                                    <optgroup label="Anthropic Claude">
+                                        <option value="anthropic.claude-3-5-sonnet-20241022-v2:0">Claude 3.5 Sonnet v2 (Recommended)</option>
+                                        <option value="anthropic.claude-3-5-haiku-20241022-v1:0">Claude 3.5 Haiku</option>
+                                        <option value="anthropic.claude-3-opus-20240229-v1:0">Claude 3 Opus (Superseded)</option>
+                                    </optgroup>
+
+                                    <!-- OpenAI -->
+                                    <optgroup label="OpenAI">
+                                        <option value="openai.gpt-4o">GPT-4o</option>
+                                        <option value="openai.gpt-4o-mini">GPT-4o Mini</option>
+                                        <option value="openai.gpt-4-turbo-2024-04-09">GPT-4 Turbo (Superseded)</option>
+                                    </optgroup>
+
+                                    <!-- Amazon Bedrock -->
+                                    <optgroup label="Amazon Bedrock">
+                                        <option value="amazon.nova-pro-v1:0">Amazon Nova Pro</option>
+                                        <option value="amazon.nova-lite-v1:0">Amazon Nova Lite</option>
+                                        <option value="amazon.nova-micro-v1:0">Amazon Nova Micro (Not Recommended)</option>
+                                    </optgroup>
+
+                                    <!-- Meta Llama -->
+                                    <optgroup label="Meta Llama (Open Source)">
+                                        <option value="meta.llama3-1-405b-instruct-v1:0">Llama 3.1 405B Instruct</option>
+                                        <option value="meta.llama3-1-70b-instruct-v1:0">Llama 3.1 70B Instruct</option>
+                                        <option value="meta.llama3-1-8b-instruct-v1:0">Llama 3.1 8B Instruct (Not Recommended)</option>
+                                    </optgroup>
+
+                                    <!-- Mistral -->
+                                    <optgroup label="Mistral AI">
+                                        <option value="mistral.mistral-large-2411-v1:0">Mistral Large 2 (24.11)</option>
+                                        <option value="mistral.mistral-small-2409-v1:0">Mistral Small (24.09)</option>
+                                    </optgroup>
                                 </select>
-                                <p id="modelRecommendation" class="text-xs text-indigo-600 mt-1"></p>
+                                <p id="modelRecommendation" class="text-xs mt-1"></p>
+                                <p id="modelWarning" class="text-xs text-amber-600 mt-1 hidden"></p>
 
                                 <!-- AI Model Reasoning -->
                                 <div id="modelReasoningSection" class="mt-3 p-3 bg-indigo-50 border border-indigo-200 rounded-lg" style="display: none;">

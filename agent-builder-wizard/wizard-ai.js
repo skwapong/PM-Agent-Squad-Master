@@ -5084,18 +5084,166 @@ Guide complex sales processes to successful closures while building lasting cust
 
 // Update Model Recommendation
 function updateModelRecommendation() {
-    const recommendations = {
-        'anthropic.claude-3-5-sonnet-20241022-v2:0': '💡 Excellent for complex reasoning, empathy, and long conversations',
-        'anthropic.claude-3-5-haiku-20241022-v1:0': '⚡ Fast and cost-effective, great for simple queries',
-        'openai.gpt-4o': '🎯 Strong general-purpose model, excellent at understanding varied questions',
-        'amazon.nova-pro-v1:0': '💰 Cost-effective AWS-native option with good performance'
+    const modelData = {
+        // Top Tier - Recommended
+        'anthropic.claude-3-5-sonnet-20241022-v2:0': {
+            tier: 'recommended',
+            icon: '✅',
+            color: 'text-green-600',
+            message: 'Best overall choice for most agent use cases',
+            details: 'Excellent reasoning, empathy, and instruction-following. 200K context. Best for customer service, analysis, and content creation.',
+            cost: '$3/$15 per 1M tokens',
+            warning: null
+        },
+        'anthropic.claude-3-5-haiku-20241022-v1:0': {
+            tier: 'recommended',
+            icon: '✅',
+            color: 'text-green-600',
+            message: 'Best for high-volume, cost-sensitive use cases',
+            details: 'Fast (<3s), cost-effective, good for simple-to-moderate complexity. Ideal for FAQ bots and data extraction.',
+            cost: '$0.80/$4 per 1M tokens (75% cheaper than Sonnet)',
+            warning: null
+        },
+        'openai.gpt-4o': {
+            tier: 'recommended',
+            icon: '✅',
+            color: 'text-green-600',
+            message: 'Strong OpenAI option with vision capabilities',
+            details: 'Good general-purpose model. Excellent for structured outputs and image understanding. 128K context.',
+            cost: '$2.50/$10 per 1M tokens',
+            warning: null
+        },
+
+        // Good Alternatives
+        'amazon.nova-pro-v1:0': {
+            tier: 'alternative',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Good AWS-native option with longest context (300K)',
+            details: 'Cost-effective for AWS environments. Multimodal (text, image, video). Good for long document processing.',
+            cost: '$0.80/$3.20 per 1M tokens',
+            warning: null
+        },
+        'openai.gpt-4o-mini': {
+            tier: 'alternative',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Very fast and affordable for simple tasks',
+            details: 'Best for high-volume, low-complexity queries. Sub-2 second responses. Limited reasoning capability.',
+            cost: '$0.15/$0.60 per 1M tokens',
+            warning: 'Not ideal for complex reasoning or nuanced responses'
+        },
+        'meta.llama3-1-405b-instruct-v1:0': {
+            tier: 'alternative',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Open-source option with strong code capabilities',
+            details: 'Good for code generation and open-source preference. 128K context.',
+            cost: '$2.65/$3.50 per 1M tokens',
+            warning: 'Less reliable than Claude/GPT on edge cases. Slower inference.'
+        },
+        'mistral.mistral-large-2411-v1:0': {
+            tier: 'alternative',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'European alternative with strong multilingual support',
+            details: 'Good for EU data residency requirements. Strong multilingual capabilities, especially European languages.',
+            cost: '$2/$6 per 1M tokens',
+            warning: 'Smaller ecosystem than Claude/OpenAI. Not as refined for complex tasks.'
+        },
+
+        // Not Recommended
+        'anthropic.claude-3-opus-20240229-v1:0': {
+            tier: 'not-recommended',
+            icon: '⚠️',
+            color: 'text-amber-600',
+            message: 'SUPERSEDED by Claude 3.5 Sonnet v2',
+            details: 'Previous flagship model. Still capable but outdated.',
+            cost: '$15/$75 per 1M tokens (5x more expensive than Sonnet v2)',
+            warning: 'Claude 3.5 Sonnet v2 outperforms Opus on most benchmarks and costs 60% less. Only use if you have specific legacy compatibility requirements.'
+        },
+        'openai.gpt-4-turbo-2024-04-09': {
+            tier: 'not-recommended',
+            icon: '⚠️',
+            color: 'text-amber-600',
+            message: 'SUPERSEDED by GPT-4o',
+            details: 'Older GPT-4 variant. Reliable but outdated.',
+            cost: '$10/$30 per 1M tokens (2x more expensive than GPT-4o)',
+            warning: 'GPT-4o is faster, better, and 50% cheaper. No reason to use GPT-4 Turbo unless you have specific compatibility needs.'
+        },
+        'amazon.nova-micro-v1:0': {
+            tier: 'not-recommended',
+            icon: '❌',
+            color: 'text-red-600',
+            message: 'NOT RECOMMENDED for production agents',
+            details: 'Smallest Nova model. Very limited capability.',
+            cost: '$0.035/$0.14 per 1M tokens (cheapest)',
+            warning: 'Too basic for most agent use cases. High error rate. Poor instruction-following. Only use for extreme cost constraints with very simple classification tasks.'
+        },
+        'meta.llama3-1-8b-instruct-v1:0': {
+            tier: 'not-recommended',
+            icon: '❌',
+            color: 'text-red-600',
+            message: 'NOT RECOMMENDED for production agents',
+            details: 'Smallest Llama model. Inconsistent quality.',
+            cost: '$0.22/$0.22 per 1M tokens',
+            warning: 'Too limited for real-world agents. High error rate on complex instructions. Only suitable for prototyping/testing with open-source requirement.'
+        },
+
+        // Acceptable but situational
+        'amazon.nova-lite-v1:0': {
+            tier: 'situational',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Acceptable for simple AWS use cases',
+            details: 'Fast and cost-effective on AWS. Good for simple queries only.',
+            cost: '$0.06/$0.24 per 1M tokens',
+            warning: 'Limited reasoning capability. Not suitable for complex agents. Use Claude Haiku instead unless locked into AWS.'
+        },
+        'meta.llama3-1-70b-instruct-v1:0': {
+            tier: 'situational',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Acceptable open-source option for moderate complexity',
+            details: 'Good balance of cost/performance for open models. Faster than 405B.',
+            cost: '$0.99/$0.99 per 1M tokens',
+            warning: 'Can struggle with nuanced tasks. Less capable than proprietary models. Use if open-source is required.'
+        },
+        'mistral.mistral-small-2409-v1:0': {
+            tier: 'situational',
+            icon: 'ℹ️',
+            color: 'text-blue-600',
+            message: 'Cost-effective for simple EU projects',
+            details: 'Good for simple agents with European data residency needs.',
+            cost: '$0.20/$0.60 per 1M tokens',
+            warning: 'Not ideal for complex agents. Use Mistral Large or Claude Haiku for better quality.'
+        }
     };
 
     const model = document.getElementById('modelSelect').value;
+    const data = modelData[model];
     const recElement = document.getElementById('modelRecommendation');
-    if (recElement) {
-        recElement.textContent = recommendations[model] || '';
+    const warningElement = document.getElementById('modelWarning');
+
+    if (!recElement || !data) return;
+
+    // Update recommendation message
+    recElement.className = `text-xs mt-1 ${data.color}`;
+    recElement.innerHTML = `<strong>${data.icon} ${data.message}</strong><br>${data.details}<br><span class="text-gray-500">Cost: ${data.cost}</span>`;
+
+    // Update warning message
+    if (warningElement) {
+        if (data.warning) {
+            warningElement.textContent = `⚠️ ${data.warning}`;
+            warningElement.classList.remove('hidden');
+        } else {
+            warningElement.classList.add('hidden');
+        }
     }
+
+    // Show link to full model reference
+    const linkHTML = '<br><a href="MODEL_REFERENCE.md" target="_blank" class="text-indigo-600 hover:text-indigo-700 underline text-xs">📖 View Full Model Comparison</a>';
+    recElement.innerHTML += linkHTML;
 }
 
 // Render Knowledge Bases in Step 1
