@@ -2537,6 +2537,24 @@ function setupEventListeners() {
     // API Connection Status
     document.getElementById('configureApiBtn')?.addEventListener('click', showApiKeyModal);
     document.getElementById('closeApiModalBtn')?.addEventListener('click', hideApiKeyModal);
+
+    // Templates
+    document.getElementById('templatesBtn')?.addEventListener('click', showTemplatesModal);
+    document.getElementById('closeTemplatesModalBtn')?.addEventListener('click', hideTemplatesModal);
+    document.getElementById('cancelTemplateBtn')?.addEventListener('click', hideTemplatesModal);
+
+    // Collaboration (Import/Export)
+    document.getElementById('importConfigBtn')?.addEventListener('click', importAgentConfig);
+    document.getElementById('exportConfigBtn')?.addEventListener('click', exportAgentConfig);
+
+    // Markdown Preview Toggle
+    document.getElementById('toggleSystemPromptPreview')?.addEventListener('click', toggleSystemPromptPreview);
+
+    // Auto-save listeners (debounced)
+    setupAutoSave();
+
+    // Initialize progress bar
+    updateProgressBar();
 }
 
 // API Connection Status Management
@@ -5866,6 +5884,7 @@ function nextStep() {
     if (currentStep < 7) {
         currentStep++;
         updateStepDisplay();
+        updateProgressBar(); // Update progress bar on step change
 
         // Show AI encouragement
         if (currentStep === 1) {
@@ -5892,6 +5911,7 @@ function prevStep() {
     if (currentStep > 0) {
         currentStep--;
         updateStepDisplay();
+        updateProgressBar(); // Update progress bar on step change
     }
 }
 
@@ -8536,3 +8556,882 @@ function showToast(message, type = 'info') {
         }, 300);
     }, 3000);
 }
+
+// ============================================================================
+// TOAST NOTIFICATION SYSTEM
+// ============================================================================
+
+function showToast(message, type = 'info', duration = 3000) {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    const icon = {
+        success: '✓',
+        error: '✕',
+        info: 'ℹ',
+        warning: '⚠'
+    }[type] || 'ℹ';
+
+    const iconColor = {
+        success: '#10b981',
+        error: '#ef4444',
+        info: '#3b82f6',
+        warning: '#f59e0b'
+    }[type] || '#3b82f6';
+
+    toast.innerHTML = `
+        <div style="width: 20px; height: 20px; border-radius: 50%; background: ${iconColor}; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+            ${icon}
+        </div>
+        <div style="flex: 1;">
+            <div style="font-weight: 600; color: #111827; margin-bottom: 2px;">${message.split('\n')[0]}</div>
+            ${message.split('\n')[1] ? `<div style="font-size: 0.875rem; color: #6b7280;">${message.split('\n')[1]}</div>` : ''}
+        </div>
+        <button onclick="this.parentElement.classList.add('toast-hiding')" style="background: none; border: none; color: #9ca3af; cursor: pointer; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+            ✕
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after duration
+    setTimeout(() => {
+        toast.classList.add('toast-hiding');
+        setTimeout(() => {
+            if (toast.parentElement) {
+                container.removeChild(toast);
+            }
+        }, 300);
+    }, duration);
+}
+
+// ============================================================================
+// AUTO-SAVE SYSTEM
+// ============================================================================
+
+let autoSaveTimeout = null;
+const AUTO_SAVE_DELAY = 2000; // 2 seconds debounce
+
+function setupAutoSave() {
+    // Track changes to all form fields
+    const fieldsToWatch = [
+        'agentDescription', 'agentTone', 'agentAudience',
+        'projectName', 'projectDescription', 'agentName',
+        'modelSelect', 'temperature', 'maxToolsIterations', 'systemPrompt'
+    ];
+
+    fieldsToWatch.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', triggerAutoSave);
+            field.addEventListener('change', triggerAutoSave);
+        }
+    });
+}
+
+function triggerAutoSave() {
+    // Clear existing timeout
+    if (autoSaveTimeout) {
+        clearTimeout(autoSaveTimeout);
+    }
+
+    // Show saving indicator
+    showAutoSaveIndicator('Saving...');
+
+    // Set new timeout
+    autoSaveTimeout = setTimeout(() => {
+        saveToLocalStorage();
+        showAutoSaveIndicator('Saved');
+        // Hide indicator after 2 seconds
+        setTimeout(hideAutoSaveIndicator, 2000);
+    }, AUTO_SAVE_DELAY);
+}
+
+function saveToLocalStorage() {
+    const dataToSave = {
+        agentConfig,
+        knowledgeBases,
+        additionalTools,
+        outputs,
+        promptVariables,
+        currentStep,
+        timestamp: Date.now()
+    };
+
+    try {
+        localStorage.setItem('agentBuilderAutoSave', JSON.stringify(dataToSave));
+        console.log('💾 Auto-saved to localStorage');
+    } catch (error) {
+        console.error('❌ Auto-save failed:', error);
+        showToast('Auto-save failed\nPlease check your browser storage', 'error');
+    }
+}
+
+function loadFromLocalStorage() {
+    try {
+        const saved = localStorage.getItem('agentBuilderAutoSave');
+        if (saved) {
+            const data = JSON.parse(saved);
+            const savedDate = new Date(data.timestamp);
+            const now = new Date();
+            const hoursSince = (now - savedDate) / (1000 * 60 * 60);
+
+            // Only load if saved within last 24 hours
+            if (hoursSince < 24) {
+                const load = confirm(`Found auto-saved work from ${savedDate.toLocaleString()}.\n\nWould you like to restore it?`);
+                if (load) {
+                    agentConfig = data.agentConfig || agentConfig;
+                    knowledgeBases = data.knowledgeBases || [];
+                    additionalTools = data.additionalTools || [];
+                    outputs = data.outputs || [];
+                    promptVariables = data.promptVariables || [];
+                    currentStep = data.currentStep || 0;
+
+                    // Populate UI fields
+                    populateFieldsFromConfig();
+                    updateStepDisplay();
+                    showToast('Auto-saved work restored successfully', 'success');
+                    return true;
+                }
+            } else {
+                // Clear old auto-save
+                localStorage.removeItem('agentBuilderAutoSave');
+            }
+        }
+    } catch (error) {
+        console.error('❌ Failed to load auto-save:', error);
+    }
+    return false;
+}
+
+function showAutoSaveIndicator(text) {
+    const indicator = document.getElementById('autosaveIndicator');
+    const textSpan = document.getElementById('autosaveText');
+    if (indicator && textSpan) {
+        textSpan.textContent = text;
+        indicator.classList.add('visible');
+    }
+}
+
+function hideAutoSaveIndicator() {
+    const indicator = document.getElementById('autosaveIndicator');
+    if (indicator) {
+        indicator.classList.remove('visible');
+    }
+}
+
+// ============================================================================
+// PROGRESS BAR
+// ============================================================================
+
+function updateProgressBar() {
+    const progressBar = document.getElementById('progressBar');
+    if (!progressBar) return;
+
+    // Calculate progress based on completed fields and current step
+    let totalSteps = 8;
+    let progress = 0;
+
+    // Step-based progress (base 60%)
+    progress += (currentStep / totalSteps) * 60;
+
+    // Completion-based progress (additional 40%)
+    let completionScore = 0;
+    let totalPossible = 7;
+
+    if (agentConfig.description) completionScore++;
+    if (agentConfig.projectName) completionScore++;
+    if (knowledgeBases.length > 0) completionScore++;
+    if (agentConfig.systemPrompt) completionScore++;
+    if (outputs.length > 0) completionScore++;
+    if (agentConfig.agentName) completionScore++;
+    if (agentConfig.model) completionScore++;
+
+    progress += (completionScore / totalPossible) * 40;
+
+    progressBar.style.width = `${Math.min(progress, 100)}%`;
+}
+
+// ============================================================================
+// AGENT TEMPLATES
+// ============================================================================
+
+const agentTemplates = [
+    {
+        id: 'campaign-planner',
+        name: 'Campaign Planner',
+        icon: '📊',
+        description: 'Plan comprehensive marketing campaigns across multiple channels',
+        config: {
+            projectName: 'Campaign Planning System',
+            projectDescription: 'An intelligent system for creating and managing marketing campaigns',
+            agentName: 'Campaign Planner Agent',
+            description: 'A marketing campaign planning agent that helps create comprehensive, multi-channel marketing strategies',
+            tone: 'professional',
+            audience: 'Marketing teams and campaign managers',
+            domain: 'Marketing & Advertising',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.7,
+            systemPrompt: `You are a Campaign Planning Agent specializing in comprehensive marketing campaign development.
+
+Your role is to help marketing teams create detailed, multi-channel campaign strategies that align with business objectives.
+
+Key Responsibilities:
+- Analyze campaign objectives and target audiences
+- Recommend optimal channel mix (social media, email, content, paid ads)
+- Create campaign timelines and milestone planning
+- Budget allocation across channels
+- Performance metrics and KPIs definition
+
+Always provide structured, actionable campaign plans with clear next steps.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Marketing Best Practices',
+                content: `# Marketing Campaign Best Practices
+
+## Channel Selection
+- Social Media: Best for brand awareness and engagement
+- Email: Highest ROI for direct conversion
+- Content Marketing: Long-term SEO and thought leadership
+- Paid Advertising: Quick reach and targeted messaging
+
+## Campaign Timeline
+1. Planning Phase: 2-4 weeks
+2. Creative Development: 2-3 weeks
+3. Campaign Launch: 1 week
+4. Active Campaign: 4-8 weeks
+5. Analysis & Optimization: Ongoing
+
+## Key Metrics
+- Reach and Impressions
+- Engagement Rate
+- Click-Through Rate (CTR)
+- Conversion Rate
+- Return on Ad Spend (ROAS)
+- Customer Acquisition Cost (CAC)`
+            }
+        ]
+    },
+    {
+        id: 'customer-support',
+        name: 'Customer Support',
+        icon: '💬',
+        description: 'Intelligent customer service assistant with FAQ knowledge',
+        config: {
+            projectName: 'Customer Support System',
+            projectDescription: 'AI-powered customer support agent for handling common inquiries',
+            agentName: 'Support Agent',
+            description: 'A helpful customer support agent that can answer questions, troubleshoot issues, and escalate when needed',
+            tone: 'friendly',
+            audience: 'Customer support teams and end users',
+            domain: 'Customer Service',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.5,
+            systemPrompt: `You are a Customer Support Agent dedicated to providing helpful, empathetic assistance.
+
+Your role is to help customers resolve issues, answer questions, and ensure satisfaction.
+
+Key Responsibilities:
+- Answer product and service questions accurately
+- Troubleshoot common technical issues
+- Process requests for refunds, exchanges, or account changes
+- Escalate complex issues to human agents when necessary
+- Maintain a friendly, professional tone
+
+Always prioritize customer satisfaction and clear communication.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Common FAQs',
+                content: `# Frequently Asked Questions
+
+## Account Management
+Q: How do I reset my password?
+A: Click "Forgot Password" on the login page and follow the email instructions.
+
+Q: How do I update my billing information?
+A: Go to Settings > Billing and update your payment method.
+
+## Product Support
+Q: What are the system requirements?
+A: Windows 10+, macOS 10.15+, or Linux. 4GB RAM minimum, 8GB recommended.
+
+Q: How do I export my data?
+A: Navigate to Settings > Data Export and choose your format (CSV, JSON, or Excel).
+
+## Troubleshooting
+Issue: Can't log in
+Solution: Clear browser cache, ensure cookies are enabled, try incognito mode.
+
+Issue: Features not working
+Solution: Check internet connection, refresh page, update browser to latest version.`
+            }
+        ]
+    },
+    {
+        id: 'data-analyst',
+        name: 'Data Analyst',
+        icon: '📈',
+        description: 'Analyze data trends and generate insights for business decisions',
+        config: {
+            projectName: 'Data Analysis Platform',
+            projectDescription: 'Advanced data analysis and business intelligence agent',
+            agentName: 'Data Analyst Agent',
+            description: 'An analytical agent that interprets data, identifies trends, and provides actionable business insights',
+            tone: 'analytical',
+            audience: 'Business analysts and decision makers',
+            domain: 'Data Science & Analytics',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.3,
+            systemPrompt: `You are a Data Analyst Agent specializing in business intelligence and data interpretation.
+
+Your role is to analyze data, identify patterns, and provide clear, actionable insights.
+
+Key Responsibilities:
+- Interpret complex datasets and identify trends
+- Create data-driven recommendations
+- Explain statistical concepts in business terms
+- Identify correlations and anomalies
+- Suggest data visualization approaches
+
+Always present findings clearly with supporting evidence and context.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Analysis Frameworks',
+                content: `# Data Analysis Frameworks
+
+## SWOT Analysis
+- Strengths: Internal positive attributes
+- Weaknesses: Internal limitations
+- Opportunities: External favorable conditions
+- Threats: External challenges
+
+## Key Performance Indicators (KPIs)
+- Revenue Growth Rate
+- Customer Lifetime Value (CLV)
+- Customer Churn Rate
+- Net Promoter Score (NPS)
+- Conversion Rate
+- Average Order Value (AOV)
+
+## Statistical Methods
+- Descriptive Statistics: Mean, median, mode, standard deviation
+- Correlation Analysis: Identify relationships between variables
+- Trend Analysis: Time-series patterns and seasonality
+- Segmentation: Customer or product grouping
+
+## Visualization Best Practices
+- Line Charts: Trends over time
+- Bar Charts: Category comparisons
+- Pie Charts: Part-to-whole relationships
+- Scatter Plots: Correlation between variables
+- Heatmaps: Pattern identification in large datasets`
+            }
+        ]
+    },
+    {
+        id: 'content-creator',
+        name: 'Content Creator',
+        icon: '✍️',
+        description: 'Generate creative content for blogs, social media, and marketing',
+        config: {
+            projectName: 'Content Creation Studio',
+            projectDescription: 'AI-powered content generation for various marketing channels',
+            agentName: 'Content Creator Agent',
+            description: 'A creative agent that generates engaging content for blogs, social media, email campaigns, and more',
+            tone: 'creative',
+            audience: 'Content marketers and social media managers',
+            domain: 'Content Marketing',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.8,
+            systemPrompt: `You are a Content Creator Agent specializing in engaging, multi-channel marketing content.
+
+Your role is to generate creative, compelling content that resonates with target audiences.
+
+Key Responsibilities:
+- Write blog posts, articles, and long-form content
+- Create social media posts optimized for each platform
+- Develop email campaign copy
+- Generate creative headlines and CTAs
+- Adapt tone and style to match brand voice
+
+Always focus on audience engagement and brand consistency.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Content Writing Guidelines',
+                content: `# Content Writing Best Practices
+
+## Blog Posts
+- Hook readers in first 2 sentences
+- Use subheadings every 200-300 words
+- Include relevant examples and data
+- End with clear call-to-action
+- Optimal length: 1500-2000 words for SEO
+
+## Social Media
+**Twitter/X:**
+- 280 characters max
+- Use 1-2 hashtags
+- Include visuals when possible
+
+**LinkedIn:**
+- Professional tone
+- 150-200 words ideal
+- Ask questions to encourage engagement
+
+**Instagram:**
+- Visual-first approach
+- Story-driven captions
+- Use 10-15 hashtags
+
+## Email Campaigns
+- Subject line: 40 characters or less
+- Personalize with recipient name
+- Clear single CTA
+- Mobile-optimized formatting
+- Preview text that complements subject
+
+## SEO Best Practices
+- Include target keyword in title, first paragraph, and subheadings
+- Use LSI (Latent Semantic Indexing) keywords
+- Optimize meta descriptions (150-160 characters)
+- Internal and external linking
+- Alt text for all images`
+            }
+        ]
+    },
+    {
+        id: 'sales-assistant',
+        name: 'Sales Assistant',
+        icon: '🎯',
+        description: 'Support sales teams with lead qualification and outreach strategies',
+        config: {
+            projectName: 'Sales Enablement Platform',
+            projectDescription: 'Intelligent sales assistant for lead management and outreach',
+            agentName: 'Sales Assistant Agent',
+            description: 'A sales-focused agent that helps qualify leads, draft outreach messages, and optimize sales strategies',
+            tone: 'persuasive',
+            audience: 'Sales teams and business development professionals',
+            domain: 'Sales & Business Development',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.6,
+            systemPrompt: `You are a Sales Assistant Agent focused on enabling successful sales outcomes.
+
+Your role is to support sales professionals with lead qualification, outreach, and strategy.
+
+Key Responsibilities:
+- Qualify leads based on BANT criteria (Budget, Authority, Need, Timeline)
+- Draft personalized outreach emails and messages
+- Suggest follow-up strategies
+- Identify upsell and cross-sell opportunities
+- Provide competitive positioning guidance
+
+Always maintain a consultative, value-focused approach.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Sales Methodologies',
+                content: `# Sales Frameworks and Techniques
+
+## BANT Lead Qualification
+- **Budget:** Can they afford our solution?
+- **Authority:** Are they the decision-maker?
+- **Need:** Do they have a problem we solve?
+- **Timeline:** When do they plan to buy?
+
+## Email Outreach Templates
+
+**Initial Contact:**
+Subject: [First Name], quick question about [pain point]
+
+Hi [First Name],
+
+I noticed [company] is [relevant observation]. Many [industry] companies face challenges with [specific problem].
+
+I'd love to share how [your solution] helped [similar company] achieve [specific result].
+
+Would you be open to a quick 15-minute call [this week/next week]?
+
+Best,
+[Your Name]
+
+**Follow-up:**
+Subject: Re: Following up on [topic]
+
+Hi [First Name],
+
+I wanted to circle back on my previous email. I understand you're busy, so I'll keep this brief.
+
+[New value proposition or case study]
+
+Let me know if [specific day/time] works for a quick chat.
+
+Thanks,
+[Your Name]
+
+## Sales Call Structure
+1. **Opening:** Build rapport (2 minutes)
+2. **Discovery:** Ask about challenges (10 minutes)
+3. **Presentation:** Share relevant solutions (15 minutes)
+4. **Handling Objections:** Address concerns (10 minutes)
+5. **Close:** Propose next steps (3 minutes)
+
+## Common Objections & Responses
+"Too expensive" → Focus on ROI and long-term value
+"Not the right time" → Create urgency with limited offers
+"Need to think about it" → Identify the real concern
+"Happy with current solution" → Highlight differentiation`
+            }
+        ]
+    },
+    {
+        id: 'product-manager',
+        name: 'Product Manager',
+        icon: '🚀',
+        description: 'Assist with product roadmap planning and feature prioritization',
+        config: {
+            projectName: 'Product Management Suite',
+            projectDescription: 'Strategic product planning and roadmap management agent',
+            agentName: 'Product Manager Agent',
+            description: 'A strategic agent that helps with product planning, feature prioritization, and roadmap development',
+            tone: 'strategic',
+            audience: 'Product managers and product teams',
+            domain: 'Product Management',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.5,
+            systemPrompt: `You are a Product Manager Agent specializing in strategic product planning and development.
+
+Your role is to help product teams make data-driven decisions about features and roadmaps.
+
+Key Responsibilities:
+- Analyze feature requests and user feedback
+- Apply prioritization frameworks (RICE, MoSCoW, etc.)
+- Create product roadmaps aligned with business goals
+- Define user stories and acceptance criteria
+- Balance stakeholder needs with technical constraints
+
+Always focus on user value and business impact.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Product Management Frameworks',
+                content: `# Product Management Best Practices
+
+## RICE Prioritization Framework
+- **Reach:** How many users affected? (per quarter)
+- **Impact:** How much will it improve experience? (0.25 = minimal, 3 = massive)
+- **Confidence:** How certain are we? (50% = low, 100% = high)
+- **Effort:** How many person-months?
+
+**Score = (Reach × Impact × Confidence) / Effort**
+
+## MoSCoW Method
+- **Must Have:** Critical for launch
+- **Should Have:** Important but not vital
+- **Could Have:** Nice to have if time permits
+- **Won't Have:** Not planned for this release
+
+## User Story Template
+"As a [user type], I want to [action] so that [benefit]."
+
+**Example:**
+As a marketing manager, I want to schedule posts in advance so that I can maintain consistent social media presence.
+
+**Acceptance Criteria:**
+- User can select date and time for posting
+- User can see all scheduled posts in calendar view
+- System sends confirmation when post is published
+- User can edit or delete scheduled posts
+
+## Product Roadmap Structure
+
+**Now (This Quarter):**
+- Feature A: [Brief description]
+- Feature B: [Brief description]
+
+**Next (Next Quarter):**
+- Feature C: [Brief description]
+- Feature D: [Brief description]
+
+**Later (Future):**
+- Feature E: [Brief description]
+- Feature F: [Brief description]
+
+## Key Metrics
+- **Adoption Rate:** % of users using new feature
+- **Feature Usage:** Frequency of feature use
+- **User Satisfaction:** NPS or CSAT scores
+- **Time to Value:** How quickly users gain benefit
+- **Retention Impact:** Effect on user retention`
+            }
+        ]
+    }
+];
+
+function showTemplatesModal() {
+    const modal = document.getElementById('templatesModal');
+    const grid = document.getElementById('templatesGrid');
+
+    if (!modal || !grid) return;
+
+    // Clear existing templates
+    grid.innerHTML = '';
+
+    // Populate templates
+    agentTemplates.forEach(template => {
+        const card = document.createElement('div');
+        card.className = 'template-card bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-indigo-500 transition-all';
+        card.innerHTML = `
+            <div class="text-4xl mb-2">${template.icon}</div>
+            <h4 class="font-bold text-gray-900 mb-1">${template.name}</h4>
+            <p class="text-sm text-gray-600 mb-3">${template.description}</p>
+            <button
+                onclick="loadTemplate('${template.id}')"
+                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2 px-4 rounded transition-colors"
+            >
+                Load Template
+            </button>
+        `;
+        grid.appendChild(card);
+    });
+
+    modal.classList.remove('hidden');
+}
+
+function hideTemplatesModal() {
+    const modal = document.getElementById('templatesModal');
+    if (modal) {
+        modal.classList.add('hidden');
+    }
+}
+
+function loadTemplate(templateId) {
+    const template = agentTemplates.find(t => t.id === templateId);
+    if (!template) return;
+
+    // Confirm before loading
+    if (agentConfig.projectName || knowledgeBases.length > 0) {
+        const confirmed = confirm('Loading a template will replace your current work. Continue?');
+        if (!confirmed) return;
+    }
+
+    // Load configuration
+    Object.assign(agentConfig, template.config);
+
+    // Load knowledge bases
+    knowledgeBases = template.knowledgeBases.map((kb, index) => ({
+        ...kb,
+        id: index,
+        customToolName: '',
+        customToolDescription: ''
+    }));
+    kbCounter = knowledgeBases.length;
+
+    // Reset other fields
+    additionalTools = [];
+    outputs = [];
+    promptVariables = [];
+
+    // Populate UI
+    populateFieldsFromConfig();
+    renderKnowledgeBases();
+
+    // Close modal
+    hideTemplatesModal();
+
+    // Show success message
+    showToast(`Template loaded successfully\n${template.name} is ready to customize`, 'success');
+
+    // Save to auto-save
+    saveToLocalStorage();
+
+    // Update progress
+    updateProgressBar();
+}
+
+function populateFieldsFromConfig() {
+    // Step 0/1 fields
+    const projectName = document.getElementById('projectName');
+    if (projectName) projectName.value = agentConfig.projectName || '';
+
+    const projectDescription = document.getElementById('projectDescription');
+    if (projectDescription) projectDescription.value = agentConfig.projectDescription || '';
+
+    const agentName = document.getElementById('agentName');
+    if (agentName) agentName.value = agentConfig.agentName || agentConfig.name || '';
+
+    const agentDescription = document.getElementById('agentDescription');
+    if (agentDescription) agentDescription.value = agentConfig.description || '';
+
+    const agentTone = document.getElementById('agentTone');
+    if (agentTone) agentTone.value = agentConfig.tone || 'professional';
+
+    const agentAudience = document.getElementById('agentAudience');
+    if (agentAudience) agentAudience.value = agentConfig.audience || '';
+
+    // Step 3 fields
+    const modelSelect = document.getElementById('modelSelect');
+    if (modelSelect) modelSelect.value = agentConfig.model || 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+
+    const temperature = document.getElementById('temperature');
+    const temperatureInput = document.getElementById('temperatureInput');
+    if (temperature && temperatureInput) {
+        temperature.value = agentConfig.temperature || 0.5;
+        temperatureInput.value = agentConfig.temperature || 0.5;
+    }
+
+    const systemPrompt = document.getElementById('systemPrompt');
+    if (systemPrompt) {
+        systemPrompt.value = agentConfig.systemPrompt || '';
+        updateSystemPromptCharCount();
+    }
+}
+
+// ============================================================================
+// COLLABORATION (IMPORT/EXPORT)
+// ============================================================================
+
+function exportAgentConfig() {
+    const exportData = {
+        version: '1.0',
+        exportDate: new Date().toISOString(),
+        agentConfig,
+        knowledgeBases,
+        additionalTools,
+        outputs,
+        promptVariables
+    };
+
+    const jsonString = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${(agentConfig.agentName || 'agent').replace(/\s+/g, '_')}_config_${Date.now()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    showToast('Configuration exported successfully\nShare this file with your team', 'success');
+}
+
+function importAgentConfig() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importData = JSON.parse(event.target.result);
+
+                // Validate structure
+                if (!importData.version || !importData.agentConfig) {
+                    throw new Error('Invalid configuration file format');
+                }
+
+                // Confirm before importing
+                const confirmed = confirm(`Import configuration from ${new Date(importData.exportDate).toLocaleString()}?\n\nThis will replace your current work.`);
+                if (!confirmed) return;
+
+                // Load data
+                agentConfig = importData.agentConfig;
+                knowledgeBases = importData.knowledgeBases || [];
+                additionalTools = importData.additionalTools || [];
+                outputs = importData.outputs || [];
+                promptVariables = importData.promptVariables || [];
+
+                // Update counters
+                kbCounter = knowledgeBases.length;
+                toolCounter = additionalTools.length;
+                outputCounter = outputs.length;
+                variableCounter = promptVariables.length;
+
+                // Populate UI
+                populateFieldsFromConfig();
+                renderKnowledgeBases();
+                renderTools();
+                renderOutputs();
+                renderPromptVariables();
+
+                showToast('Configuration imported successfully\nAll data has been loaded', 'success');
+
+                // Save to auto-save
+                saveToLocalStorage();
+
+                // Update progress
+                updateProgressBar();
+
+            } catch (error) {
+                console.error('Import error:', error);
+                showToast('Failed to import configuration\nPlease check the file format', 'error');
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
+    input.click();
+}
+
+// ============================================================================
+// MARKDOWN PREVIEW
+// ============================================================================
+
+function toggleSystemPromptPreview() {
+    const textarea = document.getElementById('systemPrompt');
+    const preview = document.getElementById('systemPromptPreview');
+    const button = document.getElementById('toggleSystemPromptPreview');
+
+    if (!textarea || !preview || !button) return;
+
+    if (preview.classList.contains('hidden')) {
+        // Show preview
+        const markdown = textarea.value;
+        const html = marked.parse(markdown);
+        preview.innerHTML = html;
+        preview.classList.remove('hidden');
+        textarea.classList.add('hidden');
+        button.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Edit
+        `;
+    } else {
+        // Show editor
+        preview.classList.add('hidden');
+        textarea.classList.remove('hidden');
+        button.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+            Preview
+        `;
+    }
+}
+
+// ============================================================================
+// INITIALIZATION
+// ============================================================================
+
+// Load auto-saved data on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Try to load auto-save after a brief delay to allow other initializations
+    setTimeout(() => {
+        loadFromLocalStorage();
+    }, 500);
+});
