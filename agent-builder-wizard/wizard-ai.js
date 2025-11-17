@@ -7310,31 +7310,30 @@ function setupDragAndDrop() {
     // Load saved layout
     loadSavedLayout();
 
-    draggableSections.forEach(section => {
-        // Only allow dragging from drag handles, not the entire section
-        const dragHandles = section.querySelectorAll('.drag-handle');
+    // Track if drag started from handle
+    let isDragFromHandle = false;
 
+    draggableSections.forEach(section => {
+        // Make sections draggable
+        section.setAttribute('draggable', 'true');
+
+        // Track mousedown on drag handles
+        const dragHandles = section.querySelectorAll('.drag-handle');
         dragHandles.forEach(handle => {
             handle.addEventListener('mousedown', function(e) {
-                // Enable dragging on the parent section
-                section.setAttribute('draggable', 'true');
+                isDragFromHandle = true;
             });
         });
-    });
 
-    // Disable dragging when mouse is released anywhere on the document
-    document.addEventListener('mouseup', function() {
-        draggableSections.forEach(section => {
-            section.setAttribute('draggable', 'false');
+        // Reset flag on mouseup
+        section.addEventListener('mouseup', function() {
+            isDragFromHandle = false;
         });
-    });
-
-    draggableSections.forEach(section => {
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
-            // Only allow drag if initiated from drag handle
-            if (!e.target.classList.contains('drag-handle') && !e.target.closest('.drag-handle')) {
+            // Only allow drag if it started from a drag handle
+            if (!isDragFromHandle) {
                 e.preventDefault();
                 return;
             }
@@ -7350,6 +7349,7 @@ function setupDragAndDrop() {
             this.style.opacity = '';
             this.classList.remove('dragging');
             draggedElement = null;
+            isDragFromHandle = false;
 
             // Save the new layout
             saveLayout();
