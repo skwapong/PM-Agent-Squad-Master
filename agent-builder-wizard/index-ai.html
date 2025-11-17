@@ -792,6 +792,86 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                             <!-- Configuration summary will be inserted here -->
                         </div>
 
+                        <!-- Session Statistics -->
+                        <div id="sessionStats" class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-indigo-200 rounded-lg p-6 mb-6">
+                            <h3 class="text-lg font-bold text-indigo-900 mb-4 flex items-center gap-2">
+                                <span>📊</span>
+                                <span>Session Statistics</span>
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Time Taken -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">⏱️</span>
+                                        <span class="text-sm font-medium text-gray-600">Total Time</span>
+                                    </div>
+                                    <div id="totalTimeValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div id="aiTimeValue" class="text-xs text-gray-500 mt-1">AI Generation: --</div>
+                                </div>
+
+                                <!-- Tokens Used -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">🎯</span>
+                                        <span class="text-sm font-medium text-gray-600">Tokens Used</span>
+                                    </div>
+                                    <div id="totalTokensValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        <span id="inputTokensValue">Input: --</span> •
+                                        <span id="outputTokensValue">Output: --</span>
+                                    </div>
+                                </div>
+
+                                <!-- Estimated Cost -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">💰</span>
+                                        <span class="text-sm font-medium text-gray-600">Estimated Cost</span>
+                                    </div>
+                                    <div id="estimatedCostValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div class="text-xs text-gray-500 mt-1">Claude 3.5 Sonnet</div>
+                                </div>
+
+                                <!-- Components Generated -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">📦</span>
+                                        <span class="text-sm font-medium text-gray-600">Components</span>
+                                    </div>
+                                    <div id="componentsValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div class="text-xs text-gray-500 mt-1" id="componentsBreakdown">--</div>
+                                </div>
+
+                                <!-- API Calls -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">🔄</span>
+                                        <span class="text-sm font-medium text-gray-600">API Calls</span>
+                                    </div>
+                                    <div id="apiCallsValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div class="text-xs text-gray-500 mt-1">to Claude API</div>
+                                </div>
+
+                                <!-- Character Count -->
+                                <div class="bg-white rounded-lg p-4 shadow-sm">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-2xl">📝</span>
+                                        <span class="text-sm font-medium text-gray-600">Content Generated</span>
+                                    </div>
+                                    <div id="contentSizeValue" class="text-2xl font-bold text-indigo-900">--</div>
+                                    <div class="text-xs text-gray-500 mt-1">characters</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 p-3 bg-white/50 rounded-lg">
+                                <p class="text-xs text-gray-600">
+                                    <strong>💡 Note:</strong> Token counts and costs are estimates based on character count.
+                                    Actual usage may vary slightly. Pricing: $3/MTok input, $15/MTok output (Claude 3.5 Sonnet).
+                                </p>
+                            </div>
+                        </div>
+
                         <div class="space-y-3">
                             <button id="viewOutputBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-4 px-4 rounded-lg transition-colors duration-200 shadow-lg" data-i18n="button.viewoutput">
                                 📄 View Copyable Output Webpage
