@@ -5320,9 +5320,7 @@ function downloadAgentConfig() {
 
 ## System Prompt
 
-\`\`\`
 ${agentConfig.systemPrompt}
-\`\`\`
 
 ## Knowledge Base Tools
 
@@ -5369,13 +5367,11 @@ Agent Foundry supports additional tool types beyond Knowledge Base:
 - **Workflow Executor** - Run complex workflows
 
 **Example: Add Agent Tool**
-\`\`\`
-Function Name: create_email_draft
-Function Description: Creates professional email draft based on campaign brief
-Target: Agent
-Target Agent: Email_Creator_Agent
-Output Mode: Return
-\`\`\`
+- Function Name: create_email_draft
+- Function Description: Creates professional email draft based on campaign brief
+- Target: Agent
+- Target Agent: Email_Creator_Agent
+- Output Mode: Return
 
 **See:** 04_Add_Tools_Guide.md for detailed tool configuration
 
@@ -5389,29 +5385,14 @@ Define how your agent returns structured information:
 - **Artifact (Image)** - Visual content
 - **Artifact (React)** - Interactive visualizations, dashboards
 
-**Example: Campaign Plan Output**
-\`\`\`json
-{
-  "outputName": "campaign_plan",
-  "functionName": "generate_campaign_plan",
-  "outputType": "Custom",
-  "jsonSchema": {
-    "type": "object",
-    "properties": {
-      "campaign_name": {"type": "string"},
-      "budget": {"type": "number"},
-      "platforms": {
-        "type": "array",
-        "items": {"type": "string"}
-      }
-    },
-    "required": ["campaign_name", "budget"]
-  }
-}
-\`\`\`
+**Example: Campaign Plan Output (JSON Schema)**
+- outputName: campaign_plan
+- functionName: generate_campaign_plan
+- outputType: Custom
+- jsonSchema properties: campaign_name (string), budget (number), platforms (array)
 
 **Special Output: :plotly:**
-Name an output `:plotly:` to auto-render as interactive Plotly chart
+Name an output ":plotly:" to auto-render as interactive Plotly chart
 
 **See:** 05_Add_Output_Guide.md for examples and React/Plotly code
 
@@ -5420,12 +5401,10 @@ Name an output `:plotly:` to auto-render as interactive Plotly chart
 Dynamically inject data from knowledge bases into prompts:
 
 **Variable Syntax Examples:**
-\`\`\`
-customers                    # All columns from customers table
-products.{sku,name,price}   # Only specified columns
-behavior_*.*                # All columns from tables starting with "behavior_"
-!*.internal_*               # Exclude columns starting with "internal_"
-\`\`\`
+- customers (all columns from customers table)
+- products.{sku,name,price} (only specified columns)
+- behavior_*.* (all columns from tables starting with "behavior_")
+- !*.internal_* (exclude columns starting with "internal_")
 
 **Configuration:**
 - Variable Name: database_schema
