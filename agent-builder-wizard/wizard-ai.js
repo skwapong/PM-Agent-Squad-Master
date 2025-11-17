@@ -3063,7 +3063,7 @@ async function generateAgent() {
             : `\n\nLanguage Requirement: The agent should respond in ${languageName}.`;
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
+        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "outputs": [\n    {\n      "outputName": "campaign_plan",\n      "functionName": "generate_campaign_plan",\n      "functionDescription": "Generate a comprehensive digital marketing campaign plan including strategy, objectives, target audience, budget allocation, creative direction, KPIs, and implementation timeline",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"campaign_objective\\": {\\"type\\": \\"string\\"}, \\"target_audience\\": {\\"type\\": \\"object\\"}, \\"budget_allocation\\": {\\"type\\": \\"object\\"}, \\"creative_direction\\": {\\"type\\": \\"string\\"}, \\"kpi_targets\\": {\\"type\\": \\"array\\"}, \\"platform_strategy\\": {\\"type\\": \\"object\\"}, \\"timeline\\": {\\"type\\": \\"string\\"}}, \\"required\\": [\\"campaign_objective\\", \\"budget_allocation\\", \\"kpi_targets\\"]}"\n    },\n    {\n      "outputName": ":plotly:",\n      "functionName": "generate_performance_chart",\n      "functionDescription": "Create interactive performance visualizations using Plotly.js for campaign metrics and analytics",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"data\\": {\\"type\\": \\"array\\"}, \\"layout\\": {\\"type\\": \\"object\\"}}, \\"required\\": [\\"data\\"]}"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -3117,6 +3117,30 @@ async function generateAgent() {
         } else {
             // Fallback to domain-based generation
             generateKnowledgeBases(domain);
+        }
+
+        // Generate outputs from AI suggestions
+        if (config.outputs && config.outputs.length > 0) {
+            outputs = [];
+            outputCounter = 0;
+            config.outputs.forEach(output => {
+                outputCounter++;
+                const newOutput = {
+                    id: `output-${outputCounter}`,
+                    outputName: output.outputName || '',
+                    functionName: output.functionName || '',
+                    functionDescription: output.functionDescription || '',
+                    outputType: output.outputType || 'custom',
+                    artifactType: output.artifactType || 'text',
+                    jsonSchema: output.jsonSchema || '',
+                    // Custom fields for editing
+                    customFunctionName: output.functionName || '',
+                    customFunctionDescription: output.functionDescription || '',
+                    customJsonSchema: output.jsonSchema || ''
+                };
+                outputs.push(newOutput);
+            });
+            console.log(`✅ Generated ${outputs.length} outputs from AI`);
         }
 
         // Generate project configuration
@@ -5376,6 +5400,190 @@ function updateKBToolDescription(index, value) {
 
 // ========== OUTPUTS FUNCTIONS (STEP 5) ==========
 
+function renderAutoGeneratedOutputs() {
+    const container = document.getElementById('autoGeneratedOutputsList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (outputs.length === 0) {
+        container.innerHTML = '<div class="text-center py-6 text-gray-400"><p>No outputs auto-generated yet. Complete Steps 0-1 to generate outputs.</p></div>';
+        return;
+    }
+
+    outputs.forEach((output, index) => {
+        const outputDiv = document.createElement('div');
+        outputDiv.className = 'bg-white border border-gray-200 rounded-lg p-4';
+        outputDiv.id = `auto-output-${index}`;
+
+        // Initialize custom fields if they don't exist
+        if (!output.customFunctionName) {
+            output.customFunctionName = output.functionName || `generate_${output.outputName}`;
+        }
+        if (!output.customFunctionDescription) {
+            output.customFunctionDescription = output.functionDescription || `Generate ${output.outputName}`;
+        }
+        if (!output.customJsonSchema) {
+            output.customJsonSchema = output.jsonSchema || '{"type": "object"}';
+        }
+
+        // Determine output type badge
+        let typeBadge = '';
+        let typeColor = '';
+        if (output.outputType === 'custom') {
+            typeBadge = 'Custom JSON';
+            typeColor = 'bg-purple-100 text-purple-800';
+        } else if (output.outputType === 'artifact') {
+            typeBadge = `Artifact (${output.artifactType})`;
+            typeColor = 'bg-blue-100 text-blue-800';
+        }
+
+        // Check if this is a Plotly output
+        const isPlotly = output.outputName === ':plotly:';
+        const displayName = isPlotly ? 'Plotly Chart' : output.outputName;
+
+        outputDiv.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${typeColor}">
+                        ${typeBadge}
+                    </span>
+                    <span class="text-sm font-semibold text-gray-900">Output ${index + 1}</span>
+                    ${isPlotly ? '<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">📊 Plotly.js</span>' : ''}
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                        Auto-generated
+                    </span>
+                    <button onclick="toggleOutputEdit(${index})" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                        ✏️ Edit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsed View -->
+            <div id="output-collapsed-${index}" class="space-y-2">
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Output Name:</span>
+                    <p class="text-sm text-gray-900 font-mono">${displayName}</p>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Function Name:</span>
+                    <p class="text-sm text-gray-900 font-mono">${output.customFunctionName}</p>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Description:</span>
+                    <p class="text-sm text-gray-700">${output.customFunctionDescription}</p>
+                </div>
+                ${output.outputType === 'custom' ? `
+                <div>
+                    <span class="text-xs font-medium text-gray-500">JSON Schema:</span>
+                    <pre class="text-xs text-gray-700 bg-gray-50 p-2 rounded mt-1 overflow-x-auto">${JSON.stringify(JSON.parse(output.customJsonSchema), null, 2)}</pre>
+                </div>
+                ` : ''}
+            </div>
+
+            <!-- Expanded Edit View -->
+            <div id="output-expanded-${index}" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Output Name</label>
+                    <input type="text" id="output-name-${index}" value="${output.outputName}"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-indigo-500"
+                           onchange="updateOutputName(${index}, this.value)"
+                           ${isPlotly ? 'readonly' : ''} />
+                    ${isPlotly ? '<p class="text-xs text-gray-500 mt-1">Special output name for auto-rendering Plotly charts</p>' : ''}
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Function Name</label>
+                    <input type="text" id="output-func-name-${index}" value="${output.customFunctionName}"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-indigo-500"
+                           onchange="updateOutputFunctionName(${index}, this.value)" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="output-desc-${index}" rows="2"
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                              onchange="updateOutputDescription(${index}, this.value)">${output.customFunctionDescription}</textarea>
+                </div>
+                ${output.outputType === 'custom' ? `
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">JSON Schema</label>
+                    <textarea id="output-schema-${index}" rows="6"
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-xs font-mono focus:ring-2 focus:ring-indigo-500"
+                              onchange="updateOutputSchema(${index}, this.value)">${JSON.stringify(JSON.parse(output.customJsonSchema), null, 2)}</textarea>
+                </div>
+                ` : ''}
+                <div class="flex justify-end">
+                    <button onclick="toggleOutputEdit(${index})"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-medium">
+                        Done
+                    </button>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(outputDiv);
+    });
+
+    // Add summary
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'mt-4 p-3 bg-gray-50 rounded-lg';
+    summaryDiv.innerHTML = `
+        <p class="text-sm text-gray-700">
+            <strong>${outputs.length} custom output${outputs.length !== 1 ? 's' : ''}</strong> will be available from your agent.
+            ${outputs.length > 0 ? 'These structured outputs can be used for API integrations, dashboards, and data processing.' : ''}
+        </p>
+    `;
+    container.appendChild(summaryDiv);
+}
+
+function toggleOutputEdit(index) {
+    const collapsed = document.getElementById(`output-collapsed-${index}`);
+    const expanded = document.getElementById(`output-expanded-${index}`);
+
+    if (collapsed && expanded) {
+        collapsed.classList.toggle('hidden');
+        expanded.classList.toggle('hidden');
+    }
+}
+
+function updateOutputName(index, value) {
+    if (outputs[index]) {
+        outputs[index].outputName = value;
+        console.log(`✅ Updated Output ${index} name: ${value}`);
+    }
+}
+
+function updateOutputFunctionName(index, value) {
+    if (outputs[index]) {
+        outputs[index].customFunctionName = value;
+        console.log(`✅ Updated Output ${index} function name: ${value}`);
+    }
+}
+
+function updateOutputDescription(index, value) {
+    if (outputs[index]) {
+        outputs[index].customFunctionDescription = value;
+        console.log(`✅ Updated Output ${index} description: ${value}`);
+    }
+}
+
+function updateOutputSchema(index, value) {
+    if (outputs[index]) {
+        try {
+            // Validate JSON
+            JSON.parse(value);
+            outputs[index].customJsonSchema = value;
+            console.log(`✅ Updated Output ${index} JSON schema`);
+        } catch (e) {
+            console.error(`❌ Invalid JSON schema for Output ${index}:`, e);
+            alert('Invalid JSON schema. Please check your syntax.');
+        }
+    }
+}
+
+// ========== MANUAL OUTPUTS FUNCTIONS ==========
+
 function addOutput() {
     outputCounter++;
     const newOutput = {
@@ -5759,6 +5967,12 @@ function updateStepDisplay() {
         console.log(`📝 Rendered ${knowledgeBases.length} Knowledge Base tools`);
     }
 
+    // Populate Step 5 (Outputs) when navigating to it
+    if (currentStep === 5) {
+        renderAutoGeneratedOutputs();
+        console.log(`📝 Rendered ${outputs.length} auto-generated outputs`);
+    }
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -6100,14 +6314,20 @@ ${tool.type === 'workflow' ? `- Workflow ARN: ${tool.workflowArn}` : ''}
 
 ${outputs.length > 0 ? `**Your Configured Outputs:**
 
-${outputs.map((output, i) => `**Output ${i + 1}: ${output.outputName || 'Unnamed Output'}**
+${outputs.map((output, i) => {
+    const functionName = output.customFunctionName || output.functionName || 'generate_output';
+    const functionDescription = output.customFunctionDescription || output.functionDescription || '';
+    const jsonSchema = output.customJsonSchema || output.jsonSchema || '';
+
+    return `**Output ${i + 1}: ${output.outputName || 'Unnamed Output'}**
 - Output Name: ${output.outputName}
-- Function Name: ${output.functionName}
+- Function Name: ${functionName}
+${functionDescription ? `- Description: ${functionDescription}` : ''}
 - Output Type: ${output.outputType === 'custom' ? 'Custom (JSON)' : 'Artifact'}
 ${output.outputType === 'artifact' ? `- Artifact Type: ${output.artifactType}` : ''}
-${output.outputType === 'custom' && output.jsonSchema ? `- JSON Schema:
-  ${output.jsonSchema}` : ''}
-`).join('\n')}
+${output.outputType === 'custom' && jsonSchema ? `- JSON Schema:
+  ${jsonSchema}` : ''}`;
+}).join('\n\n')}
 
 **To add these outputs in Agent Foundry:**
 1. Navigate to the "Outputs" section
@@ -6693,52 +6913,64 @@ function viewOutputWebpage() {
                     </p>
                 </div>
 
-                <div class="field" style="margin-top: 20px;">
-                    <h4 style="font-weight: 600; margin-bottom: 10px;">Optional: Custom JSON Output</h4>
-                    <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
-                        <div style="margin-bottom: 12px;">
-                            <strong>Output Name:</strong>
-                            <div class="field-value">structured_response</div>
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Function Name:</strong>
-                            <div class="field-value">generate_structured_output</div>
-                        </div>
-                        <div style="margin-bottom: 12px;">
-                            <strong>Output Type:</strong>
-                            <div class="field-value">Custom (JSON)</div>
-                        </div>
-                        <div>
-                            <strong>Function Description:</strong>
-                            <div class="field-value">Generate structured JSON output for programmatic use</div>
-                        </div>
-                    </div>
-                </div>
+                ${outputs.length > 0 ? outputs.map((output, i) => {
+                    const functionName = output.customFunctionName || output.functionName || 'generate_output';
+                    const functionDescription = output.customFunctionDescription || output.functionDescription || '';
+                    const jsonSchema = output.customJsonSchema || output.jsonSchema || '';
+                    const isPlotly = output.outputName === ':plotly:';
+                    const displayName = isPlotly ? 'Plotly Chart' : output.outputName;
 
+                    return `
                 <div class="field" style="margin-top: 20px;">
-                    <h4 style="font-weight: 600; margin-bottom: 10px;">Optional: Plotly Chart Output</h4>
+                    <h4 style="font-weight: 600; margin-bottom: 10px;">${isPlotly ? '📊 ' : '📦 '}Output ${i + 1}: ${displayName}</h4>
                     <div style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
                         <div style="margin-bottom: 12px;">
                             <strong>Output Name:</strong>
                             <div class="copy-box">
-                                <button class="copy-btn" onclick="copyToClipboard('plotlyName')">📋 Copy</button>
-                                <div id="plotlyName" class="field-value">:plotly:</div>
+                                <button class="copy-btn" onclick="copyToClipboard('output-name-${i}')">📋 Copy</button>
+                                <div id="output-name-${i}" class="field-value">${output.outputName}</div>
                             </div>
                         </div>
                         <div style="margin-bottom: 12px;">
                             <strong>Function Name:</strong>
-                            <div class="field-value">create_chart</div>
+                            <div class="copy-box">
+                                <button class="copy-btn" onclick="copyToClipboard('output-func-${i}')">📋 Copy</button>
+                                <div id="output-func-${i}" class="field-value">${functionName}</div>
+                            </div>
                         </div>
+                        ${functionDescription ? `
+                        <div style="margin-bottom: 12px;">
+                            <strong>Function Description:</strong>
+                            <div class="field-value">${functionDescription}</div>
+                        </div>
+                        ` : ''}
                         <div style="margin-bottom: 12px;">
                             <strong>Output Type:</strong>
-                            <div class="field-value">Artifact</div>
+                            <div class="field-value">${output.outputType === 'custom' ? 'Custom (JSON)' : 'Artifact'}</div>
                         </div>
+                        ${output.outputType === 'artifact' ? `
+                        <div style="margin-bottom: 12px;">
+                            <strong>Artifact Type:</strong>
+                            <div class="field-value">${output.artifactType}${isPlotly ? ' (for Plotly charts)' : ''}</div>
+                        </div>
+                        ` : ''}
+                        ${output.outputType === 'custom' && jsonSchema ? `
                         <div>
-                            <strong>Artifact Content Type:</strong>
-                            <div class="field-value">React (for Plotly charts)</div>
+                            <strong>JSON Schema:</strong>
+                            <div class="copy-box">
+                                <button class="copy-btn" onclick="copyToClipboard('output-schema-${i}')">📋 Copy</button>
+                                <pre id="output-schema-${i}" class="field-value" style="max-height: 200px; overflow-y: auto; font-size: 12px;">${jsonSchema}</pre>
+                            </div>
                         </div>
+                        ` : ''}
                     </div>
                 </div>
+                    `;
+                }).join('') : `
+                <div class="field" style="margin-top: 20px; background: #f3f4f6; padding: 20px; border-radius: 8px;">
+                    <p style="color: #6b7280; text-align: center; margin: 0;">No custom outputs configured. Using default text output only.</p>
+                </div>
+                `}
             </div>
 
             <!-- Complete Configuration Summary -->
