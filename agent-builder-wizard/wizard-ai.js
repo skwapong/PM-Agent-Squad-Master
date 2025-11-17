@@ -5358,24 +5358,96 @@ ${tools.map((tool, i) => `**${tool.name}:**
 - Description: "${tool.description}"
 `).join('\n')}
 
-### 4. Configure Output
-1. Output format: Markdown
-2. Enable citations: Yes
-3. Max tokens: 4096
-4. Stop sequences: (leave default)
+### 4. Add Additional Tools (Optional)
 
-### 5. Test Agent
+Agent Foundry supports additional tool types beyond Knowledge Base:
+
+**Tool Types Available:**
+- **Knowledge Base** - Query structured data (already added above)
+- **Agent** - Call another agent for specialized tasks
+- **Image Generator** - Create/edit images
+- **Workflow Executor** - Run complex workflows
+
+**Example: Add Agent Tool**
+\`\`\`
+Function Name: create_email_draft
+Function Description: Creates professional email draft based on campaign brief
+Target: Agent
+Target Agent: Email_Creator_Agent
+Output Mode: Return
+\`\`\`
+
+**See:** 04_Add_Tools_Guide.md for detailed tool configuration
+
+### 5. Configure Outputs (Optional)
+
+Define how your agent returns structured information:
+
+**Output Types:**
+- **Custom (JSON)** - Structured data for APIs, databases
+- **Artifact (Text)** - Formatted documents, reports
+- **Artifact (Image)** - Visual content
+- **Artifact (React)** - Interactive visualizations, dashboards
+
+**Example: Campaign Plan Output**
+\`\`\`json
+{
+  "outputName": "campaign_plan",
+  "functionName": "generate_campaign_plan",
+  "outputType": "Custom",
+  "jsonSchema": {
+    "type": "object",
+    "properties": {
+      "campaign_name": {"type": "string"},
+      "budget": {"type": "number"},
+      "platforms": {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    },
+    "required": ["campaign_name", "budget"]
+  }
+}
+\`\`\`
+
+**Special Output: :plotly:**
+Name an output `:plotly:` to auto-render as interactive Plotly chart
+
+**See:** 05_Add_Output_Guide.md for examples and React/Plotly code
+
+### 6. Add Prompt Variables (Optional)
+
+Dynamically inject data from knowledge bases into prompts:
+
+**Variable Syntax Examples:**
+\`\`\`
+customers                    # All columns from customers table
+products.{sku,name,price}   # Only specified columns
+behavior_*.*                # All columns from tables starting with "behavior_"
+!*.internal_*               # Exclude columns starting with "internal_"
+\`\`\`
+
+**Configuration:**
+- Variable Name: database_schema
+- Target Knowledge Base: Campaign_Performance_DB
+- Target Function: List columns
+- List of Variables: campaigns, metrics.{impressions,clicks,conversions}
+
+**See:** 06_Add_Prompt_Variables_Guide.md for detailed syntax
+
+### 7. Test Agent
 Sample test queries:
 ${tools.slice(0, 3).map((tool, i) => `- "Tell me about ${knowledgeBases[i].name.toLowerCase()}"`).join('\n')}
 - "What can you help me with?"
 - (Add domain-specific test queries)
 
-### 6. Review and Deploy
+### 8. Review and Deploy
 1. Review all configuration
 2. Run test queries
 3. Verify knowledge base responses
-4. Click "Deploy"
-5. Note agent ID and endpoint
+4. Test tools and outputs (if added)
+5. Click "Deploy"
+6. Note agent ID and endpoint
 
 ---
 
@@ -5942,7 +6014,12 @@ function downloadAllFiles() {
         You now have:<br>
         • ${knowledgeBases.length} knowledge base .md files<br>
         • PROJECT_SETUP.md<br>
-        • AGENT_CONFIG.md<br><br>
+        • AGENT_CONFIG.md (includes Tools, Outputs, Prompt Variables guidance)<br><br>
+        📚 <strong>Additional Features:</strong><br>
+        The AGENT_CONFIG.md file includes optional sections for:<br>
+        • Adding Tools (Agent, Image Generator, Workflow Executor)<br>
+        • Configuring Outputs (JSON, Text, React/Plotly visualizations)<br>
+        • Setting up Prompt Variables (dynamic data injection)<br><br>
         Check your Downloads folder and follow the guides to deploy your agent to AWS Bedrock!`);
     }, 1500);
 }
