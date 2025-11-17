@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Localhost Connection</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Localhost Claude Connection</h1>
+
+    <div id="status"></div>
+
+    <button onclick="testHealth()">1. Test Health</button>
+    <button onclick="testChat()">2. Test Chat</button>
+    <button onclick="testAPI()">3. Test API Object</button>
+
+    <div id="results" style="margin-top: 20px; padding: 10px; background: #f5f5f5; min-height: 100px;"></div>
+
+    <script src="claude-api.js"></script>
+    <script>
+        function log(message, isError = false) {
+            const results = document.getElementById('results');
+            const p = document.createElement('p');
+            p.textContent = message;
+            p.style.color = isError ? 'red' : 'green';
+            results.appendChild(p);
+        }
+
+        function showStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.className = 'status ' + (isError ? 'error' : 'success');
+            status.textContent = message;
+        }
+
+        async function testHealth() {
+            log('Testing health endpoint...');
+            try {
+                const response = await fetch('http://localhost:3333/health');
+                const data = await response.json();
+                log('✅ Health check passed: ' + JSON.stringify(data));
+                showStatus('✅ Proxy is running!');
+            } catch (error) {
+                log('❌ Health check failed: ' + error.message, true);
+                showStatus('❌ Proxy not running! Start it with: node claude-code-proxy.cjs', true);
+            }
+        }
+
+        async function testChat() {
+            log('Testing chat endpoint...');
+            try {
+                const response = await fetch('http://localhost:3333/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Hello test' })
+                });
+                const data = await response.json();
+                log('✅ Chat response: ' + data.response.substring(0, 100) + '...');
+                showStatus('✅ Chat endpoint working!');
+            } catch (error) {
+                log('❌ Chat failed: ' + error.message, true);
+                showStatus('❌ Chat endpoint error', true);
+            }
+        }
+
+        async function testAPI() {
+            log('Testing ClaudeAPI object...');
+            try {
+                log('claudeAPI exists: ' + (typeof claudeAPI !== 'undefined'));
+                log('hasApiKey(): ' + claudeAPI.hasApiKey());
+                log('API URL: ' + claudeAPI.apiUrl);
+
+                log('Sending test message...');
+                const response = await claudeAPI.sendMessage('I want to build a campaign agent');
+                log('✅ API response: ' + response.substring(0, 100) + '...');
+                showStatus('✅ ClaudeAPI working perfectly!');
+            } catch (error) {
+                log('❌ API test failed: ' + error.message, true);
+                showStatus('❌ API error: ' + error.message, true);
+            }
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            setTimeout(async () => {
+                await testHealth();
+                setTimeout(async () => {
+                    await testAPI();
+                }, 1000);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
