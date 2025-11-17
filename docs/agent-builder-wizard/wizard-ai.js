@@ -16,6 +16,7 @@ let agentConfig = {
     projectDescription: '',
     model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
     temperature: 0.5,
+    maxToolsIterations: 0,
     systemPrompt: ''
 };
 
@@ -2433,6 +2434,16 @@ function setupEventListeners() {
         });
     }
 
+    // Max Tools Iterations slider
+    const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
+    const maxToolsIterationsValue = document.getElementById('maxToolsIterationsValue');
+    if (maxToolsIterationsSlider && maxToolsIterationsValue) {
+        maxToolsIterationsSlider.addEventListener('input', function() {
+            maxToolsIterationsValue.textContent = this.value;
+            agentConfig.maxToolsIterations = parseInt(this.value);
+        });
+    }
+
     // Model selection
     const modelSelect = document.getElementById('modelSelect');
     if (modelSelect) {
@@ -3013,7 +3024,7 @@ async function generateAgent() {
             : `\n\nLanguage Requirement: The agent should respond in ${languageName}.`;
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model and temperature\n7. Create a comprehensive systemPrompt (150-300 words) that defines the agent's role, expertise, and behavior`;
+        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Create a comprehensive systemPrompt (150-300 words) that defines the agent's role, expertise, and behavior`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -3093,6 +3104,19 @@ async function generateAgent() {
             }
             if (tempValue) {
                 tempValue.textContent = config.temperature;
+            }
+        }
+        if (config.maxToolsIterations !== undefined) {
+            agentConfig.maxToolsIterations = config.maxToolsIterations;
+            console.log(`✅ Max Tools Iterations: ${config.maxToolsIterations}`);
+            // Populate maxToolsIterations slider
+            const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
+            const maxToolsIterationsValue = document.getElementById('maxToolsIterationsValue');
+            if (maxToolsIterationsSlider) {
+                maxToolsIterationsSlider.value = config.maxToolsIterations;
+            }
+            if (maxToolsIterationsValue) {
+                maxToolsIterationsValue.textContent = config.maxToolsIterations;
             }
         }
         if (config.modelReasoning) {
@@ -4330,6 +4354,8 @@ function generateAgentConfig(domain) {
     document.getElementById('modelSelect').value = agentConfig.model;
     document.getElementById('temperature').value = agentConfig.temperature;
     document.getElementById('tempValue').textContent = agentConfig.temperature;
+    document.getElementById('maxToolsIterations').value = agentConfig.maxToolsIterations;
+    document.getElementById('maxToolsIterationsValue').textContent = agentConfig.maxToolsIterations;
 
     // Show model reasoning if AI provided it
     const reasoningSection = document.getElementById('modelReasoningSection');
@@ -4978,6 +5004,13 @@ function updateStepDisplay() {
             console.log(`📝 Populated Temperature: ${agentConfig.temperature}`);
         }
 
+        // Populate Max Tools Iterations
+        if (agentConfig.maxToolsIterations !== undefined) {
+            document.getElementById('maxToolsIterations').value = agentConfig.maxToolsIterations;
+            document.getElementById('maxToolsIterationsValue').textContent = agentConfig.maxToolsIterations;
+            console.log(`📝 Populated Max Tools Iterations: ${agentConfig.maxToolsIterations}`);
+        }
+
         // Populate System Prompt
         if (agentConfig.systemPrompt) {
             document.getElementById('systemPrompt').value = agentConfig.systemPrompt;
@@ -5247,6 +5280,7 @@ function downloadAgentConfig() {
 **Agent Name:** ${agentConfig.name}
 **Model:** ${agentConfig.model}
 **Temperature:** ${agentConfig.temperature}
+**Max Tools Iterations:** ${agentConfig.maxToolsIterations}
 
 ## System Prompt
 
@@ -5270,7 +5304,8 @@ ${tools.map((tool, i) => `### Tool ${i + 1}: ${tool.name}
 2. Enter agent name: **${agentConfig.name}**
 3. Select model: **${agentConfig.model}**
 4. Set temperature: **${agentConfig.temperature}**
-5. Click "Next"
+5. Set max tools iterations: **${agentConfig.maxToolsIterations}**
+6. Click "Next"
 
 ### 2. Add System Prompt
 1. In the "Instructions" section
@@ -5925,6 +5960,8 @@ function resetWizard() {
     document.getElementById('modelSelect').value = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
     document.getElementById('temperature').value = 0.5;
     document.getElementById('tempValue').textContent = '0.5';
+    document.getElementById('maxToolsIterations').value = 0;
+    document.getElementById('maxToolsIterationsValue').textContent = '0';
     document.getElementById('systemPrompt').value = '';
 
     // Clear knowledge bases display
