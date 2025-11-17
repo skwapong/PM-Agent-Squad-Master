@@ -5264,42 +5264,73 @@ function renderKnowledgeBaseTools() {
     knowledgeBases.forEach((kb, index) => {
         const toolDiv = document.createElement('div');
         toolDiv.className = 'bg-white border border-gray-200 rounded-lg p-4';
+        toolDiv.id = `kb-tool-${index}`;
 
-        const toolName = `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`;
-        const toolDescription = `Search and retrieve information from ${kb.name}`;
+        // Initialize custom fields if they don't exist
+        if (!kb.customToolName) {
+            kb.customToolName = `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`;
+        }
+        if (!kb.customToolDescription) {
+            kb.customToolDescription = `Search and retrieve information from ${kb.name}`;
+        }
 
         toolDiv.innerHTML = `
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            Knowledge Base
-                        </span>
-                        <span class="text-sm font-semibold text-gray-900">Tool ${index + 1}</span>
-                    </div>
-                    <div class="space-y-2">
-                        <div>
-                            <span class="text-xs font-medium text-gray-500">Function Name:</span>
-                            <p class="text-sm text-gray-900 font-mono">${toolName}</p>
-                        </div>
-                        <div>
-                            <span class="text-xs font-medium text-gray-500">Description:</span>
-                            <p class="text-sm text-gray-700">${toolDescription}</p>
-                        </div>
-                        <div>
-                            <span class="text-xs font-medium text-gray-500">Source Knowledge Base:</span>
-                            <p class="text-sm text-gray-900">${kb.name}</p>
-                        </div>
-                        <div>
-                            <span class="text-xs font-medium text-gray-500">Content Preview:</span>
-                            <p class="text-xs text-gray-600 mt-1 line-clamp-2">${kb.content.substring(0, 150)}${kb.content.length > 150 ? '...' : ''}</p>
-                        </div>
-                    </div>
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        Knowledge Base
+                    </span>
+                    <span class="text-sm font-semibold text-gray-900">Tool ${index + 1}</span>
                 </div>
-                <div class="ml-4">
+                <div class="flex items-center gap-2">
                     <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600">
                         Auto-generated
                     </span>
+                    <button onclick="toggleKBToolEdit(${index})" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                        ✏️ Edit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Collapsed View -->
+            <div id="kb-tool-collapsed-${index}" class="space-y-2">
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Function Name:</span>
+                    <p class="text-sm text-gray-900 font-mono">${kb.customToolName}</p>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Description:</span>
+                    <p class="text-sm text-gray-700">${kb.customToolDescription}</p>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Source Knowledge Base:</span>
+                    <p class="text-sm text-gray-900">${kb.name}</p>
+                </div>
+            </div>
+
+            <!-- Expanded Edit View -->
+            <div id="kb-tool-expanded-${index}" class="space-y-3 hidden">
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Function Name</label>
+                    <input type="text" id="kb-tool-name-${index}" value="${kb.customToolName}"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-mono focus:ring-2 focus:ring-indigo-500"
+                           onchange="updateKBToolName(${index}, this.value)" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-700 mb-1">Description</label>
+                    <textarea id="kb-tool-desc-${index}" rows="2"
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                              onchange="updateKBToolDescription(${index}, this.value)">${kb.customToolDescription}</textarea>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-gray-500">Source Knowledge Base:</span>
+                    <p class="text-sm text-gray-900">${kb.name}</p>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="toggleKBToolEdit(${index})"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded text-sm font-medium">
+                        Done
+                    </button>
                 </div>
             </div>
         `;
@@ -5317,6 +5348,30 @@ function renderKnowledgeBaseTools() {
         </p>
     `;
     container.appendChild(summaryDiv);
+}
+
+function toggleKBToolEdit(index) {
+    const collapsed = document.getElementById(`kb-tool-collapsed-${index}`);
+    const expanded = document.getElementById(`kb-tool-expanded-${index}`);
+
+    if (collapsed && expanded) {
+        collapsed.classList.toggle('hidden');
+        expanded.classList.toggle('hidden');
+    }
+}
+
+function updateKBToolName(index, value) {
+    if (knowledgeBases[index]) {
+        knowledgeBases[index].customToolName = value;
+        console.log(`✅ Updated KB Tool ${index} name: ${value}`);
+    }
+}
+
+function updateKBToolDescription(index, value) {
+    if (knowledgeBases[index]) {
+        knowledgeBases[index].customToolDescription = value;
+        console.log(`✅ Updated KB Tool ${index} description: ${value}`);
+    }
 }
 
 // ========== OUTPUTS FUNCTIONS (STEP 5) ==========
@@ -5813,8 +5868,8 @@ function renderConfigSummary() {
     const summaryDiv = document.getElementById('configSummary');
 
     const tools = knowledgeBases.map(kb => ({
-        name: `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`,
-        description: `Search and retrieve information from ${kb.name}`
+        name: kb.customToolName || `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`,
+        description: kb.customToolDescription || `Search and retrieve information from ${kb.name}`
     }));
 
     summaryDiv.innerHTML = `
@@ -5953,8 +6008,8 @@ Follow the instructions in **AGENT_CONFIG.md** to:
 
 function downloadAgentConfig() {
     const tools = knowledgeBases.map((kb, i) => ({
-        name: `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`,
-        description: `Search and retrieve information from ${kb.name}`,
+        name: kb.customToolName || `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`,
+        description: kb.customToolDescription || `Search and retrieve information from ${kb.name}`,
         type: 'knowledge-base'
     }));
 
@@ -6575,7 +6630,8 @@ function viewOutputWebpage() {
 
                 ${knowledgeBases.length === 0 ? '<p style="color: #6b7280;">No tools to configure (no knowledge bases created yet)</p>' : `
                     ${knowledgeBases.map((kb, index) => {
-                        const toolId = kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
+                        const toolName = kb.customToolName || `kb_${kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`;
+                        const toolDesc = kb.customToolDescription || `Search and retrieve information from the ${kb.name} knowledge base`;
                         return `
                         <div class="field" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e5e7eb;">
                             <h3 style="font-size: 16px; font-weight: 600; color: #667eea; margin-bottom: 15px;">
@@ -6587,7 +6643,7 @@ function viewOutputWebpage() {
                                 <strong>Function Name:</strong>
                                 <div class="copy-box">
                                     <button class="copy-btn" onclick="copyToClipboard('toolFnName${index}')">📋 Copy</button>
-                                    <div id="toolFnName${index}" class="field-value">kb_${toolId}</div>
+                                    <div id="toolFnName${index}" class="field-value">${toolName}</div>
                                 </div>
                             </div>
 
@@ -6595,7 +6651,7 @@ function viewOutputWebpage() {
                                 <strong>Function Description:</strong>
                                 <div class="copy-box">
                                     <button class="copy-btn" onclick="copyToClipboard('toolFnDesc${index}')">📋 Copy</button>
-                                    <div id="toolFnDesc${index}" class="field-value">Search and retrieve information from the ${kb.name} knowledge base</div>
+                                    <div id="toolFnDesc${index}" class="field-value">${toolDesc}</div>
                                 </div>
                             </div>
 
