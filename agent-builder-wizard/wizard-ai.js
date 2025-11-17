@@ -8286,25 +8286,16 @@ function setupDragAndDrop() {
     let isDragFromHandle = false;
 
     draggableSections.forEach(section => {
+        // Make sections draggable
+        section.setAttribute('draggable', 'true');
+
         // Track mousedown on drag handles
         const dragHandles = section.querySelectorAll('.drag-handle');
         dragHandles.forEach(handle => {
             handle.addEventListener('mousedown', function(e) {
-                e.preventDefault(); // Prevent button default behavior
                 isDragFromHandle = true;
-                // Make the section draggable
-                section.setAttribute('draggable', 'true');
             });
         });
-
-        // Reset flag on mouseup or dragleave
-        const resetDrag = function() {
-            isDragFromHandle = false;
-            section.setAttribute('draggable', 'false');
-        };
-
-        section.addEventListener('mouseup', resetDrag);
-        document.addEventListener('mouseup', resetDrag);
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
