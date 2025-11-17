@@ -3236,6 +3236,7 @@ async function generateAgent() {
             const systemPromptTextarea = document.getElementById('systemPrompt');
             if (systemPromptTextarea) {
                 systemPromptTextarea.value = config.systemPrompt;
+                updateSystemPromptCharCount(); // Update character counter
             }
         }
 
@@ -6004,6 +6005,7 @@ function updateStepDisplay() {
         // Populate System Prompt
         if (agentConfig.systemPrompt) {
             document.getElementById('systemPrompt').value = agentConfig.systemPrompt;
+            updateSystemPromptCharCount(); // Update character counter
             console.log(`📝 Populated System Prompt: ${agentConfig.systemPrompt.length} chars`);
         }
 
