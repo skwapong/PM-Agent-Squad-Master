@@ -2526,6 +2526,14 @@ function setupEventListeners() {
     document.getElementById('downloadAgentBtn')?.addEventListener('click', downloadAgentConfig);
     document.getElementById('downloadAllBtn')?.addEventListener('click', downloadAllFilesAsZip);
 
+    // System Prompt Character Counter
+    const systemPromptTextarea = document.getElementById('systemPrompt');
+    if (systemPromptTextarea) {
+        systemPromptTextarea.addEventListener('input', updateSystemPromptCharCount);
+        // Initialize count on page load
+        updateSystemPromptCharCount();
+    }
+
     // API Connection Status
     document.getElementById('configureApiBtn')?.addEventListener('click', showApiKeyModal);
     document.getElementById('closeApiModalBtn')?.addEventListener('click', hideApiKeyModal);
@@ -4501,6 +4509,7 @@ function generateSystemPrompt(domain) {
 
     agentConfig.systemPrompt = prompts[domain] || prompts.hr;
     document.getElementById('systemPrompt').value = agentConfig.systemPrompt;
+    updateSystemPromptCharCount(); // Update character counter
 }
 
 // Regenerate System Prompt
@@ -5051,6 +5060,7 @@ Guide complex sales processes to successful closures while building lasting cust
     // Update the config and UI
     agentConfig.systemPrompt = newPrompt;
     document.getElementById('systemPrompt').value = newPrompt;
+    updateSystemPromptCharCount(); // Update character counter
 }
 
 // Update Model Recommendation
@@ -6065,6 +6075,43 @@ function validateAgentDescription() {
     return true;
 }
 
+// Update system prompt character count
+function updateSystemPromptCharCount() {
+    const systemPromptTextarea = document.getElementById('systemPrompt');
+    const charCountElement = document.getElementById('systemPromptCharCount');
+    const warningElement = document.getElementById('systemPromptWarning');
+    const errorElement = document.getElementById('systemPromptError');
+
+    if (!systemPromptTextarea || !charCountElement) return;
+
+    const currentLength = systemPromptTextarea.value.length;
+    const maxLength = 9000;
+
+    // Update character count
+    charCountElement.textContent = `${currentLength} / ${maxLength}`;
+
+    // Update styling based on length
+    if (currentLength >= maxLength) {
+        // At or over limit - show error
+        charCountElement.classList.remove('text-gray-600', 'text-amber-600');
+        charCountElement.classList.add('text-red-600', 'font-bold');
+        warningElement?.classList.add('hidden');
+        errorElement?.classList.remove('hidden');
+    } else if (currentLength >= maxLength * 0.9) {
+        // 90% or more - show warning
+        charCountElement.classList.remove('text-gray-600', 'text-red-600', 'font-bold');
+        charCountElement.classList.add('text-amber-600', 'font-medium');
+        warningElement?.classList.remove('hidden');
+        errorElement?.classList.add('hidden');
+    } else {
+        // Under 90% - normal
+        charCountElement.classList.remove('text-amber-600', 'text-red-600', 'font-bold', 'font-medium');
+        charCountElement.classList.add('text-gray-600');
+        warningElement?.classList.add('hidden');
+        errorElement?.classList.add('hidden');
+    }
+}
+
 function validateKnowledgeBases() {
     if (knowledgeBases.length < 1) {
         alert(getTranslation('validation.kb.required', 'Please create at least one knowledge base.'));
@@ -6117,6 +6164,11 @@ function validateAgentConfig() {
 
     if (!systemPrompt) {
         alert(getTranslation('validation.agent.prompt', 'Please provide a system prompt.'));
+        return false;
+    }
+
+    if (systemPrompt.length > 9000) {
+        alert('⚠️ System prompt exceeds 9000 character limit. Please shorten it to ensure compatibility with Agent Foundry.');
         return false;
     }
 
@@ -7525,35 +7577,38 @@ async function downloadAllFilesAsZip() {
 function shareOutputWebpage() {
     // Generate the output webpage HTML
     const htmlContent = generateOutputWebpageHTML();
+    const agentSlug = (agentConfig.agentName || agentConfig.name || 'Agent').replace(/\s+/g, '_');
 
-    // Create a data URL
+    // Create a blob and download as HTML file
     const blob = new Blob([htmlContent], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${agentSlug}_Configuration.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 
-    // Copy URL to clipboard
-    const tempInput = document.createElement('input');
-    tempInput.value = url;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
+    // Also open in new tab for preview
+    const previewUrl = URL.createObjectURL(blob);
+    window.open(previewUrl, '_blank');
 
-    // Show success message with instructions
-    addChatMessage('assistant', `🔗 <strong>Shareable link created!</strong><br><br>
-    A temporary link has been copied to your clipboard:<br>
-    <code style="background: #f3f4f6; padding: 4px 8px; border-radius: 4px; font-size: 11px; word-break: break-all;">${url}</code><br><br>
-    <strong>⚠️ Important Notes:</strong><br>
-    • This link is temporary and only works while this page is open<br>
-    • For permanent sharing, save the output webpage as HTML and host it<br>
-    • Or use the "View Output Webpage" button, then save the page (Ctrl+S / Cmd+S)<br><br>
-    <strong>📧 To share with a colleague:</strong><br>
-    1. Open the output webpage in a new tab<br>
-    2. Save the page as HTML (File → Save As)<br>
-    3. Send the HTML file via email or file sharing service<br>
-    4. They can open it in any browser to see your agent configuration`);
-
-    // Also open in new tab
-    window.open(url, '_blank');
+    // Show success message with clear instructions
+    addChatMessage('assistant', `📄 <strong>Configuration HTML downloaded!</strong><br><br>
+    ✅ File saved as: <strong>${agentSlug}_Configuration.html</strong><br><br>
+    <strong>📧 How to share with colleagues:</strong><br>
+    1. Find the downloaded HTML file in your Downloads folder<br>
+    2. Send it via email, Slack, Teams, or any file sharing service<br>
+    3. Your colleague can open it in <strong>any web browser</strong> (Chrome, Firefox, Safari, Edge)<br>
+    4. No server or special software required - it's a standalone HTML file!<br><br>
+    <strong>💡 What they'll see:</strong><br>
+    • Complete agent configuration with copy-paste ready values<br>
+    • All knowledge bases with formatted content<br>
+    • Project settings and system prompts<br>
+    • Tools and outputs configuration<br>
+    • Easy navigation and copy buttons for each section<br><br>
+    <strong>🔍 Preview:</strong> The file has also been opened in a new tab for you to review before sharing.`);
 }
 
 // Helper function to generate output webpage HTML (extracted from viewOutputWebpage)

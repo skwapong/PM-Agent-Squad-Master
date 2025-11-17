@@ -569,12 +569,22 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                                     id="systemPrompt"
                                     rows="8"
                                     class="w-full border border-gray-300 rounded-lg px-4 py-2 font-mono text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                    maxlength="9000"
                                 ></textarea>
                                 <div class="flex justify-between items-center mt-1">
-                                    <p class="text-xs text-gray-500" data-i18n="step3.prompt.tip">AI-generated system prompt based on your description</p>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-xs text-gray-500" data-i18n="step3.prompt.tip">AI-generated system prompt based on your description</p>
+                                        <span id="systemPromptCharCount" class="text-xs font-medium text-gray-600">0 / 9000</span>
+                                    </div>
                                     <button id="regeneratePromptBtn" class="text-xs text-indigo-600 hover:text-indigo-700" data-i18n="button.regenerate">
                                         🔄 Regenerate
                                     </button>
+                                </div>
+                                <div id="systemPromptWarning" class="mt-2 text-xs text-amber-600 font-medium hidden">
+                                    ⚠️ System prompt is approaching the 9000 character limit
+                                </div>
+                                <div id="systemPromptError" class="mt-2 text-xs text-red-600 font-medium hidden">
+                                    ❌ System prompt exceeds 9000 character limit and will be truncated
                                 </div>
                             </div>
                         </div>
@@ -878,7 +888,7 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                                     📄 View Output Webpage
                                 </button>
                                 <button id="shareOutputBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-4 rounded-lg transition-colors duration-200 shadow-lg">
-                                    🔗 Share Output Webpage
+                                    💾 Download Shareable HTML
                                 </button>
                             </div>
 
