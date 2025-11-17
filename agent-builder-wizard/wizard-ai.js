@@ -2367,6 +2367,9 @@ function setupEventListeners() {
     // Drag and Drop Layout Customization
     setupDragAndDrop();
 
+    // Scroll Navigation Buttons
+    setupScrollNavigation();
+
     // Navigation
     document.getElementById('nextBtn').addEventListener('click', nextStep);
     document.getElementById('prevBtn').addEventListener('click', prevStep);
@@ -8275,6 +8278,51 @@ function resetWizard() {
 
 let draggedElement = null;
 
+// Setup scroll navigation buttons
+function setupScrollNavigation() {
+    const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+    const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
+
+    // Show/hide scroll to top button based on scroll position
+    window.addEventListener('scroll', function() {
+        const scrollPosition = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+
+        // Show "scroll to top" button when scrolled down more than 300px
+        if (scrollPosition > 300) {
+            scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            scrollToTopBtn.classList.add('opacity-100');
+        } else {
+            scrollToTopBtn.classList.remove('opacity-100');
+            scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Hide "scroll to bottom" button when at the bottom
+        if (scrollPosition + windowHeight >= documentHeight - 100) {
+            scrollToBottomBtn.classList.add('opacity-0', 'pointer-events-none');
+        } else {
+            scrollToBottomBtn.classList.remove('opacity-0', 'pointer-events-none');
+        }
+    });
+
+    // Scroll to top
+    scrollToTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Scroll to bottom
+    scrollToBottomBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    });
+}
+
 function setupDragAndDrop() {
     const container = document.getElementById('draggableContainer');
     const draggableSections = document.querySelectorAll('.draggable-section');
@@ -8289,21 +8337,45 @@ function setupDragAndDrop() {
         // Make sections draggable
         section.setAttribute('draggable', 'true');
 
-        // Track mousedown on drag handles
+        // Track mousedown on drag handles (using event capturing to catch before button)
         const dragHandles = section.querySelectorAll('.drag-handle');
         dragHandles.forEach(handle => {
+            // Add listener to the handle and its SVG children
             handle.addEventListener('mousedown', function(e) {
+                e.stopPropagation(); // Prevent other handlers
                 isDragFromHandle = true;
-            });
+                console.log('Drag handle clicked, isDragFromHandle:', isDragFromHandle);
+            }, true); // Use capture phase
+
+            // Also handle clicks on SVG and its children
+            const svg = handle.querySelector('svg');
+            if (svg) {
+                svg.addEventListener('mousedown', function(e) {
+                    e.stopPropagation();
+                    isDragFromHandle = true;
+                    console.log('SVG clicked, isDragFromHandle:', isDragFromHandle);
+                }, true);
+            }
+        });
+
+        // Reset flag when mouse leaves the section (after potential drag start)
+        section.addEventListener('mouseleave', function() {
+            // Don't reset if we're dragging
+            if (!draggedElement) {
+                isDragFromHandle = false;
+            }
         });
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
+            console.log('Dragstart event, isDragFromHandle:', isDragFromHandle);
             // Only allow drag if it started from a drag handle
             if (!isDragFromHandle) {
+                console.log('Preventing drag - not from handle');
                 e.preventDefault();
                 return;
             }
+            console.log('Starting drag');
             draggedElement = this;
             this.style.opacity = '0.5';
             this.classList.add('dragging');
@@ -8313,6 +8385,7 @@ function setupDragAndDrop() {
 
         // Drag end
         section.addEventListener('dragend', function(e) {
+            console.log('Drag ended');
             this.style.opacity = '';
             this.classList.remove('dragging');
             draggedElement = null;
