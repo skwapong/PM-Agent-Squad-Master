@@ -7320,11 +7320,16 @@ function setupDragAndDrop() {
                 section.setAttribute('draggable', 'true');
             });
         });
+    });
 
-        // Disable dragging when mouse is released
-        section.addEventListener('mouseup', function() {
+    // Disable dragging when mouse is released anywhere on the document
+    document.addEventListener('mouseup', function() {
+        draggableSections.forEach(section => {
             section.setAttribute('draggable', 'false');
         });
+    });
+
+    draggableSections.forEach(section => {
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
