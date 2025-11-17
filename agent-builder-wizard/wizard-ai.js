@@ -2424,23 +2424,47 @@ function setupEventListeners() {
     // Reset Button
     document.getElementById('resetBtn')?.addEventListener('click', resetWizard);
 
-    // Temperature slider
-    const tempSlider = document.getElementById('temperature') || document.getElementById('temperatureSlider');
-    const tempValue = document.getElementById('tempValue') || document.getElementById('temperatureValue');
-    if (tempSlider && tempValue) {
+    // Temperature slider and input box
+    const tempSlider = document.getElementById('temperature');
+    const tempInput = document.getElementById('temperatureInput');
+    if (tempSlider && tempInput) {
+        // Sync slider -> input
         tempSlider.addEventListener('input', function() {
-            tempValue.textContent = this.value;
-            agentConfig.temperature = parseFloat(this.value);
+            const value = parseFloat(this.value);
+            tempInput.value = value;
+            agentConfig.temperature = value;
+        });
+        // Sync input -> slider
+        tempInput.addEventListener('input', function() {
+            let value = parseFloat(this.value);
+            // Validate range
+            if (value < 0) value = 0;
+            if (value > 1) value = 1;
+            this.value = value;
+            tempSlider.value = value;
+            agentConfig.temperature = value;
         });
     }
 
-    // Max Tools Iterations slider
+    // Max Tools Iterations slider and input box
     const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
-    const maxToolsIterationsValue = document.getElementById('maxToolsIterationsValue');
-    if (maxToolsIterationsSlider && maxToolsIterationsValue) {
+    const maxToolsIterationsInput = document.getElementById('maxToolsIterationsInput');
+    if (maxToolsIterationsSlider && maxToolsIterationsInput) {
+        // Sync slider -> input
         maxToolsIterationsSlider.addEventListener('input', function() {
-            maxToolsIterationsValue.textContent = this.value;
-            agentConfig.maxToolsIterations = parseInt(this.value);
+            const value = parseInt(this.value);
+            maxToolsIterationsInput.value = value;
+            agentConfig.maxToolsIterations = value;
+        });
+        // Sync input -> slider
+        maxToolsIterationsInput.addEventListener('input', function() {
+            let value = parseInt(this.value);
+            // Validate range
+            if (value < 0) value = 0;
+            if (value > 10) value = 10;
+            this.value = value;
+            maxToolsIterationsSlider.value = value;
+            agentConfig.maxToolsIterations = value;
         });
     }
 
@@ -3096,27 +3120,27 @@ async function generateAgent() {
         if (config.temperature !== undefined) {
             agentConfig.temperature = config.temperature;
             console.log(`✅ Temperature: ${config.temperature}`);
-            // Populate temperature slider
+            // Populate temperature slider and input
             const tempSlider = document.getElementById('temperature');
-            const tempValue = document.getElementById('tempValue');
+            const tempInput = document.getElementById('temperatureInput');
             if (tempSlider) {
                 tempSlider.value = config.temperature;
             }
-            if (tempValue) {
-                tempValue.textContent = config.temperature;
+            if (tempInput) {
+                tempInput.value = config.temperature;
             }
         }
         if (config.maxToolsIterations !== undefined) {
             agentConfig.maxToolsIterations = config.maxToolsIterations;
             console.log(`✅ Max Tools Iterations: ${config.maxToolsIterations}`);
-            // Populate maxToolsIterations slider
+            // Populate maxToolsIterations slider and input
             const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
-            const maxToolsIterationsValue = document.getElementById('maxToolsIterationsValue');
+            const maxToolsIterationsInput = document.getElementById('maxToolsIterationsInput');
             if (maxToolsIterationsSlider) {
                 maxToolsIterationsSlider.value = config.maxToolsIterations;
             }
-            if (maxToolsIterationsValue) {
-                maxToolsIterationsValue.textContent = config.maxToolsIterations;
+            if (maxToolsIterationsInput) {
+                maxToolsIterationsInput.value = config.maxToolsIterations;
             }
         }
         if (config.modelReasoning) {
@@ -4352,10 +4376,18 @@ function generateAgentConfig(domain) {
     document.getElementById('agentName').value = agentConfig.agentName;
 
     document.getElementById('modelSelect').value = agentConfig.model;
-    document.getElementById('temperature').value = agentConfig.temperature;
-    document.getElementById('tempValue').textContent = agentConfig.temperature;
-    document.getElementById('maxToolsIterations').value = agentConfig.maxToolsIterations;
-    document.getElementById('maxToolsIterationsValue').textContent = agentConfig.maxToolsIterations;
+
+    // Populate temperature slider and input
+    const tempSlider = document.getElementById('temperature');
+    const tempInput = document.getElementById('temperatureInput');
+    if (tempSlider) tempSlider.value = agentConfig.temperature;
+    if (tempInput) tempInput.value = agentConfig.temperature;
+
+    // Populate max tools iterations slider and input
+    const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
+    const maxToolsIterationsInput = document.getElementById('maxToolsIterationsInput');
+    if (maxToolsIterationsSlider) maxToolsIterationsSlider.value = agentConfig.maxToolsIterations;
+    if (maxToolsIterationsInput) maxToolsIterationsInput.value = agentConfig.maxToolsIterations;
 
     // Show model reasoning if AI provided it
     const reasoningSection = document.getElementById('modelReasoningSection');
@@ -4997,17 +5029,21 @@ function updateStepDisplay() {
             console.log(`📝 Populated Model: ${agentConfig.model}`);
         }
 
-        // Populate Temperature
+        // Populate Temperature (both slider and input)
         if (agentConfig.temperature !== undefined) {
-            document.getElementById('temperature').value = agentConfig.temperature;
-            document.getElementById('tempValue').textContent = agentConfig.temperature;
+            const tempSlider = document.getElementById('temperature');
+            const tempInput = document.getElementById('temperatureInput');
+            if (tempSlider) tempSlider.value = agentConfig.temperature;
+            if (tempInput) tempInput.value = agentConfig.temperature;
             console.log(`📝 Populated Temperature: ${agentConfig.temperature}`);
         }
 
-        // Populate Max Tools Iterations
+        // Populate Max Tools Iterations (both slider and input)
         if (agentConfig.maxToolsIterations !== undefined) {
-            document.getElementById('maxToolsIterations').value = agentConfig.maxToolsIterations;
-            document.getElementById('maxToolsIterationsValue').textContent = agentConfig.maxToolsIterations;
+            const maxToolsIterationsSlider = document.getElementById('maxToolsIterations');
+            const maxToolsIterationsInput = document.getElementById('maxToolsIterationsInput');
+            if (maxToolsIterationsSlider) maxToolsIterationsSlider.value = agentConfig.maxToolsIterations;
+            if (maxToolsIterationsInput) maxToolsIterationsInput.value = agentConfig.maxToolsIterations;
             console.log(`📝 Populated Max Tools Iterations: ${agentConfig.maxToolsIterations}`);
         }
 
@@ -5959,9 +5995,9 @@ function resetWizard() {
     document.getElementById('agentName').value = '';
     document.getElementById('modelSelect').value = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
     document.getElementById('temperature').value = 0.5;
-    document.getElementById('tempValue').textContent = '0.5';
+    document.getElementById('temperatureInput').value = 0.5;
     document.getElementById('maxToolsIterations').value = 0;
-    document.getElementById('maxToolsIterationsValue').textContent = '0';
+    document.getElementById('maxToolsIterationsInput').value = 0;
     document.getElementById('systemPrompt').value = '';
 
     // Clear knowledge bases display
