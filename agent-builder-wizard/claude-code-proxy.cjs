@@ -17,6 +17,7 @@ const { join } = require('path');
 const os = require('os');
 
 const PORT = 3333;
+const TIMEOUT_MS = process.env.CLAUDE_TIMEOUT_MS || 1200000; // 20 minutes default, configurable via env var
 
 // System prompt for agent building context
 const SYSTEM_PROMPT = `You are an expert AI assistant helping users build custom AI agents for Treasure Data's AI Agent Foundry.
@@ -85,15 +86,16 @@ async function callClaudeCLI(userMessage, conversationHistory = []) {
         let stderr = '';
         let resolved = false;
 
-        // Add timeout to prevent hanging (60 seconds)
+        // Add timeout to prevent hanging (default 3 minutes, configurable)
         const timeout = setTimeout(() => {
             if (!resolved) {
                 resolved = true;
                 claude.kill();
-                console.error('⏱️ Claude CLI timed out after 60 seconds');
-                reject(new Error('Claude CLI timed out. The request took too long to complete.'));
+                const timeoutSeconds = Math.round(TIMEOUT_MS / 1000);
+                console.error(`⏱️ Claude CLI timed out after ${timeoutSeconds} seconds`);
+                reject(new Error(`Claude CLI timed out after ${timeoutSeconds} seconds. The request took too long to complete.`));
             }
-        }, 60000);
+        }, TIMEOUT_MS);
 
         claude.stdout.on('data', (data) => {
             const chunk = data.toString();
@@ -249,6 +251,7 @@ server.listen(PORT, () => {
     testClaude.on('close', (code) => {
         const cliAvailable = (code === 0);
 
+        const timeoutSeconds = Math.round(TIMEOUT_MS / 1000);
         console.log(`
 ╔════════════════════════════════════════════════════════════════╗
 ║  🚀 Claude Code CLI Localhost Proxy                            ║
@@ -256,6 +259,7 @@ server.listen(PORT, () => {
 ║  ✅ Running on http://localhost:${PORT}                            ║
 ║  ${cliAvailable ? '✅' : '❌'} Claude CLI: ${cliAvailable ? 'Available' : 'NOT FOUND'}                              ║
 ║  ${cliAvailable ? '✅' : '❌'} Connected to Claude Code                             ║
+║  ⏱️  Request timeout: ${timeoutSeconds} seconds                           ║
 ║                                                                 ║
 ${!cliAvailable ? `║  ⚠️  WARNING: Claude CLI not found!                            ║
 ║                                                                 ║
@@ -270,6 +274,7 @@ ${!cliAvailable ? `║  ⚠️  WARNING: Claude CLI not found!                  
 ║  2. Open agent-builder-wizard/index-ai.html                    ║
 ║  3. Start building agents with your local Claude Code!         ║
 ║                                                                 ║
+║  💡 Increase timeout: CLAUDE_TIMEOUT_MS=300000 node ...        ║
 ║  Test: curl http://localhost:${PORT}/health                        ║
 ╚════════════════════════════════════════════════════════════════╝
         `);
