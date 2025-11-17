@@ -5484,6 +5484,10 @@ function viewOutputWebpage() {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
@@ -5654,18 +5658,107 @@ function viewOutputWebpage() {
             white-space: pre-wrap;
             word-wrap: break-word;
         }
+
+        /* Navigation Styles */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 3px solid #667eea;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .nav-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f3f4f6;
+            color: #4b5563;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid #e5e7eb;
+        }
+
+        .nav-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .nav-link:active {
+            transform: translateY(0);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s;
+            z-index: 999;
+        }
+
+        .back-to-top:hover {
+            background: #5a67d8;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
+        <div class="header" id="top">
             <h1>🤖 ${agentConfig.name || 'AI Agent'}</h1>
             <p>Configuration Output - Ready for Agent Foundry</p>
         </div>
 
+        <!-- Sticky Navigation Bar -->
+        <nav class="nav-bar">
+            <div class="nav-container">
+                <span class="nav-label">Jump to:</span>
+                <a href="#knowledge-bases" class="nav-link">📚 Knowledge Bases</a>
+                <a href="#project-config" class="nav-link">📁 Project</a>
+                <a href="#agent-config" class="nav-link">🤖 Agent</a>
+                <a href="#tools" class="nav-link">🔧 Tools</a>
+                <a href="#outputs" class="nav-link">📤 Outputs</a>
+                <a href="#summary" class="nav-link">📋 Summary</a>
+            </div>
+        </nav>
+
         <div class="content">
             <!-- Step 1: Knowledge Bases (Detailed) -->
-            <div class="section">
+            <div class="section" id="knowledge-bases">
                 <h2 class="section-title">📚 Knowledge Bases (${knowledgeBases.length})</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Each knowledge base provides specialized expertise to your agent. Copy each section to create the knowledge base in Agent Foundry.</p>
 
@@ -5722,7 +5815,7 @@ function viewOutputWebpage() {
             </div>
 
             <!-- Step 2: Project Configuration -->
-            <div class="section">
+            <div class="section" id="project-config">
                 <h2 class="section-title">📁 Step 2: Project Configuration</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Create a project to contain your agent and knowledge bases.</p>
 
@@ -5759,7 +5852,7 @@ function viewOutputWebpage() {
             </div>
 
             <!-- Step 3: Agent Configuration -->
-            <div class="section">
+            <div class="section" id="agent-config">
                 <h2 class="section-title">🤖 Step 3: Agent Configuration</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Configure your agent's basic settings and behavior.</p>
 
@@ -5808,7 +5901,7 @@ function viewOutputWebpage() {
             </div>
 
             <!-- Step 4: Tools Configuration -->
-            <div class="section">
+            <div class="section" id="tools">
                 <h2 class="section-title">🔧 Step 4: Add Tools</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Add tools to connect your agent to knowledge bases. Each KB requires one tool.</p>
 
@@ -5862,7 +5955,7 @@ function viewOutputWebpage() {
             </div>
 
             <!-- Step 5: Output Configuration -->
-            <div class="section">
+            <div class="section" id="outputs">
                 <h2 class="section-title">📤 Step 5: Add Outputs</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Configure structured outputs for your agent (optional). Default text output is always available.</p>
 
@@ -5925,7 +6018,7 @@ function viewOutputWebpage() {
             </div>
 
             <!-- Complete Configuration Summary -->
-            <div class="section">
+            <div class="section" id="summary">
                 <h2 class="section-title">📋 Complete Configuration Summary</h2>
                 <p style="color: #6b7280; margin-bottom: 20px;">Full configuration in JSON format for reference or programmatic deployment.</p>
 
@@ -5992,6 +6085,9 @@ function viewOutputWebpage() {
             });
         }
     </script>
+
+    <!-- Back to Top Button -->
+    <a href="#top" class="back-to-top" title="Back to top">↑</a>
 </body>
 </html>
     `;
