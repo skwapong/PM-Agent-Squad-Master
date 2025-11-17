@@ -68,36 +68,63 @@ async function callClaudeCLI(userMessage, conversationHistory = []) {
         // Add current message
         fullPrompt += `Human: ${userMessage}\n\nAssistant:`;
 
-        // Write prompt to temp file
+        // Write prompt to temp file for debugging
         const promptFile = join(TEMP_DIR, `prompt-${Date.now()}.txt`);
         writeFileSync(promptFile, fullPrompt, 'utf8');
 
         console.log('📝 Prompt file created:', promptFile);
-        console.log('🤖 Calling Claude Code CLI via stdin...');
+        console.log('🤖 Calling Claude Code CLI...');
 
-        // Call Claude Code CLI using stdin (more reliable for long prompts)
-        // echo "prompt" | claude
-        const claude = spawn('claude', [], {
+        // Use 'claude chat' instead of just 'claude' for better stdin handling
+        const claude = spawn('claude', ['chat'], {
             stdio: ['pipe', 'pipe', 'pipe'],
             env: { ...process.env }
         });
 
         let stdout = '';
         let stderr = '';
+        let resolved = false;
+
+        // Add timeout to prevent hanging (60 seconds)
+        const timeout = setTimeout(() => {
+            if (!resolved) {
+                resolved = true;
+                claude.kill();
+                console.error('⏱️ Claude CLI timed out after 60 seconds');
+                reject(new Error('Claude CLI timed out. The request took too long to complete.'));
+            }
+        }, 60000);
 
         claude.stdout.on('data', (data) => {
-            stdout += data.toString();
+            const chunk = data.toString();
+            stdout += chunk;
+            console.log('📥 Received chunk:', chunk.substring(0, 50));
         });
 
         claude.stderr.on('data', (data) => {
-            stderr += data.toString();
+            const chunk = data.toString();
+            stderr += chunk;
+            console.error('⚠️ stderr:', chunk);
         });
 
         // Write prompt to stdin
-        claude.stdin.write(fullPrompt);
-        claude.stdin.end();
+        try {
+            claude.stdin.write(fullPrompt);
+            claude.stdin.end();
+            console.log('✍️ Prompt sent to Claude CLI');
+        } catch (error) {
+            clearTimeout(timeout);
+            resolved = true;
+            console.error('❌ Failed to write to stdin:', error.message);
+            reject(new Error(`Failed to send prompt to Claude CLI: ${error.message}`));
+            return;
+        }
 
         claude.on('close', (code) => {
+            if (resolved) return;
+            resolved = true;
+            clearTimeout(timeout);
+
             // Clean up temp file
             try {
                 if (existsSync(promptFile)) {
@@ -107,18 +134,34 @@ async function callClaudeCLI(userMessage, conversationHistory = []) {
                 console.error('Failed to cleanup temp file:', e.message);
             }
 
-            if (code === 0 && stdout) {
+            console.log(`🔍 Claude CLI exited with code ${code}`);
+            console.log(`📊 stdout length: ${stdout.length}`);
+            console.log(`📊 stderr length: ${stderr.length}`);
+
+            if (stdout.trim()) {
                 console.log('✅ Claude response received');
                 resolve(stdout.trim());
+            } else if (code === 0) {
+                console.error('❌ Claude CLI succeeded but returned no output');
+                reject(new Error('Claude CLI returned no output. This may indicate an authentication issue or that the CLI is running in interactive mode. Try: claude auth login'));
             } else {
-                console.error('❌ Claude CLI error:', stderr || 'No output');
-                reject(new Error(stderr || 'Claude CLI failed to respond'));
+                console.error('❌ Claude CLI error:', stderr || `Exit code ${code}`);
+                reject(new Error(stderr || `Claude CLI exited with code ${code}`));
             }
         });
 
         claude.on('error', (error) => {
+            if (resolved) return;
+            resolved = true;
+            clearTimeout(timeout);
+
             console.error('❌ Failed to spawn Claude CLI:', error.message);
-            reject(new Error(`Failed to execute Claude Code CLI: ${error.message}`));
+
+            if (error.code === 'ENOENT') {
+                reject(new Error('Claude Code CLI not found. Please install it: npm install -g @anthropics/claude-code'));
+            } else {
+                reject(new Error(`Failed to execute Claude Code CLI: ${error.message}`));
+            }
         });
     });
 }

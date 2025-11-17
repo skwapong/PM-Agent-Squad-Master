@@ -109,7 +109,7 @@ npm start
 ## 📚 More Info
 
 - **Detailed docs:** `README-CLAUDE-CLI.md`
-- **Troubleshooting:** `DIAGNOSTICS.md`
+- **Troubleshooting:** `TROUBLESHOOTING.md` ⭐ **NEW!**
 - **Original README:** `README.md`
 
 ---
