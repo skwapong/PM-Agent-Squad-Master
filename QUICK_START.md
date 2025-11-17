@@ -15,10 +15,11 @@ cd PM-Agent-Squad-Master/agent-builder-wizard
 # Install dependencies
 npm install
 
-# Create your .env file
-cp .env.example .env
-# Edit .env and add your API key: ANTHROPIC_API_KEY=your-key-here
+# Authenticate with Claude Code CLI
+claude auth login
 ```
+
+> **Note:** No `.env` file or API key needed! Claude Code CLI handles authentication.
 
 ### 2. Start Every Time
 ```bash

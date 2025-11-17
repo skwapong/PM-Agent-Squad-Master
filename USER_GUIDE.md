@@ -9,8 +9,10 @@
 
 ### Prerequisites
 - **Node.js** installed (version 14 or higher) - [Download here](https://nodejs.org/)
-- **Claude Code CLI** installed - [Installation guide](https://docs.anthropic.com/claude/docs/claude-cli)
+- **Claude Code CLI** installed and authenticated - [Installation guide](https://docs.anthropic.com/claude/docs/claude-cli)
 - **Git** installed (for keeping project updated)
+
+> **Note:** When using `./START.sh`, authentication is handled through Claude Code CLI. No `.env` file or API key needed!
 
 ### Step 1: Clone the Repository
 
@@ -27,19 +29,15 @@ cd PM-Agent-Squad-Master/agent-builder-wizard
 npm install
 ```
 
-### Step 3: Configure Your API Key
+### Step 3: Ensure Claude Code CLI is Authenticated
 
-1. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+# Check if Claude Code CLI is installed
+claude --version
 
-2. Open `.env` file and add your Anthropic API key:
-   ```
-   ANTHROPIC_API_KEY=your-api-key-here
-   ```
-
-   > Get your API key from: https://console.anthropic.com/
+# If not authenticated, run:
+claude auth login
+```
 
 ### Step 4: Start the Application
 
@@ -70,6 +68,8 @@ file:///[YOUR-PATH]/PM-Agent-Squad-Master/agent-builder-wizard/index-ai.html
 ```
 
 Or simply open `index-ai.html` by double-clicking it.
+
+> **✅ That's it!** No API keys to configure. Claude Code CLI handles authentication automatically.
 
 ---
 
@@ -217,6 +217,24 @@ npm install -g @anthropics/claude-code
 
 # Verify installation
 claude --version
+
+# Authenticate
+claude auth login
+```
+
+### Not Authenticated with Claude
+
+**Problem:** `Error: Not authenticated` or `401 Unauthorized`
+
+**Solution:**
+```bash
+# Check authentication status
+claude auth status
+
+# If not logged in, authenticate
+claude auth login
+
+# Follow the prompts to log in with your Anthropic account
 ```
 
 ### Port Already in Use
@@ -271,10 +289,10 @@ git pull origin main
 ```
 This ensures you have the latest bug fixes and features.
 
-### 2. Keep Your API Key Secure
-- Never commit your `.env` file to Git
-- Don't share your API key with others
-- Rotate your key if it gets exposed
+### 2. Authentication is Handled by Claude Code CLI
+- No API keys needed in the project
+- Authentication happens through `claude auth login`
+- Each team member authenticates individually
 
 ### 3. Use Descriptive Agent Names
 - ✅ Good: "Meta Advertising Campaign Optimizer"
@@ -372,10 +390,10 @@ node --version
 
 ## 🔐 Security Notes
 
-1. **API Keys:**
-   - Stored locally in `.env` file (never committed to Git)
-   - Used only for communication with Claude API
-   - Keep your API key confidential
+1. **Authentication:**
+   - Handled through Claude Code CLI (`claude auth login`)
+   - No API keys stored in project files
+   - Each user authenticates with their own Claude account
 
 2. **Local Execution:**
    - All processing happens on your local machine
