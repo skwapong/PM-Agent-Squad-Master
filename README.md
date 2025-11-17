@@ -2,6 +2,18 @@
 
 A universal, production-ready template for building custom AI agents for Amazon Bedrock Agent Foundry. This template includes everything you need to create, customize, and deploy your own AI agent with a professional chat interface.
 
+---
+
+## 📖 Documentation for Team Members
+
+- **🚀 [Quick Start Guide](QUICK_START.md)** - Get started in 5 minutes
+- **📘 [Complete User Guide](USER_GUIDE.md)** - Comprehensive guide for colleagues
+- **🔄 [How to Get Latest Version](USER_GUIDE.md#-getting-the-latest-version-recommended-workflow)** - Always stay updated
+
+> **New to this project?** Start with the [Quick Start Guide](QUICK_START.md)!
+
+---
+
 ## ✨ Features
 
 ### 🎯 NEW: Agent Builder Wizard
