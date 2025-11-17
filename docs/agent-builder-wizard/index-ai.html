@@ -66,6 +66,28 @@
                 transform: scale(1);
             }
         }
+        /* Drag and Drop Styles */
+        .draggable-section {
+            cursor: grab;
+        }
+        .draggable-section:active {
+            cursor: grabbing;
+        }
+        .draggable-section.dragging {
+            opacity: 0.5;
+            transform: scale(0.98);
+        }
+        .draggable-section.drag-over {
+            border: 2px dashed #6366f1;
+            background-color: #f0f0ff;
+        }
+        .drag-handle {
+            cursor: move;
+            transition: all 0.2s;
+        }
+        .drag-handle:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen">
@@ -139,15 +161,20 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div id="draggableContainer" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Left Side: AI Assistant Panel -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+            <div id="assistantPanel" class="lg:col-span-1 draggable-section" draggable="true" data-section="assistant">
+                <div class="bg-white rounded-lg shadow-lg p-6 sticky top-4 transition-all duration-200">
                     <div class="flex items-center gap-2 mb-4 pb-4 border-b border-gray-200">
+                        <button class="drag-handle cursor-move text-gray-400 hover:text-gray-600 transition-colors" title="Drag to reorder">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                            </svg>
+                        </button>
                         <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center p-1 shadow-sm border border-gray-200">
                             <img src="favicon.ico" alt="TD" class="w-full h-full">
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <h3 class="font-bold text-gray-900" data-i18n="assistant.title">Agent Foundry Assistant</h3>
                             <p class="text-xs text-gray-500" data-i18n="assistant.subtitle">Your agent building assistant</p>
                         </div>
@@ -235,7 +262,17 @@
             </div>
 
             <!-- Right Side: Wizard Steps -->
-            <div class="lg:col-span-2">
+            <div id="wizardPanel" class="lg:col-span-2 draggable-section" draggable="true" data-section="wizard">
+                <div class="transition-all duration-200">
+                    <!-- Drag Handle -->
+                    <div class="bg-white rounded-t-lg shadow-md p-2 flex items-center justify-center">
+                        <button class="drag-handle cursor-move text-gray-400 hover:text-gray-600 transition-colors" title="Drag to reorder">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
                 <!-- Progress Steps -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
                     <div class="flex items-center justify-between">

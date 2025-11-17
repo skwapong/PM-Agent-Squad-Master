@@ -2340,6 +2340,9 @@ function getTranslation(key, fallback = '') {
 
 // Event Listeners
 function setupEventListeners() {
+    // Drag and Drop Layout Customization
+    setupDragAndDrop();
+
     // Navigation
     document.getElementById('nextBtn').addEventListener('click', nextStep);
     document.getElementById('prevBtn').addEventListener('click', prevStep);
@@ -5914,4 +5917,136 @@ function resetWizard() {
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ========================================
+// Drag and Drop Layout Customization
+// ========================================
+
+let draggedElement = null;
+
+function setupDragAndDrop() {
+    const container = document.getElementById('draggableContainer');
+    const draggableSections = document.querySelectorAll('.draggable-section');
+
+    // Load saved layout
+    loadSavedLayout();
+
+    draggableSections.forEach(section => {
+        // Drag start
+        section.addEventListener('dragstart', function(e) {
+            draggedElement = this;
+            this.style.opacity = '0.5';
+            this.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/html', this.innerHTML);
+        });
+
+        // Drag end
+        section.addEventListener('dragend', function(e) {
+            this.style.opacity = '';
+            this.classList.remove('dragging');
+            draggedElement = null;
+
+            // Save the new layout
+            saveLayout();
+        });
+
+        // Drag over
+        section.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+
+            if (draggedElement !== this) {
+                this.classList.add('drag-over');
+            }
+        });
+
+        // Drag enter
+        section.addEventListener('dragenter', function(e) {
+            if (draggedElement !== this) {
+                this.classList.add('drag-over');
+            }
+        });
+
+        // Drag leave
+        section.addEventListener('dragleave', function(e) {
+            this.classList.remove('drag-over');
+        });
+
+        // Drop
+        section.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+
+            if (draggedElement !== this) {
+                // Swap positions
+                const allSections = Array.from(container.children);
+                const draggedIndex = allSections.indexOf(draggedElement);
+                const targetIndex = allSections.indexOf(this);
+
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    container.insertBefore(draggedElement, this);
+                }
+
+                // Visual feedback
+                showToast('Layout updated! Your preference has been saved.', 'success');
+            }
+        });
+    });
+}
+
+function saveLayout() {
+    const container = document.getElementById('draggableContainer');
+    const sections = Array.from(container.children);
+    const layout = sections.map(section => section.dataset.section);
+
+    localStorage.setItem('layoutOrder', JSON.stringify(layout));
+}
+
+function loadSavedLayout() {
+    const savedLayout = localStorage.getItem('layoutOrder');
+    if (!savedLayout) return;
+
+    try {
+        const layout = JSON.parse(savedLayout);
+        const container = document.getElementById('draggableContainer');
+
+        layout.forEach(sectionId => {
+            const section = container.querySelector(`[data-section="${sectionId}"]`);
+            if (section) {
+                container.appendChild(section);
+            }
+        });
+    } catch (e) {
+        console.error('Failed to load saved layout:', e);
+    }
+}
+
+function showToast(message, type = 'info') {
+    // Create toast element
+    const toast = document.createElement('div');
+    toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg text-white z-50 transition-all duration-300 ${
+        type === 'success' ? 'bg-green-600' :
+        type === 'error' ? 'bg-red-600' :
+        'bg-indigo-600'
+    }`;
+    toast.innerHTML = message;
+
+    document.body.appendChild(toast);
+
+    // Fade in
+    setTimeout(() => {
+        toast.style.opacity = '1';
+    }, 10);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(toast);
+        }, 300);
+    }, 3000);
 }
