@@ -3076,19 +3076,55 @@ async function generateAgent() {
         if (config.model) {
             agentConfig.model = config.model;
             console.log(`✅ AI Model: ${config.model}`);
+            // Populate model select
+            const modelSelect = document.getElementById('modelSelect');
+            if (modelSelect) {
+                modelSelect.value = config.model;
+            }
         }
         if (config.temperature !== undefined) {
             agentConfig.temperature = config.temperature;
             console.log(`✅ Temperature: ${config.temperature}`);
+            // Populate temperature slider
+            const tempSlider = document.getElementById('temperature');
+            const tempValue = document.getElementById('tempValue');
+            if (tempSlider) {
+                tempSlider.value = config.temperature;
+            }
+            if (tempValue) {
+                tempValue.textContent = config.temperature;
+            }
         }
         if (config.modelReasoning) {
             agentConfig.modelReasoning = config.modelReasoning;
             console.log(`✅ Model Reasoning: "${config.modelReasoning.substring(0, 60)}..."`);
+            // Show model reasoning section
+            const reasoningSection = document.getElementById('modelReasoningSection');
+            const reasoningText = document.getElementById('modelReasoningText');
+            if (reasoningText) {
+                reasoningText.textContent = config.modelReasoning;
+            }
+            if (reasoningSection) {
+                reasoningSection.style.display = 'block';
+            }
         }
         if (config.systemPrompt) {
             agentConfig.systemPrompt = config.systemPrompt;
             console.log(`✅ System Prompt: ${config.systemPrompt.length} characters`);
-        } else {
+            // Populate the textarea
+            const systemPromptTextarea = document.getElementById('systemPrompt');
+            if (systemPromptTextarea) {
+                systemPromptTextarea.value = config.systemPrompt;
+            }
+        }
+
+        // If no system prompt from AI, generate it based on domain
+        if (!config.systemPrompt) {
+            generateSystemPrompt(domain);
+        }
+
+        // If model/temp not provided by AI, use defaults
+        if (!config.model || config.temperature === undefined) {
             generateAgentConfig(domain);
         }
 
