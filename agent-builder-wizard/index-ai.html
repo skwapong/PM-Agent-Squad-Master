@@ -358,7 +358,13 @@
                 <!-- Templates will be dynamically loaded here -->
             </div>
 
-            <div class="mt-6 flex justify-end gap-3">
+            <div class="mt-6 flex justify-between items-center">
+                <a href="https://github.com/skwapong/PM-Agent-Squad-Master/issues/new?labels=template-submission&template=template_submission.md&title=%5BTemplate%5D+" target="_blank" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Submit Your Template
+                </a>
                 <button id="cancelTemplateBtn" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
                     Cancel
                 </button>
@@ -1277,6 +1283,7 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
     <script src="claude-api.js"></script>
+    <script src="agent-templates.js"></script>
     <script src="wizard-ai.js"></script>
 </body>
 </html>
