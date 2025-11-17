@@ -8344,7 +8344,6 @@ function setupDragAndDrop() {
             handle.addEventListener('mousedown', function(e) {
                 e.stopPropagation(); // Prevent other handlers
                 isDragFromHandle = true;
-                console.log('Drag handle clicked, isDragFromHandle:', isDragFromHandle);
             }, true); // Use capture phase
 
             // Also handle clicks on SVG and its children
@@ -8353,29 +8352,17 @@ function setupDragAndDrop() {
                 svg.addEventListener('mousedown', function(e) {
                     e.stopPropagation();
                     isDragFromHandle = true;
-                    console.log('SVG clicked, isDragFromHandle:', isDragFromHandle);
                 }, true);
-            }
-        });
-
-        // Reset flag when mouse leaves the section (after potential drag start)
-        section.addEventListener('mouseleave', function() {
-            // Don't reset if we're dragging
-            if (!draggedElement) {
-                isDragFromHandle = false;
             }
         });
 
         // Drag start
         section.addEventListener('dragstart', function(e) {
-            console.log('Dragstart event, isDragFromHandle:', isDragFromHandle);
             // Only allow drag if it started from a drag handle
             if (!isDragFromHandle) {
-                console.log('Preventing drag - not from handle');
                 e.preventDefault();
                 return;
             }
-            console.log('Starting drag');
             draggedElement = this;
             this.style.opacity = '0.5';
             this.classList.add('dragging');
@@ -8385,7 +8372,6 @@ function setupDragAndDrop() {
 
         // Drag end
         section.addEventListener('dragend', function(e) {
-            console.log('Drag ended');
             this.style.opacity = '';
             this.classList.remove('dragging');
             draggedElement = null;
