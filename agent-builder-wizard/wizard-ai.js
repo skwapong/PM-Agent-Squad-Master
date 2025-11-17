@@ -5,6 +5,12 @@
 let currentStep = 0;
 let knowledgeBases = [];
 let kbCounter = 0;
+let additionalTools = [];
+let toolCounter = 0;
+let outputs = [];
+let outputCounter = 0;
+let promptVariables = [];
+let variableCounter = 0;
 let agentConfig = {
     description: '',
     tone: 'professional',
@@ -161,7 +167,7 @@ const translations = {
         'button.previous': '← Previous',
         'button.next': 'Next →',
         'step.of': 'Step',
-        'step.total': 'of 4',
+        'step.total': 'of 8',
 
         // Validation
         'error.required': '⚠️ Please enter a message before sending',
@@ -404,7 +410,7 @@ Use consultative selling approaches and help build long-term customer relationsh
         'button.previous': '← Anterior',
         'button.next': 'Próximo →',
         'step.of': 'Passo',
-        'step.total': 'de 4',
+        'step.total': 'de 8',
 
         'error.required': '⚠️ Por favor, digite uma mensagem antes de enviar',
         'validation.description.required': 'Por favor, descreva seu agente primeiro! Adicione pelo menos uma breve descrição do que seu agente deve fazer (mínimo de 20 caracteres).',
@@ -647,7 +653,7 @@ Sempre priorize relacionamentos de longo prazo com clientes em vez de vitórias 
         'button.previous': '← Anterior',
         'button.next': 'Siguiente →',
         'step.of': 'Paso',
-        'step.total': 'de 4',
+        'step.total': 'de 8',
 
         'error.required': '⚠️ Por favor, escribe un mensaje antes de enviar',
         'validation.description.required': '¡Por favor, describe tu agente primero! Agrega al menos una breve descripción de lo que debe hacer tu agente (mínimo 20 caracteres).',
@@ -900,7 +906,7 @@ Siempre priorizar las relaciones a largo plazo con los clientes sobre las victor
         'button.previous': '← 前へ',
         'button.next': '次へ →',
         'step.of': 'ステップ',
-        'step.total': '/ 4',
+        'step.total': '/ 8',
 
         // Validation
         'error.required': '⚠️ 送信する前にメッセージを入力してください',
@@ -1144,7 +1150,7 @@ Siempre priorizar las relaciones a largo plazo con los clientes sobre las victor
         'button.previous': '← Précédent',
         'button.next': 'Suivant →',
         'step.of': 'Étape',
-        'step.total': 'sur 4',
+        'step.total': 'sur 8',
 
         'error.required': '⚠️ Veuillez saisir un message avant d\'envoyer',
         'validation.description.required': 'Veuillez d\'abord décrire votre agent ! Ajoutez au moins une brève description de ce que votre agent doit faire (minimum 20 caractères).',
@@ -1387,7 +1393,7 @@ Toujours prioriser les relations client à long terme plutôt que les victoires 
         'button.previous': '← Precedente',
         'button.next': 'Successivo →',
         'step.of': 'Passo',
-        'step.total': 'di 4',
+        'step.total': 'di 8',
 
         'error.required': '⚠️ Per favore, scrivi un messaggio prima di inviare',
         'validation.description.required': 'Per favore, descrivi prima il tuo agente! Aggiungi almeno una breve descrizione di cosa dovrebbe fare il tuo agente (minimo 20 caratteri).',
@@ -1630,7 +1636,7 @@ Dare sempre priorità alle relazioni clienti a lungo termine rispetto alle vitto
         'button.previous': '← Zurück',
         'button.next': 'Weiter →',
         'step.of': 'Schritt',
-        'step.total': 'von 4',
+        'step.total': 'von 8',
 
         'error.required': '⚠️ Bitte geben Sie eine Nachricht ein, bevor Sie senden',
         'validation.description.required': 'Bitte beschreiben Sie zuerst Ihren Agenten! Fügen Sie mindestens eine kurze Beschreibung hinzu, was Ihr Agent tun soll (mindestens 20 Zeichen).',
@@ -1873,7 +1879,7 @@ Immer langfristige Kundenbeziehungen über kurzfristige Erfolge priorisieren.`
         'button.previous': '← 이전',
         'button.next': '다음 →',
         'step.of': '단계',
-        'step.total': '/ 4',
+        'step.total': '/ 8',
 
         'error.required': '⚠️ 전송하기 전에 메시지를 입력하세요',
         'validation.description.required': '먼저 에이전트를 설명하세요! 에이전트가 해야 할 일에 대한 간단한 설명을 추가하세요 (최소 20자).',
@@ -2116,7 +2122,7 @@ Immer langfristige Kundenbeziehungen über kurzfristige Erfolge priorisieren.`
         'button.previous': '← Vorige',
         'button.next': 'Volgende →',
         'step.of': 'Stap',
-        'step.total': 'van 4',
+        'step.total': 'van 8',
 
         'error.required': '⚠️ Voer een bericht in voordat je verzendt',
         'validation.description.required': 'Beschrijf eerst je agent! Voeg minimaal een korte beschrijving toe van wat je agent moet doen (minimaal 20 tekens).',
@@ -2369,7 +2375,7 @@ function setupEventListeners() {
     document.querySelectorAll('.step-nav-item, .progress-step').forEach(navItem => {
         navItem.addEventListener('click', function() {
             const step = parseInt(this.dataset.step);
-            if (!isNaN(step) && step >= 0 && step <= 4) {
+            if (!isNaN(step) && step >= 0 && step <= 7) {
                 currentStep = step;
                 updateStepDisplay();
             }
@@ -2482,6 +2488,15 @@ function setupEventListeners() {
 
     // Add KB button
     document.getElementById('addKBBtn')?.addEventListener('click', addKnowledgeBase);
+
+    // Add Tool button (Step 4)
+    document.getElementById('addToolBtn')?.addEventListener('click', addTool);
+
+    // Add Output button (Step 5)
+    document.getElementById('addOutputBtn')?.addEventListener('click', addOutput);
+
+    // Add Prompt Variable button (Step 6)
+    document.getElementById('addPromptVariableBtn')?.addEventListener('click', addPromptVariable);
 
     // Download buttons
     document.getElementById('viewOutputBtn')?.addEventListener('click', viewOutputWebpage);
@@ -3048,7 +3063,7 @@ async function generateAgent() {
             : `\n\nLanguage Requirement: The agent should respond in ${languageName}.`;
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT: \n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Create a comprehensive systemPrompt (150-300 words) that defines the agent's role, expertise, and behavior`;
+        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -4436,67 +4451,256 @@ function generateSystemPromptVariation(domain) {
     // Define multiple prompt variations for each domain
     const promptVariations = {
         marketing: [
-            // Variation 1: Strategic Focus
-            `You are an expert Marketing Campaign Strategist with comprehensive knowledge of campaign planning, multi-channel advertising, and performance optimization.
+            // Variation 1: Comprehensive Strategic Marketing Advisor
+            `# IDENTITY & ROLE
 
-Your role is to:
-- Develop comprehensive marketing campaign strategies across Meta, Google, TikTok, and Pinterest
-- Provide tactical recommendations for audience targeting, creative development, and budget allocation
-- Analyze campaign performance and suggest data-driven optimizations
-- Guide marketers through campaign setup, execution, and reporting
-- Stay current with platform updates and advertising best practices
+You are an elite Marketing Campaign Strategist and Performance Advisor with deep expertise in multi-channel digital advertising, data-driven optimization, and revenue growth strategies. You serve as a trusted strategic partner to marketing teams, combining analytical rigor with creative problem-solving to drive measurable business outcomes.
 
-Guidelines:
-- Start with clear objectives and KPIs for every campaign
-- Recommend platform-specific tactics based on campaign goals
-- Provide creative ideas while maintaining strategic focus
-- Balance performance optimization with brand building
-- Use data and benchmarks to support recommendations
-- Focus on measurable ROI and ROAS improvements
+Your primary role is to help marketing professionals plan, execute, and optimize comprehensive campaigns across major advertising platforms (Meta, Google, TikTok, Pinterest, LinkedIn) while maximizing return on ad spend and achieving specific business objectives.
 
-Always align recommendations with business goals, available budget, and target audience characteristics.`,
+# CORE CAPABILITIES
 
-            // Variation 2: Tactical Focus
-            `You are a hands-on Marketing Campaign Specialist focused on execution, optimization, and measurable results across paid advertising platforms.
+Your expertise spans the full marketing lifecycle:
 
-Your expertise includes:
-- Creating and optimizing campaigns on Meta Ads, Google Ads, TikTok, and Pinterest
-- Building effective audience targeting strategies using platform tools
-- Developing high-performing ad creative (copy, visuals, video)
-- Managing budgets and bidding strategies for optimal ROAS
-- Running A/B tests and analyzing performance data
-- Generating actionable insights from campaign analytics
+- **Strategic Campaign Planning**: Design comprehensive campaign strategies aligned with business goals, including objective setting, KPI definition, audience segmentation, channel selection, and budget allocation across platforms
+- **Platform Mastery**: Deep knowledge of Meta Ads Manager, Google Ads, TikTok Ads, Pinterest Ads, and LinkedIn Campaign Manager, including advanced features, bidding strategies, and creative specifications
+- **Audience Targeting**: Expert in building high-performance audience segments using demographic, behavioral, interest-based, lookalike, and custom audience strategies, plus retargeting and funnel-based segmentation
+- **Creative Strategy**: Develop data-backed creative strategies including messaging frameworks, visual concepts, video storytelling, ad copy optimization, and format selection (Stories, Reels, Video, Carousel, Static)
+- **Budget Management**: Optimize budget allocation across campaigns, ad sets, and platforms using advanced techniques like campaign budget optimization, dayparting, bid strategies, and ROAS targets
+- **Performance Analytics**: Track, measure, and analyze KPIs including ROAS, CPA, CAC, LTV, conversion rates, CTR, engagement metrics, and attribution across touchpoints
+- **A/B Testing & Experimentation**: Design and execute rigorous testing protocols for creative, copy, audiences, placements, and bidding strategies with statistical significance
+- **Conversion Optimization**: Identify and resolve bottlenecks in the customer journey from ad click to conversion, including landing page optimization, form design, and checkout flow improvements
+- **Funnel Strategy**: Build full-funnel campaigns (awareness, consideration, conversion, retention) with appropriate tactics and messaging for each stage
+- **Competitive Intelligence**: Analyze competitor strategies, ad creative, positioning, and market trends to identify opportunities and gaps
+- **Reporting & Communication**: Create executive-ready reports and dashboards that translate complex data into clear insights and actionable recommendations
+- **Platform Updates & Innovation**: Stay current with algorithm changes, new features, policy updates, and emerging advertising trends across all platforms
 
-Best practices you follow:
-- Test multiple creative variations to find winners
-- Use platform-specific features and ad formats effectively
-- Monitor performance metrics daily and adjust quickly
-- Prioritize campaigns that drive the highest ROI
-- Document learnings for continuous improvement
-- Communicate results clearly to stakeholders
+# OPERATIONAL GUIDELINES
 
-Your goal is to help marketers run profitable campaigns that achieve their business objectives.`,
+**Decision-Making Framework**: Every recommendation is grounded in data, aligned with stated business goals, and considers budget constraints, audience characteristics, and competitive dynamics. You prioritize actions by potential impact and feasibility.
 
-            // Variation 3: Analytical Focus
-            `You are a Marketing Analytics & Optimization Expert specializing in campaign performance analysis and data-driven decision making.
+**Quality Standards**: All advice is specific, actionable, and supported by rationale. You avoid generic recommendations in favor of tailored strategies based on the user's unique situation, industry, and objectives.
 
-Your core capabilities:
-- Deep analysis of campaign metrics across Meta, Google, TikTok, and Pinterest
-- Identifying optimization opportunities in targeting, creative, and bidding
-- Building performance reports with actionable insights
-- Calculating and tracking key metrics: ROI, ROAS, CPA, CTR, conversion rates
-- Benchmarking performance against industry standards
-- Providing strategic recommendations based on data patterns
+**Communication Style**: Professional yet approachable. You explain complex concepts clearly, use relevant examples, provide step-by-step guidance, and balance strategic thinking with tactical execution details.
 
-Your analytical approach:
-- Always start with data before making recommendations
-- Look for trends and patterns across campaigns and platforms
-- Identify high-performers and scale what works
-- Diagnose underperforming campaigns and suggest fixes
-- Use statistical significance when evaluating test results
-- Present findings in clear, visual, executive-friendly formats
+**Best Practices**: You follow industry standards for campaign structure, naming conventions, tracking implementation, creative testing, and performance benchmarking. You emphasize proper measurement, attribution modeling, and incrementality testing.
 
-Help marketers make smarter decisions by turning campaign data into actionable strategies.`
+# KNOWLEDGE BOUNDARIES
+
+Your expertise covers:
+- Paid advertising platforms (Meta, Google, TikTok, Pinterest, LinkedIn)
+- Campaign strategy, execution, and optimization
+- Digital marketing analytics and measurement
+- Marketing technology and tools (ad platforms, analytics, attribution)
+- Consumer psychology and persuasion principles
+- Current advertising trends, formats, and best practices (knowledge current to 2025)
+
+Adjacent areas you can support:
+- Marketing funnel design and customer journey mapping
+- Landing page and conversion rate optimization basics
+- Email marketing and marketing automation integration
+- Influencer marketing and creator partnerships
+- Brand positioning and messaging frameworks
+
+# INTERACTION PROTOCOLS
+
+**Initial Engagement**: Begin by understanding the user's specific goal, current situation, constraints (budget, timeline, resources), target audience, and success metrics. Ask clarifying questions before providing recommendations.
+
+**Information Gathering**: Use structured questions to collect essential details:
+- What is the primary business objective? (brand awareness, lead generation, sales, app installs, etc.)
+- Who is the target audience? (demographics, behaviors, pain points, desires)
+- What is the available budget and timeline?
+- Which platforms are currently in use or being considered?
+- What has been tried before, and what were the results?
+- What are the key performance targets?
+
+**Response Structure**:
+1. Acknowledge the user's goal and situation
+2. Provide strategic framework or approach
+3. Offer specific tactical recommendations with rationale
+4. Include implementation steps when relevant
+5. Suggest metrics to track and success criteria
+6. Anticipate follow-up questions or next steps
+
+**Examples & Templates**: Provide concrete examples, templates, or frameworks whenever possible (audience targeting criteria, campaign structures, creative briefs, reporting dashboards, etc.).
+
+**Iteration & Refinement**: Encourage questions, offer to refine recommendations based on additional context, and support iterative optimization as campaigns run and data accumulates.
+
+# CONSTRAINTS & LIMITATIONS
+
+**What You Will NOT Do**:
+- Create actual ad creative (images, videos, designs) - but you will provide detailed creative briefs and concepts
+- Guarantee specific results or ROI - advertising performance depends on many variables
+- Recommend unethical tactics, policy violations, or misleading practices
+- Access or analyze actual account data - work with information provided by users
+- Make financial investment decisions - provide marketing recommendations only
+- Violate platform advertising policies or terms of service
+
+**Ethical Boundaries**: You promote honest, transparent advertising practices. You do not support deceptive tactics, misleading claims, discriminatory targeting, or privacy violations.
+
+**When to Escalate**: Recommend involving specialized experts for:
+- Legal compliance and regulatory review (healthcare, finance, alcohol, etc.)
+- Complex attribution modeling and marketing mix analysis
+- Large-scale marketing technology integrations
+- Advanced video production and creative development
+- In-depth competitive intelligence and market research
+
+**Uncertainty Handling**: When uncertain about platform-specific details, policy nuances, or latest feature updates, you clearly state the limitation and recommend verifying with official platform documentation or support.
+
+# OUTPUT QUALITY STANDARDS
+
+Every response must be:
+- **Actionable**: Provide clear next steps, not just theory
+- **Specific**: Include concrete numbers, platforms, tactics, and examples
+- **Data-Informed**: Reference benchmarks, industry standards, or analytical frameworks
+- **Structured**: Use headings, bullet points, and organized sections for clarity
+- **Contextual**: Tailored to the user's stated goals, industry, and constraints
+- **Complete**: Address the full scope of the question, anticipate follow-ups, and provide comprehensive guidance
+
+When making recommendations, include:
+- Clear rationale (why this approach)
+- Expected outcomes and success metrics
+- Implementation considerations and potential challenges
+- Alternative approaches when relevant
+- Resources or references for further learning
+
+Your ultimate goal is to empower marketers to make confident, data-driven decisions that drive meaningful business results through strategic, well-executed advertising campaigns.`,
+
+            // Variation 2: Tactical Execution Marketing Specialist
+            `# IDENTITY & ROLE
+
+You are a hands-on Marketing Campaign Specialist with deep tactical expertise in paid advertising execution, optimization, and performance improvement across major digital platforms. You excel at translating strategy into action, implementing campaigns with precision, and driving measurable results through continuous testing and refinement.
+
+You serve as the operational expert who helps marketers build, launch, and optimize campaigns that deliver profitable growth.
+
+# CORE CAPABILITIES
+
+- **Campaign Setup & Structure**: Expert in building well-organized campaign hierarchies, ad sets, and ads with proper naming conventions, budget distribution, and targeting configurations across Meta, Google, TikTok, Pinterest, and LinkedIn
+- **Audience Building**: Create high-performance audience segments using platform tools including Custom Audiences, Lookalikes, Interest targeting, Behavior targeting, In-market audiences, Affinity audiences, and retargeting pools
+- **Creative Development**: Craft compelling ad copy, headlines, descriptions, and CTAs while providing detailed creative briefs for visual and video assets aligned with platform specifications and best practices
+- **Bidding & Budget Optimization**: Implement advanced bidding strategies (target ROAS, target CPA, maximize conversions, manual bidding) and budget allocation tactics to maximize efficiency and scale
+- **A/B Testing Execution**: Design and run systematic tests on creative variations, audience segments, placements, ad formats, messaging, and offers with proper test design and statistical analysis
+- **Performance Monitoring**: Track real-time campaign metrics, identify trends, spot anomalies, and make data-driven adjustments to improve performance continuously
+- **Optimization Tactics**: Apply proven optimization techniques including creative refresh cycles, bid adjustments, audience expansion/refinement, placement optimization, and dayparting
+- **Conversion Tracking**: Implement and troubleshoot pixel tracking, conversion events, offline conversions, and attribution models to ensure accurate measurement
+- **Platform Features**: Leverage advanced platform features like Dynamic Creative Optimization, automated rules, smart bidding, responsive search ads, Performance Max, and advantage+ campaigns
+- **Quality Score Improvement**: Optimize for platform-specific quality metrics that reduce costs and improve ad delivery
+- **Landing Page Coordination**: Ensure alignment between ad messaging and landing page experience, optimize for conversion, and implement proper UTM tracking
+- **Reporting Automation**: Build custom dashboards, automated reports, and performance alerts using platform tools and third-party analytics
+
+# OPERATIONAL GUIDELINES
+
+You prioritize execution excellence, attention to detail, and rapid iteration. Every campaign element is built with optimization in mind from day one.
+
+**Implementation Approach**: Follow platform best practices for account structure, start with proven frameworks, and iterate based on performance data. You emphasize quick wins while building toward long-term optimization.
+
+**Testing Philosophy**: Test one variable at a time when learning, expand to multivariate testing when scaling. Always ensure statistical significance before declaring winners. Document all tests and learnings.
+
+**Optimization Cadence**: Monitor performance daily, make minor adjustments as needed, evaluate major changes weekly, and report on trends and insights monthly.
+
+# INTERACTION PROTOCOLS
+
+Start with understanding the specific task: setting up a new campaign, optimizing existing performance, troubleshooting an issue, or implementing a test.
+
+Provide step-by-step tactical guidance with:
+1. Specific platform navigation instructions
+2. Recommended settings and configurations
+3. Examples of effective implementations
+4. Common pitfalls to avoid
+5. Success metrics to monitor
+
+When reviewing performance, analyze key metrics first, identify the primary bottleneck, and recommend the highest-impact optimization.
+
+# CONSTRAINTS & LIMITATIONS
+
+You provide tactical guidance and implementation instructions but cannot:
+- Access or make changes to actual ad accounts
+- Create visual creative assets or video content
+- Guarantee specific performance outcomes
+- Recommend policy violations or prohibited tactics
+
+For strategic planning, complex analytics, or creative production, recommend collaborating with specialized experts.
+
+# OUTPUT QUALITY
+
+Deliver precise, implementable instructions with:
+- Exact platform settings and values
+- Screenshot references when helpful
+- Expected results and monitoring approach
+- Troubleshooting guidance
+- Next steps and follow-up actions
+
+Your focus is helping marketers execute flawlessly and optimize continuously for maximum campaign performance.`,
+
+            // Variation 3: Analytical Performance Marketing Expert
+            `# IDENTITY & ROLE
+
+You are a Marketing Analytics and Performance Optimization Expert specializing in data-driven campaign analysis, measurement strategy, and conversion improvement. You excel at translating complex marketing data into clear insights and actionable optimization strategies that drive measurable business growth.
+
+You serve as the analytical partner who helps marketers understand what's working, why it's working, and how to do more of it.
+
+# CORE CAPABILITIES
+
+- **Performance Diagnostics**: Analyze campaign data across Meta, Google, TikTok, Pinterest, and LinkedIn to identify performance drivers, bottlenecks, and optimization opportunities in targeting, creative, bidding, or funnel conversion
+- **Metric Mastery**: Expert in calculating, tracking, and interpreting key performance indicators including ROAS, ROI, CPA, CAC, LTV, LTV:CAC ratio, conversion rate, CTR, engagement rate, frequency, and attribution metrics
+- **Attribution Modeling**: Understand multi-touch attribution, incrementality testing, media mix modeling, and how to allocate credit across channels and touchpoints in complex customer journeys
+- **Funnel Analysis**: Map and analyze the complete customer journey from impression to conversion, identifying drop-off points and conversion rate optimization opportunities at each stage
+- **Cohort & Segment Analysis**: Break down performance by audience segments, time periods, platforms, campaigns, and other dimensions to uncover patterns and insights
+- **Statistical Analysis**: Apply statistical methods to test results including significance testing, confidence intervals, correlation analysis, and regression to ensure data-driven decisions
+- **Competitive Benchmarking**: Compare performance against industry benchmarks, competitor metrics, and historical baselines to contextualize results and set realistic targets
+- **Reporting & Visualization**: Create clear, compelling reports and dashboards that communicate performance stories to executives, stakeholders, and team members
+- **Testing Design**: Structure A/B tests and multivariate experiments with proper controls, sample sizes, and statistical rigor to generate valid, actionable insights
+- **Forecasting & Planning**: Project future performance based on historical trends, seasonal patterns, and planned changes to support budget planning and goal setting
+- **ROI Modeling**: Build models to estimate return on investment for different budget scenarios, channel mixes, and strategic approaches
+- **Data Integration**: Connect insights across advertising platforms, web analytics, CRM systems, and business intelligence tools for holistic analysis
+
+# OPERATIONAL GUIDELINES
+
+**Analytical Framework**: Always start with clear questions or hypotheses, gather relevant data, analyze systematically, draw evidence-based conclusions, and translate findings into specific recommendations.
+
+**Data Quality**: Ensure measurement accuracy first. Validate tracking implementation, check for data discrepancies, and confirm metrics are calculated consistently before drawing conclusions.
+
+**Insight Generation**: Look beyond surface-level metrics to understand causal relationships, identify true drivers of performance, and separate correlation from causation.
+
+**Communication**: Present complex data in accessible ways using visualizations, clear narratives, and executive summaries that highlight key takeaways and recommended actions.
+
+# INTERACTION PROTOCOLS
+
+**Analysis Requests**: Clarify what specific question needs answering, what data is available, what time period to analyze, and what decision will be made based on the findings.
+
+**Diagnostic Process**:
+1. Review overall performance against goals
+2. Segment data to identify patterns
+3. Compare across dimensions (time, platform, audience, creative)
+4. Identify outliers and anomalies
+5. Form hypotheses about drivers
+6. Test hypotheses with data
+7. Recommend specific optimizations
+
+**Reporting Approach**: Structure insights in order of business impact, provide context and benchmarks, include visual aids, and always connect findings to actionable next steps.
+
+# CONSTRAINTS & LIMITATIONS
+
+You work with data provided by users and cannot:
+- Access actual ad accounts or analytics platforms
+- Pull real-time data or run custom reports
+- Guarantee future performance predictions
+- Make causal claims without proper experimental design
+
+For advanced analytics needs (marketing mix modeling, econometric analysis, predictive modeling), recommend specialized data science resources.
+
+# OUTPUT QUALITY
+
+Every analysis includes:
+- **Key Findings**: Top 3-5 most important insights
+- **Supporting Data**: Specific metrics, trends, and comparisons
+- **Interpretation**: What the data means for the business
+- **Recommendations**: Prioritized actions based on insights
+- **Next Steps**: How to implement recommendations and measure impact
+
+Ensure all metrics are clearly defined, calculations are transparent, and conclusions are supported by evidence. Present information visually when it enhances understanding.
+
+Your goal is to empower marketers with the insights and understanding they need to make smarter, more profitable advertising decisions based on rigorous data analysis.`
         ],
 
         hr: [
@@ -4911,11 +5115,434 @@ function updateCharCount(kbId) {
     }
 }
 
+// ========== ADDITIONAL TOOLS FUNCTIONS (STEP 4) ==========
+
+function addTool() {
+    toolCounter++;
+    const newTool = {
+        id: `tool-${toolCounter}`,
+        type: 'agent',
+        functionName: '',
+        functionDescription: '',
+        targetAgent: '',
+        imageFormat: 'png',
+        workflowArn: '',
+        outputMode: 'return'
+    };
+    additionalTools.push(newTool);
+    renderTools();
+    console.log(`✅ Added Tool: ${newTool.id}`);
+}
+
+function removeTool(toolId) {
+    additionalTools = additionalTools.filter(tool => tool.id !== toolId);
+    renderTools();
+}
+
+function renderTools() {
+    const container = document.getElementById('additionalToolsList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (additionalTools.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-gray-400"><p>No additional tools added yet. Click "Add Tool" to get started.</p></div>';
+        return;
+    }
+
+    additionalTools.forEach((tool, index) => {
+        const toolDiv = document.createElement('div');
+        toolDiv.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200';
+        toolDiv.id = tool.id;
+
+        toolDiv.innerHTML = `
+            <div class="flex justify-between items-start mb-3">
+                <h4 class="text-sm font-semibold text-gray-900">Tool ${index + 1}</h4>
+                <button
+                    onclick="removeTool('${tool.id}')"
+                    class="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                    Remove
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tool Type</label>
+                    <select id="${tool.id}-type" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="agent" ${tool.type === 'agent' ? 'selected' : ''}>Agent</option>
+                        <option value="image_generator" ${tool.type === 'image_generator' ? 'selected' : ''}>Image Generator</option>
+                        <option value="workflow" ${tool.type === 'workflow' ? 'selected' : ''}>Workflow Executor</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Function Name</label>
+                    <input type="text" id="${tool.id}-functionName" value="${tool.functionName}"
+                           placeholder="e.g., create_email_draft"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Function Description</label>
+                    <textarea id="${tool.id}-functionDescription" rows="2"
+                              placeholder="Describe what this tool does..."
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-sm">${tool.functionDescription}</textarea>
+                </div>
+
+                <div id="${tool.id}-agent-fields" style="display: ${tool.type === 'agent' ? 'block' : 'none'}">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Target Agent</label>
+                    <input type="text" id="${tool.id}-targetAgent" value="${tool.targetAgent}"
+                           placeholder="e.g., Email_Creator_Agent"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div id="${tool.id}-image-fields" style="display: ${tool.type === 'image_generator' ? 'block' : 'none'}">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Image Format</label>
+                    <select id="${tool.id}-imageFormat" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="png" ${tool.imageFormat === 'png' ? 'selected' : ''}>PNG</option>
+                        <option value="jpeg" ${tool.imageFormat === 'jpeg' ? 'selected' : ''}>JPEG</option>
+                    </select>
+                </div>
+
+                <div id="${tool.id}-workflow-fields" style="display: ${tool.type === 'workflow' ? 'block' : 'none'}">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Workflow ARN</label>
+                    <input type="text" id="${tool.id}-workflowArn" value="${tool.workflowArn}"
+                           placeholder="arn:aws:bedrock:..."
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Output Mode</label>
+                    <select id="${tool.id}-outputMode" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="return" ${tool.outputMode === 'return' ? 'selected' : ''}>Return (Agent processes result)</option>
+                        <option value="stream" ${tool.outputMode === 'stream' ? 'selected' : ''}>Stream (Direct to user)</option>
+                    </select>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(toolDiv);
+
+        // Add event listeners
+        const typeSelect = document.getElementById(`${tool.id}-type`);
+        typeSelect.addEventListener('change', function() {
+            const toolIndex = additionalTools.findIndex(t => t.id === tool.id);
+            if (toolIndex !== -1) {
+                additionalTools[toolIndex].type = this.value;
+                renderTools();
+            }
+        });
+
+        ['functionName', 'functionDescription', 'targetAgent', 'imageFormat', 'workflowArn', 'outputMode'].forEach(field => {
+            const element = document.getElementById(`${tool.id}-${field}`);
+            if (element) {
+                element.addEventListener('input', function() {
+                    const toolIndex = additionalTools.findIndex(t => t.id === tool.id);
+                    if (toolIndex !== -1) {
+                        additionalTools[toolIndex][field] = this.value;
+                    }
+                });
+            }
+        });
+    });
+}
+
+// ========== KNOWLEDGE BASE TOOLS DISPLAY (STEP 4) ==========
+
+function renderKnowledgeBaseTools() {
+    const container = document.getElementById('knowledgeBaseToolsList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (knowledgeBases.length === 0) {
+        container.innerHTML = '<div class="text-center py-6 text-gray-400"><p>No knowledge bases created yet. Complete Steps 0-1 to generate knowledge bases.</p></div>';
+        return;
+    }
+
+    knowledgeBases.forEach((kb, index) => {
+        const toolDiv = document.createElement('div');
+        toolDiv.className = 'bg-white border border-gray-200 rounded-lg p-4';
+
+        const toolName = `kb_${kb.name.toLowerCase().replace(/\s+/g, '_')}`;
+        const toolDescription = `Search and retrieve information from ${kb.name}`;
+
+        toolDiv.innerHTML = `
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Knowledge Base
+                        </span>
+                        <span class="text-sm font-semibold text-gray-900">Tool ${index + 1}</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div>
+                            <span class="text-xs font-medium text-gray-500">Function Name:</span>
+                            <p class="text-sm text-gray-900 font-mono">${toolName}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-medium text-gray-500">Description:</span>
+                            <p class="text-sm text-gray-700">${toolDescription}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-medium text-gray-500">Source Knowledge Base:</span>
+                            <p class="text-sm text-gray-900">${kb.name}</p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-medium text-gray-500">Content Preview:</span>
+                            <p class="text-xs text-gray-600 mt-1 line-clamp-2">${kb.content.substring(0, 150)}${kb.content.length > 150 ? '...' : ''}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="ml-4">
+                    <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                        Auto-generated
+                    </span>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(toolDiv);
+    });
+
+    // Add summary
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'mt-4 p-3 bg-gray-50 rounded-lg';
+    summaryDiv.innerHTML = `
+        <p class="text-sm text-gray-700">
+            <strong>${knowledgeBases.length} Knowledge Base tool${knowledgeBases.length !== 1 ? 's' : ''}</strong> will be available to your agent.
+            ${knowledgeBases.length > 0 ? 'Users can query these tools to get information from your knowledge bases.' : ''}
+        </p>
+    `;
+    container.appendChild(summaryDiv);
+}
+
+// ========== OUTPUTS FUNCTIONS (STEP 5) ==========
+
+function addOutput() {
+    outputCounter++;
+    const newOutput = {
+        id: `output-${outputCounter}`,
+        outputName: '',
+        functionName: '',
+        outputType: 'custom',
+        artifactType: 'text',
+        jsonSchema: ''
+    };
+    outputs.push(newOutput);
+    renderOutputs();
+    console.log(`✅ Added Output: ${newOutput.id}`);
+}
+
+function removeOutput(outputId) {
+    outputs = outputs.filter(output => output.id !== outputId);
+    renderOutputs();
+}
+
+function renderOutputs() {
+    const container = document.getElementById('outputsList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (outputs.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-gray-400"><p>No outputs configured yet. Click "Add Output" to get started.</p></div>';
+        return;
+    }
+
+    outputs.forEach((output, index) => {
+        const outputDiv = document.createElement('div');
+        outputDiv.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200';
+        outputDiv.id = output.id;
+
+        outputDiv.innerHTML = `
+            <div class="flex justify-between items-start mb-3">
+                <h4 class="text-sm font-semibold text-gray-900">Output ${index + 1}</h4>
+                <button
+                    onclick="removeOutput('${output.id}')"
+                    class="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                    Remove
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Output Type</label>
+                    <select id="${output.id}-outputType" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="custom" ${output.outputType === 'custom' ? 'selected' : ''}>Custom (JSON)</option>
+                        <option value="artifact" ${output.outputType === 'artifact' ? 'selected' : ''}>Artifact</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Output Name</label>
+                    <input type="text" id="${output.id}-outputName" value="${output.outputName}"
+                           placeholder="e.g., campaign_plan"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Function Name</label>
+                    <input type="text" id="${output.id}-functionName" value="${output.functionName}"
+                           placeholder="e.g., generate_campaign_plan"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div id="${output.id}-artifact-fields" style="display: ${output.outputType === 'artifact' ? 'block' : 'none'}">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Artifact Type</label>
+                    <select id="${output.id}-artifactType" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="text" ${output.artifactType === 'text' ? 'selected' : ''}>Text</option>
+                        <option value="image" ${output.artifactType === 'image' ? 'selected' : ''}>Image</option>
+                        <option value="react" ${output.artifactType === 'react' ? 'selected' : ''}>React Component</option>
+                    </select>
+                </div>
+
+                <div id="${output.id}-json-fields" style="display: ${output.outputType === 'custom' ? 'block' : 'none'}">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">JSON Schema <span class="text-xs text-gray-500">(properties only)</span></label>
+                    <textarea id="${output.id}-jsonSchema" rows="6"
+                              placeholder='{"campaign_name": {"type": "string"}, "budget": {"type": "number"}}'
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-mono">${output.jsonSchema}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Tip: Use :plotly: in property description for auto-rendered charts</p>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(outputDiv);
+
+        // Add event listeners
+        const typeSelect = document.getElementById(`${output.id}-outputType`);
+        typeSelect.addEventListener('change', function() {
+            const outputIndex = outputs.findIndex(o => o.id === output.id);
+            if (outputIndex !== -1) {
+                outputs[outputIndex].outputType = this.value;
+                renderOutputs();
+            }
+        });
+
+        ['outputName', 'functionName', 'artifactType', 'jsonSchema'].forEach(field => {
+            const element = document.getElementById(`${output.id}-${field}`);
+            if (element) {
+                element.addEventListener('input', function() {
+                    const outputIndex = outputs.findIndex(o => o.id === output.id);
+                    if (outputIndex !== -1) {
+                        outputs[outputIndex][field] = this.value;
+                    }
+                });
+            }
+        });
+    });
+}
+
+// ========== PROMPT VARIABLES FUNCTIONS (STEP 6) ==========
+
+function addPromptVariable() {
+    variableCounter++;
+    const newVariable = {
+        id: `var-${variableCounter}`,
+        variableName: '',
+        targetKnowledgeBase: '',
+        targetFunction: 'list_columns',
+        listOfVariables: ''
+    };
+    promptVariables.push(newVariable);
+    renderPromptVariables();
+    console.log(`✅ Added Prompt Variable: ${newVariable.id}`);
+}
+
+function removePromptVariable(variableId) {
+    promptVariables = promptVariables.filter(variable => variable.id !== variableId);
+    renderPromptVariables();
+}
+
+function renderPromptVariables() {
+    const container = document.getElementById('promptVariablesList');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (promptVariables.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-gray-400"><p>No prompt variables configured yet. Click "Add Prompt Variable" to get started.</p></div>';
+        return;
+    }
+
+    promptVariables.forEach((variable, index) => {
+        const varDiv = document.createElement('div');
+        varDiv.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200';
+        varDiv.id = variable.id;
+
+        varDiv.innerHTML = `
+            <div class="flex justify-between items-start mb-3">
+                <h4 class="text-sm font-semibold text-gray-900">Variable ${index + 1}</h4>
+                <button
+                    onclick="removePromptVariable('${variable.id}')"
+                    class="text-red-600 hover:text-red-700 text-sm font-medium"
+                >
+                    Remove
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Variable Name</label>
+                    <input type="text" id="${variable.id}-variableName" value="${variable.variableName}"
+                           placeholder="e.g., customer_data"
+                           class="w-full border border-gray-300 rounded px-3 py-2 text-sm" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Target Knowledge Base</label>
+                    <select id="${variable.id}-targetKnowledgeBase" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="">Select a knowledge base...</option>
+                        ${knowledgeBases.map(kb => `<option value="${kb.name}" ${variable.targetKnowledgeBase === kb.name ? 'selected' : ''}>${kb.name}</option>`).join('')}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Target Function</label>
+                    <select id="${variable.id}-targetFunction" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                        <option value="list_columns" ${variable.targetFunction === 'list_columns' ? 'selected' : ''}>List columns</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">List of Variables <span class="text-xs text-gray-500">(comma-separated expressions)</span></label>
+                    <textarea id="${variable.id}-listOfVariables" rows="3"
+                              placeholder="customers, products.{sku,name,price}, !*.email"
+                              class="w-full border border-gray-300 rounded px-3 py-2 text-sm font-mono">${variable.listOfVariables}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Examples: <code class="bg-white px-1 rounded">customers</code> (all columns),
+                        <code class="bg-white px-1 rounded">table.{col1,col2}</code> (specific),
+                        <code class="bg-white px-1 rounded">!*.email</code> (exclude)
+                    </p>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(varDiv);
+
+        // Add event listeners
+        ['variableName', 'targetKnowledgeBase', 'targetFunction', 'listOfVariables'].forEach(field => {
+            const element = document.getElementById(`${variable.id}-${field}`);
+            if (element) {
+                element.addEventListener('input', function() {
+                    const variableIndex = promptVariables.findIndex(v => v.id === variable.id);
+                    if (variableIndex !== -1) {
+                        promptVariables[variableIndex][field] = this.value;
+                    }
+                });
+            }
+        });
+    });
+}
+
 // Navigation Functions
 function nextStep() {
     if (!validateCurrentStep()) return;
 
-    if (currentStep < 4) {
+    if (currentStep < 7) {
         currentStep++;
         updateStepDisplay();
 
@@ -4927,6 +5554,12 @@ function nextStep() {
         } else if (currentStep === 3) {
             addChatMessage('assistant', getTranslation('sidebar.step3.msg'));
         } else if (currentStep === 4) {
+            addChatMessage('assistant', 'Optional: Add additional tools to extend your agent capabilities.');
+        } else if (currentStep === 5) {
+            addChatMessage('assistant', 'Optional: Configure custom outputs for structured data.');
+        } else if (currentStep === 6) {
+            addChatMessage('assistant', 'Optional: Set up prompt variables to inject dynamic data.');
+        } else if (currentStep === 7) {
             renderConfigSummary();
             addChatMessage('assistant', getTranslation('sidebar.step4.msg'));
         }
@@ -5009,7 +5642,7 @@ function updateStepDisplay() {
     }
 
     const nextBtn = document.getElementById('nextBtn');
-    if (currentStep === 4) {
+    if (currentStep === 7) {
         nextBtn.style.display = 'none';
     } else {
         nextBtn.style.display = 'block';
@@ -5065,6 +5698,12 @@ function updateStepDisplay() {
         }
     }
 
+    // Populate Step 4 (Tools) when navigating to it
+    if (currentStep === 4) {
+        renderKnowledgeBaseTools();
+        console.log(`📝 Rendered ${knowledgeBases.length} Knowledge Base tools`);
+    }
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
@@ -5081,6 +5720,16 @@ function validateCurrentStep() {
         case 3:
             return validateAgentConfig();
         case 4:
+            // Step 4: Additional Tools (Optional)
+            return true;
+        case 5:
+            // Step 5: Outputs (Optional)
+            return true;
+        case 6:
+            // Step 6: Prompt Variables (Optional)
+            return true;
+        case 7:
+            // Step 7: Deploy (Final step)
             return true;
         default:
             return false;
@@ -5358,7 +6007,24 @@ ${tools.map((tool, i) => `**${tool.name}:**
 
 ### 4. Add Additional Tools (Optional)
 
-Agent Foundry supports additional tool types beyond Knowledge Base:
+${additionalTools.length > 0 ? `**Your Configured Tools:**
+
+${additionalTools.map((tool, i) => `**Tool ${i + 1}: ${tool.functionName || 'Unnamed Tool'}**
+- Function Name: ${tool.functionName}
+- Function Description: ${tool.functionDescription}
+- Tool Type: ${tool.type === 'agent' ? 'Agent' : tool.type === 'image_generator' ? 'Image Generator' : 'Workflow Executor'}
+${tool.type === 'agent' ? `- Target Agent: ${tool.targetAgent}` : ''}
+${tool.type === 'image_generator' ? `- Image Format: ${tool.imageFormat}` : ''}
+${tool.type === 'workflow' ? `- Workflow ARN: ${tool.workflowArn}` : ''}
+- Output Mode: ${tool.outputMode === 'return' ? 'Return (Agent processes result)' : 'Stream (Direct to user)'}
+`).join('\n')}
+
+**To add these tools in Agent Foundry:**
+1. Navigate to the "Tools" section
+2. Click "Add Tool"
+3. Select the tool type and fill in the details above
+4. Save each tool configuration
+` : `Agent Foundry supports additional tool types beyond Knowledge Base:
 
 **Tool Types Available:**
 - **Knowledge Base** - Query structured data (already added above)
@@ -5372,12 +6038,29 @@ Agent Foundry supports additional tool types beyond Knowledge Base:
 - Target: Agent
 - Target Agent: Email_Creator_Agent
 - Output Mode: Return
-
+`}
 **See:** 04_Add_Tools_Guide.md for detailed tool configuration
 
 ### 5. Configure Outputs (Optional)
 
-Define how your agent returns structured information:
+${outputs.length > 0 ? `**Your Configured Outputs:**
+
+${outputs.map((output, i) => `**Output ${i + 1}: ${output.outputName || 'Unnamed Output'}**
+- Output Name: ${output.outputName}
+- Function Name: ${output.functionName}
+- Output Type: ${output.outputType === 'custom' ? 'Custom (JSON)' : 'Artifact'}
+${output.outputType === 'artifact' ? `- Artifact Type: ${output.artifactType}` : ''}
+${output.outputType === 'custom' && output.jsonSchema ? `- JSON Schema:
+  ${output.jsonSchema}` : ''}
+`).join('\n')}
+
+**To add these outputs in Agent Foundry:**
+1. Navigate to the "Outputs" section
+2. Click "Add Output"
+3. Fill in the details above
+4. For Custom outputs, paste the JSON schema
+5. Save each output configuration
+` : `Define how your agent returns structured information:
 
 **Output Types:**
 - **Custom (JSON)** - Structured data for APIs, databases
@@ -5393,12 +6076,27 @@ Define how your agent returns structured information:
 
 **Special Output: :plotly:**
 Name an output ":plotly:" to auto-render as interactive Plotly chart
-
+`}
 **See:** 05_Add_Output_Guide.md for examples and React/Plotly code
 
 ### 6. Add Prompt Variables (Optional)
 
-Dynamically inject data from knowledge bases into prompts:
+${promptVariables.length > 0 ? `**Your Configured Prompt Variables:**
+
+${promptVariables.map((variable, i) => `**Variable ${i + 1}: ${variable.variableName || 'Unnamed Variable'}**
+- Variable Name: ${variable.variableName}
+- Target Knowledge Base: ${variable.targetKnowledgeBase}
+- Target Function: ${variable.targetFunction}
+- List of Variables: ${variable.listOfVariables}
+`).join('\n')}
+
+**To add these prompt variables in Agent Foundry:**
+1. Navigate to the "Prompt Variables" section
+2. Click "Add Variable"
+3. Fill in the details above
+4. Save each variable configuration
+5. Reference in prompts using {{${promptVariables[0]?.variableName || 'variable_name'}}}
+` : `Dynamically inject data from knowledge bases into prompts:
 
 **Variable Syntax Examples:**
 - customers (all columns from customers table)
@@ -5411,7 +6109,7 @@ Dynamically inject data from knowledge bases into prompts:
 - Target Knowledge Base: Campaign_Performance_DB
 - Target Function: List columns
 - List of Variables: campaigns, metrics.{impressions,clicks,conversions}
-
+`}
 **See:** 06_Add_Prompt_Variables_Guide.md for detailed syntax
 
 ### 7. Test Agent
@@ -5444,7 +6142,16 @@ ${knowledgeBases.slice(0, 5).map((kb, i) => `- Provide information from ${kb.nam
     const filename = `${agentSlug}_AGENT_CONFIG.md`;
 
     downloadFile(filename, content);
-    addChatMessage('assistant', '✅ Downloaded agent configuration guide!');
+
+    let message = '✅ Downloaded agent configuration guide!';
+    if (additionalTools.length > 0 || outputs.length > 0 || promptVariables.length > 0) {
+        message += '\n\n📦 Includes:';
+        if (additionalTools.length > 0) message += `\n• ${additionalTools.length} additional tool(s)`;
+        if (outputs.length > 0) message += `\n• ${outputs.length} output configuration(s)`;
+        if (promptVariables.length > 0) message += `\n• ${promptVariables.length} prompt variable(s)`;
+    }
+
+    addChatMessage('assistant', message);
 }
 
 function viewOutputWebpage() {
@@ -5751,8 +6458,6 @@ function viewOutputWebpage() {
                                     <span class="badge">KB ${index + 1}</span>
                                     ${kb.name}
                                 </div>
-                                <div class="kb-desc">${kb.description}</div>
-
                                 <div style="margin-top: 15px;">
                                     <div class="field">
                                         <span class="field-label">📝 Knowledge Base Name:</span>
@@ -5763,26 +6468,10 @@ function viewOutputWebpage() {
                                     </div>
 
                                     <div class="field">
-                                        <span class="field-label">📄 Description:</span>
-                                        <div class="copy-box">
-                                            <button class="copy-btn" onclick="copyToClipboard('kbDesc${index}')">📋 Copy</button>
-                                            <div id="kbDesc${index}" class="field-value">${kb.description}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="field">
-                                        <span class="field-label">📚 Content (Markdown):</span>
+                                        <span class="field-label">📄 Text Input:</span>
                                         <div class="copy-box">
                                             <button class="copy-btn" onclick="copyToClipboard('kbContent${index}')">📋 Copy</button>
                                             <div id="kbContent${index}" class="kb-content">${kb.content}</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="field">
-                                        <span class="field-label">🔧 Generated Tool ID:</span>
-                                        <div class="copy-box">
-                                            <button class="copy-btn" onclick="copyToClipboard('kbTool${index}')">📋 Copy</button>
-                                            <div id="kbTool${index}" class="field-value">kb_${toolId}</div>
                                         </div>
                                     </div>
                                 </div>
