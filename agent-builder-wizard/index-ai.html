@@ -630,9 +630,22 @@
 
                         <div class="space-y-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    <span data-i18n="step0.purpose">What is your agent's purpose?</span> <span class="text-red-500">*</span>
-                                </label>
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="block text-sm font-medium text-gray-700">
+                                        <span data-i18n="step0.purpose">What is your agent's purpose?</span> <span class="text-red-500">*</span>
+                                    </label>
+                                    <button
+                                        type="button"
+                                        id="expandDescriptionBtn"
+                                        class="text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
+                                        onclick="toggleDescriptionModal()"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                        </svg>
+                                        Expand
+                                    </button>
+                                </div>
                                 <textarea
                                     id="agentDescription"
                                     rows="6"
@@ -1325,6 +1338,37 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
         </svg>
     </button>
+
+    <!-- Description Expand Modal -->
+    <div id="descriptionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Agent Purpose & Description</h3>
+                <button
+                    onclick="toggleDescriptionModal()"
+                    class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                >&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <textarea
+                    id="modalDescription"
+                    rows="20"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-full"
+                    placeholder="Describe your agent's purpose, capabilities, and requirements in detail..."
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-3 p-6 border-t border-gray-200">
+                <button
+                    onclick="toggleDescriptionModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >Cancel</button>
+                <button
+                    onclick="saveDescriptionFromModal()"
+                    class="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors font-medium"
+                >Save & Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>

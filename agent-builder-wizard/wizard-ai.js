@@ -9490,6 +9490,62 @@ function toggleSystemPromptPreview() {
 }
 
 // ============================================================================
+// DESCRIPTION MODAL FUNCTIONS
+// ============================================================================
+
+function toggleDescriptionModal() {
+    const modal = document.getElementById('descriptionModal');
+    const mainDescription = document.getElementById('agentDescription');
+    const modalDescription = document.getElementById('modalDescription');
+
+    if (modal.classList.contains('hidden')) {
+        // Opening modal - copy content from main textarea to modal
+        modalDescription.value = mainDescription.value;
+        modal.classList.remove('hidden');
+        // Focus the modal textarea
+        setTimeout(() => modalDescription.focus(), 100);
+    } else {
+        // Closing modal
+        modal.classList.add('hidden');
+    }
+}
+
+function saveDescriptionFromModal() {
+    const mainDescription = document.getElementById('agentDescription');
+    const modalDescription = document.getElementById('modalDescription');
+
+    // Copy content from modal to main textarea
+    mainDescription.value = modalDescription.value;
+
+    // Update agentConfig
+    agentConfig.description = modalDescription.value;
+
+    // Close modal
+    toggleDescriptionModal();
+
+    // Trigger auto-save
+    saveToLocalStorage();
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('descriptionModal');
+        if (modal && !modal.classList.contains('hidden')) {
+            toggleDescriptionModal();
+        }
+    }
+});
+
+// Close modal when clicking outside
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('descriptionModal');
+    if (modal && e.target === modal) {
+        toggleDescriptionModal();
+    }
+});
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
