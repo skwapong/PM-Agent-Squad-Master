@@ -6,9 +6,22 @@
 class ClaudeAPI {
     constructor() {
         this.apiKey = null;
-        this.apiUrl = 'http://localhost:3333/chat';
+
+        // Auto-detect environment and set API URL
+        // Use config-helper.js if available, otherwise default to localhost
+        if (typeof configHelper !== 'undefined') {
+            this.apiUrl = configHelper.getApiUrl() || 'http://localhost:3333/chat';
+            this.environment = configHelper.environment;
+        } else {
+            this.apiUrl = 'http://localhost:3333/chat';
+            this.environment = 'local';
+        }
+
         this.model = 'claude-3-5-sonnet-20241022';
         this.maxTokens = 2048;
+
+        console.log(`🌐 Claude API initialized for ${this.environment} environment`);
+        console.log(`📡 API URL: ${this.apiUrl}`);
     }
 
     /**
