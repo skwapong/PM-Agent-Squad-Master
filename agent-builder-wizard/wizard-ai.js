@@ -3079,6 +3079,9 @@ function cancelGeneration() {
     generationCancelled = true;
     console.log('🛑 User requested generation cancellation');
 
+    // Stop the generation timer
+    stopGenerationTimer(false);
+
     // Immediately hide cancel button and show generate button
     const generateBtn = document.getElementById('aiGenerateBtn');
     const cancelBtn = document.getElementById('cancelGenerateBtn');
