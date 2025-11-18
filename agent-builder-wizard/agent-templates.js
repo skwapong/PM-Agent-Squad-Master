@@ -1314,19 +1314,19 @@ Winning Metric: Clicks on CTA
 
 **5. Personalization with Liquid**
 \`\`\`liquid
-{% if custom_attribute.${lifecycle_stage} == 'trial' %}
-  Hi {{${first_name}}}, you have {{${trial_days_remaining}}} days left in your trial.
-{% elsif custom_attribute.${lifecycle_stage} == 'active' %}
-  Welcome back, {{${first_name}}}!
+{% if custom_attribute.\${lifecycle_stage} == 'trial' %}
+  Hi {{\${first_name}}}, you have {{\${trial_days_remaining}}} days left in your trial.
+{% elsif custom_attribute.\${lifecycle_stage} == 'active' %}
+  Welcome back, {{\${first_name}}}!
 {% endif %}
 
-{% if custom_attribute.${lifetime_value} > 1000 %}
+{% if custom_attribute.\${lifetime_value} > 1000 %}
   As a VIP customer, here's an exclusive offer...
 {% endif %}
 
 Recommended Product:
 {% connected_content
-  https://api.yourcompany.com/recommendations?user_id={{${user_id}}}
+  https://api.yourcompany.com/recommendations?user_id={{\${user_id}}}
   :save product
 %}
 {{product.name}} - {{product.price}}
@@ -1445,7 +1445,7 @@ Email Link:
 https://yoursite.com/cart?utm_source=braze
   &utm_medium=email
   &utm_campaign=cart_recovery_day1
-  &customer_id={{${user_id}}}
+  &customer_id={{\${user_id}}}
 \`\`\`
 
 Track across platforms with customer_id to unify attribution.`

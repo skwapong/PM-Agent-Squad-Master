@@ -8919,7 +8919,8 @@ function showTemplatesModal() {
     grid.innerHTML = '';
 
     // Populate templates
-    agentTemplates.forEach(template => {
+    const templates = window.agentTemplates || [];
+    templates.forEach(template => {
         const card = document.createElement('div');
         card.className = 'template-card bg-white rounded-lg p-4 border-2 border-gray-200 hover:border-indigo-500 transition-all';
         card.innerHTML = `
@@ -8947,7 +8948,8 @@ function hideTemplatesModal() {
 }
 
 function loadTemplate(templateId) {
-    const template = agentTemplates.find(t => t.id === templateId);
+    const templates = window.agentTemplates || [];
+    const template = templates.find(t => t.id === templateId);
     if (!template) return;
 
     // Confirm before loading
