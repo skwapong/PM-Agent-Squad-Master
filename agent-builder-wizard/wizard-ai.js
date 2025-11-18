@@ -55,7 +55,7 @@ let currentAttachment = null;
 // Generation timer state
 let generationTimer = null;
 let generationStartTime = null;
-const ESTIMATED_GENERATION_TIME = 90; // seconds (under-promise to over-deliver)
+const ESTIMATED_GENERATION_TIME = 120; // seconds (conservative estimate to under-promise and over-deliver)
 
 // Initialize wizard
 document.addEventListener('DOMContentLoaded', function() {
