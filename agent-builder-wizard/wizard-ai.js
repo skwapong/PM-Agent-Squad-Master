@@ -5931,7 +5931,7 @@ function addPromptVariable() {
         id: `var-${variableCounter}`,
         variableName: '',
         targetKnowledgeBase: '',
-        targetFunction: 'list_columns',
+        targetFunction: 'read', // Default to 'read' for text KBs, user can change to 'list_columns' for database KBs
         listOfVariables: ''
     };
     promptVariables.push(newVariable);
@@ -5989,9 +5989,14 @@ function renderPromptVariables() {
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Target Function</label>
-                    <select id="${variable.id}-targetFunction" class="w-full border border-gray-300 rounded px-3 py-2 text-sm">
+                    <select id="${variable.id}-targetFunction" class="w-full border border-gray-300 rounded px-3 py-2 text-sm" onchange="updatePromptVariableFunction('${variable.id}')">
+                        <option value="read" ${variable.targetFunction === 'read' ? 'selected' : ''}>Read</option>
                         <option value="list_columns" ${variable.targetFunction === 'list_columns' ? 'selected' : ''}>List columns</option>
                     </select>
+                    <p class="text-xs text-gray-500 mt-1">
+                        <strong>Read:</strong> For Text knowledge bases<br>
+                        <strong>List columns:</strong> For Database knowledge bases
+                    </p>
                 </div>
 
                 <div>
@@ -6018,11 +6023,38 @@ function renderPromptVariables() {
                     const variableIndex = promptVariables.findIndex(v => v.id === variable.id);
                     if (variableIndex !== -1) {
                         promptVariables[variableIndex][field] = this.value;
+
+                        // Auto-suggest target function based on KB type
+                        if (field === 'targetKnowledgeBase') {
+                            const kb = knowledgeBases.find(k => k.name === this.value);
+                            if (kb) {
+                                const suggestedFunction = kb.type === 'database' ? 'list_columns' : 'read';
+                                const functionSelect = document.getElementById(`${variable.id}-targetFunction`);
+                                if (functionSelect && promptVariables[variableIndex].targetFunction !== suggestedFunction) {
+                                    // Auto-update if not manually changed
+                                    promptVariables[variableIndex].targetFunction = suggestedFunction;
+                                    functionSelect.value = suggestedFunction;
+                                    console.log(`💡 Auto-set target function to '${suggestedFunction}' for ${kb.type} KB`);
+                                }
+                            }
+                        }
                     }
                 });
             }
         });
     });
+}
+
+// Update prompt variable function (called when user changes dropdown)
+function updatePromptVariableFunction(variableId) {
+    const functionSelect = document.getElementById(`${variableId}-targetFunction`);
+    if (functionSelect) {
+        const variableIndex = promptVariables.findIndex(v => v.id === variableId);
+        if (variableIndex !== -1) {
+            promptVariables[variableIndex].targetFunction = functionSelect.value;
+            console.log(`✏️ User manually set target function to '${functionSelect.value}'`);
+        }
+    }
 }
 
 // Navigation Functions
