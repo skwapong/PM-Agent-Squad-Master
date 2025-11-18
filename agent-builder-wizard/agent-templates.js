@@ -1451,6 +1451,521 @@ https://yoursite.com/cart?utm_source=braze
 Track across platforms with customer_id to unify attribution.`
             }
         ]
+    },
+
+    // Marketing Templates - Detailed and Complete Versions
+    {
+        id: 'campaign-budget-optimizer',
+        name: 'Campaign Budget Optimizer',
+        icon: '💰',
+        category: 'Marketing',
+        targetAudience: ['Enterprise', 'Mid-Market'],
+        description: 'Optimize marketing budget allocation across channels using performance data and predictive modeling',
+        config: {
+            projectName: 'Campaign Budget Optimization Platform',
+            projectDescription: 'AI-powered budget optimization engine that analyzes campaign performance across channels and recommends optimal budget allocation to maximize ROI',
+            agentName: 'Budget Optimization Agent',
+            description: 'Expert marketing budget optimization agent that analyzes multi-channel campaign performance and provides data-driven budget allocation recommendations',
+            tone: 'analytical',
+            audience: 'Marketing managers, campaign planners, and marketing operations teams',
+            domain: 'Digital Marketing & Budget Management',
+            model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+            temperature: 0.4,
+            maxToolsIterations: 5,
+            systemPrompt: `You are an expert Campaign Budget Optimization Agent specializing in multi-channel marketing budget allocation and performance optimization.
+
+**Your Primary Role:**
+Analyze campaign performance data across multiple channels (Meta, Google, TikTok, LinkedIn, etc.) and provide data-driven recommendations for optimal budget allocation to maximize ROI and achieve marketing objectives.
+
+**Core Capabilities:**
+
+1. **Budget Performance Analysis**
+   - Calculate ROI, ROAS, CPA, and CPL by channel
+   - Identify high-performing and underperforming channels
+   - Analyze spend efficiency and conversion rates
+   - Track budget pacing and delivery rates
+
+2. **Optimization Recommendations**
+   - Recommend budget reallocation based on performance
+   - Identify opportunities to shift budget to high-ROI channels
+   - Suggest budget increases for scaling campaigns
+   - Flag channels with diminishing returns
+
+3. **Predictive Budget Modeling**
+   - Forecast performance impact of budget changes
+   - Model "what-if" scenarios for budget allocation
+   - Predict optimal budget mix for goal achievement
+   - Estimate incremental ROI from budget increases
+
+4. **Channel-Specific Insights**
+   - Meta: Campaign objective optimization, audience scaling
+   - Google: Keyword bidding, shopping feed optimization
+   - TikTok: Creative testing budget allocation
+   - LinkedIn: B2B lead generation efficiency
+
+**Operational Guidelines:**
+
+- Always base recommendations on actual performance data
+- Consider both short-term efficiency and long-term brand building
+- Account for attribution windows and customer journey complexity
+- Balance risk and opportunity in budget reallocation
+- Provide clear rationale for all budget recommendations
+
+**Budget Allocation Framework:**
+
+1. Assess current performance by channel and campaign
+2. Identify budget reallocation opportunities
+3. Calculate projected impact of changes
+4. Recommend specific dollar amounts and percentages
+5. Provide implementation timeline and monitoring plan
+
+**Output Format:**
+
+Provide structured budget recommendations with:
+- Current budget allocation and performance
+- Recommended budget changes with rationale
+- Projected performance impact (ROI, conversions, revenue)
+- Implementation steps and priority
+- Monitoring KPIs and success criteria
+
+**Constraints:**
+
+- Never recommend budget cuts without clear performance justification
+- Always consider minimum viable budgets for testing
+- Account for seasonality and market trends
+- Respect client budget limits and cash flow constraints
+- Flag when insufficient data exists for confident recommendations
+
+Use data-driven insights, clear financial analysis, and actionable recommendations to help marketers optimize their budget allocation for maximum impact.`
+        },
+        knowledgeBases: [
+            {
+                name: 'Budget Optimization Frameworks',
+                content: `# Budget Optimization Frameworks
+
+## ROI-Based Allocation Model
+
+### Calculation Methods
+**Return on Ad Spend (ROAS)**
+- Formula: Revenue / Ad Spend
+- Benchmark: 3:1 minimum for profitability
+- Industry averages: E-commerce 4:1, B2B SaaS 5:1, Retail 3.5:1
+
+**Cost Per Acquisition (CPA)**
+- Formula: Ad Spend / Conversions
+- Compare against Customer Lifetime Value (LTV)
+- Target: CPA < 30% of LTV for sustainable growth
+
+**Marketing Efficiency Ratio (MER)**
+- Formula: Total Revenue / Total Marketing Spend
+- Blended metric across all channels
+- Helps identify overall marketing health
+
+## Budget Allocation Strategies
+
+**80/20 Rule Application**
+- 80% to proven channels (Meta, Google)
+- 20% to experimental channels (TikTok, Reddit, Influencer)
+- Rebalance quarterly based on performance
+
+**Incremental Budget Testing**
+- Increase top-performing channel budgets by 10-20%
+- Monitor for diminishing returns
+- Scale gradually to maintain efficiency
+
+**Channel Diversification**
+- Avoid over-dependence on single platform
+- Maintain 3-5 active channels minimum
+- Balance brand and performance marketing
+
+## Performance-Based Reallocation
+
+**Reallocation Triggers**
+1. Channel ROAS drops 20% below benchmark
+2. CPA exceeds target by 15% for 2 weeks
+3. Conversion rate declines 25% month-over-month
+4. New channel shows 30% better efficiency
+
+**Reallocation Process**
+- Reduce underperforming channel by 15-30%
+- Shift budget to top 2 performers
+- Maintain 10% test budget for new opportunities
+- Monitor weekly, adjust monthly
+
+## Budget Pacing
+
+**Even Pacing Strategy**
+- Daily budget = Monthly budget / Days in month
+- Prevents early month overspend
+- Ensures full month visibility
+
+**Accelerated Pacing**
+- Front-load budget for product launches
+- Capitalize on seasonal demand peaks
+- Monitor closely to avoid premature depletion
+
+**Weighted Pacing**
+- Allocate more budget to high-converting days
+- E-commerce: Increase Thursday-Sunday
+- B2B: Increase Tuesday-Thursday`
+            },
+            {
+                name: 'Channel Performance Benchmarks',
+                content: `# Channel Performance Benchmarks
+
+## Meta (Facebook & Instagram)
+
+**Industry Benchmarks**
+- E-commerce: ROAS 4-6x, CPA $15-40
+- B2B: CPL $30-100, CTR 0.9-1.5%
+- Retail: ROAS 3-5x, CPA $20-50
+
+**Optimization Levers**
+- Audience size: 500k-2M for best performance
+- Creative refresh: Every 7-14 days
+- Budget minimum: $50/day per ad set
+- Scaling: Increase 20% every 3-4 days
+
+**Budget Allocation by Objective**
+- Conversion campaigns: 60-70% of budget
+- Retargeting: 15-25% of budget
+- Prospecting/TOF: 10-20% of budget
+
+## Google Ads
+
+**Search Campaigns**
+- Avg CPC: $1-$3 (varies by industry)
+- Conversion rate: 3-5% average
+- Quality Score target: 7+ for efficiency
+- ROAS benchmark: 4-8x
+
+**Shopping Campaigns**
+- ROAS target: 5-10x
+- Impression share: Aim for 70%+
+- Product feed optimization critical
+- Budget: 30-40% of total Google budget
+
+**Display & YouTube**
+- ROAS: 2-4x (upper funnel)
+- Viewthrough conversion attribution
+- Budget: 10-20% for awareness
+
+## TikTok Ads
+
+**Performance Metrics**
+- CPM: $3-$10
+- CPC: $0.50-$2
+- CTR: 1.5-3% (higher than Meta)
+- Conversion rate: 1-2%
+
+**Budget Requirements**
+- Minimum: $20/day per ad group
+- Creative testing: $50-100/day
+- Scaling threshold: $200+/day
+
+## LinkedIn Ads (B2B Focus)
+
+**Lead Generation**
+- CPL: $50-$150 (enterprise)
+- CTR: 0.3-0.6%
+- Conversion rate: 2-5%
+- Minimum budget: $100/day
+
+**Content Promotion**
+- CPM: $30-$80 (premium audience)
+- Engagement rate: 2-6%
+- Budget for reach: $1,000+ monthly
+
+## Budget Distribution Templates
+
+**E-Commerce Balanced Mix**
+- Meta: 40%
+- Google Shopping: 30%
+- Google Search: 20%
+- TikTok/Other: 10%
+
+**B2B SaaS**
+- Google Search: 45%
+- LinkedIn: 30%
+- Retargeting: 15%
+- Content/Display: 10%
+
+**DTC Brand**
+- Meta: 50%
+- TikTok: 20%
+- Google: 20%
+- Influencer/Affiliate: 10%`
+            },
+            {
+                name: 'Budget Optimization Tactics',
+                content: `# Budget Optimization Tactics
+
+## Scaling Strategies
+
+**Vertical Scaling (Increase Budget)**
+1. Identify campaigns with ROAS > Target
+2. Increase budget by 15-20% every 3 days
+3. Monitor CPA - pause if increases >25%
+4. Test up to 2-3x original budget
+5. Watch for plateau or diminishing returns
+
+**Horizontal Scaling (Expand Reach)**
+1. Duplicate winning ad sets with new audiences
+2. Expand to similar geographic markets
+3. Test new creative variations
+4. Add complementary products/services
+5. Launch on additional platforms
+
+## Cost Reduction Techniques
+
+**Improve Quality Score (Google)**
+- Optimize landing page experience
+- Increase ad relevance to keywords
+- Improve expected CTR with better copy
+- Can reduce CPC by 20-50%
+
+**Reduce Frequency (Meta)**
+- Refresh creative when frequency >3
+- Expand audience to reduce saturation
+- Implement frequency caps (3-5 per week)
+- Prevents ad fatigue and wasted spend
+
+**Bid Optimization**
+- Start with target CPA bidding
+- Migrate to maximize conversions once stable
+- Use bid caps to control costs
+- Test manual bidding for granular control
+
+## Budget Reallocation Framework
+
+**Weekly Analysis**
+1. Calculate 7-day ROAS by channel
+2. Identify channels ±20% from target
+3. Flag campaigns for adjustment
+4. Prepare reallocation recommendation
+
+**Monthly Optimization**
+1. Review month-over-month performance
+2. Reallocate 10-30% from worst to best
+3. Maintain 10% innovation budget
+4. Update channel mix targets
+
+**Quarterly Planning**
+1. Analyze seasonal trends
+2. Plan budget increases for peak periods
+3. Test new channels with 5-10% budget
+4. Revise annual budget forecast
+
+## Attribution Considerations
+
+**Multi-Touch Attribution**
+- First-touch: Awareness channel credit
+- Last-touch: Conversion channel credit
+- Linear: Equal credit across touchpoints
+- Time-decay: More credit to recent touches
+
+**Cross-Device Tracking**
+- Account for mobile research, desktop purchase
+- Use customer ID tracking when possible
+- Understand Meta/Google attribution differences
+- Factor 20-30% view-through conversions
+
+**Budget Implications**
+- Upper-funnel channels drive lower-funnel conversions
+- Don't cut awareness budget based solely on last-click
+- Maintain balanced funnel investment
+- Test holdout groups to measure incrementality
+
+## Emergency Budget Adjustments
+
+**Underperformance Response**
+1. Pause if ROAS drops >40% for 3 days
+2. Investigate: audience, creative, landing page, offer
+3. Fix root cause before resuming
+4. Reallocate budget to stable campaigns
+
+**Rapid Scaling Opportunities**
+1. Viral content or PR moment
+2. Competitor exit or weakness
+3. Product launch success
+4. Seasonal demand spike
+
+**Actions:**
+- Shift budget within 24 hours
+- Increase 50-100% for short periods
+- Monitor hourly during rapid changes
+- Return to baseline after event`
+            },
+            {
+                name: 'ROI Calculation & Reporting',
+                content: `# ROI Calculation & Reporting
+
+## Core Metrics Definitions
+
+**Revenue Metrics**
+- Gross Revenue: Total sales from marketing
+- Net Revenue: Revenue - Refunds - Discounts
+- Attributed Revenue: Revenue tied to specific campaigns
+- Lifetime Value (LTV): Total customer revenue over lifetime
+
+**Cost Metrics**
+- Ad Spend: Direct platform costs
+- Fully-Loaded Costs: Ad spend + agency fees + tools + creative
+- Cost Per Click (CPC): Spend / Clicks
+- Cost Per Acquisition (CPA): Spend / Conversions
+
+**Efficiency Metrics**
+- Return on Ad Spend (ROAS): Revenue / Ad Spend
+- Return on Investment (ROI): (Revenue - Cost) / Cost × 100
+- Marketing Efficiency Ratio (MER): Total Revenue / Total Marketing Spend
+- Customer Acquisition Cost (CAC): Total Marketing Cost / New Customers
+
+## ROI Calculation Examples
+
+**Basic ROAS**
+- Ad Spend: $10,000
+- Revenue: $45,000
+- ROAS = $45,000 / $10,000 = 4.5x
+
+**ROI Percentage**
+- Ad Spend: $10,000
+- Revenue: $45,000
+- Profit Margin: 40%
+- Profit = $45,000 × 0.40 = $18,000
+- ROI = ($18,000 - $10,000) / $10,000 × 100 = 80%
+
+**Fully-Loaded ROI**
+- Ad Spend: $10,000
+- Agency Fee (15%): $1,500
+- Creative Costs: $500
+- Total Cost: $12,000
+- Revenue: $45,000 (40% margin = $18,000 profit)
+- ROI = ($18,000 - $12,000) / $12,000 × 100 = 50%
+
+## Budget Performance Dashboards
+
+**Daily Monitoring Metrics**
+- Spend vs. Budget (Pacing %)
+- Impressions, Clicks, CTR
+- Conversions, CPA
+- Revenue, ROAS
+
+**Weekly Review Metrics**
+- 7-day ROAS by channel
+- Week-over-week change
+- Top/Bottom performing campaigns
+- Budget utilization rate
+
+**Monthly Reporting Template**
+1. Executive Summary
+   - Total spend: $X
+   - Total revenue: $Y
+   - Blended ROAS: Z.Zx
+   - MoM change: +/- %
+
+2. Channel Performance
+   - Budget allocation vs. revenue contribution
+   - ROAS by channel with YoY comparison
+   - Cost efficiency trends
+
+3. Recommendations
+   - Budget reallocation suggestions
+   - Scaling opportunities
+   - Optimization priorities
+
+## Profit-Based Budget Planning
+
+**Break-Even Analysis**
+- Calculate maximum CPA: LTV × Margin %
+- Example: LTV $200, Margin 50% = Max CPA $100
+- Set target CPA at 70-80% of maximum
+- Ensures profitable customer acquisition
+
+**Budget Sizing Formula**
+- Monthly Revenue Goal: $500,000
+- Target ROAS: 5x
+- Required Ad Spend: $500,000 / 5 = $100,000
+- Add 20% buffer for testing: $120,000 budget
+
+**Growth Investment Model**
+- Profitable Baseline: 60% of budget (proven channels)
+- Scaling Budget: 30% (expand winning campaigns)
+- Innovation Budget: 10% (test new channels/strategies)
+
+## Advanced Attribution Reporting
+
+**Data-Driven Attribution (DDA)**
+- Use machine learning to assign credit
+- Available in Google Ads, Google Analytics 4
+- More accurate than rule-based models
+- Requires sufficient conversion volume (30+ per month)
+
+**Incrementality Testing**
+- Hold out 10% of audience from marketing
+- Measure conversion lift in exposed group
+- Calculate true incremental ROAS
+- Adjust budgets based on incrementality, not just correlation
+
+**Marketing Mix Modeling (MMM)**
+- Statistical analysis of all marketing inputs
+- Accounts for non-digital: TV, radio, print, PR
+- Requires 2+ years of data for accuracy
+- Reveals optimal channel mix and budget allocation`
+            }
+        ],
+        outputs: [
+            {
+                    outputName: 'budget_allocation_plan',
+                    functionName: 'generate_budget_allocation',
+                    functionDescription: 'Generate comprehensive budget allocation plan with performance analysis and optimization recommendations across all marketing channels',
+                    outputType: 'custom',
+                    jsonSchema: JSON.stringify({
+                        type: 'object',
+                        properties: {
+                            current_performance: {
+                                type: 'object',
+                                properties: {
+                                    total_spend: { type: 'number' },
+                                    total_revenue: { type: 'number' },
+                                    blended_roas: { type: 'number' },
+                                    channel_breakdown: { type: 'array' }
+                                }
+                            },
+                            recommendations: {
+                                type: 'object',
+                                properties: {
+                                    budget_changes: { type: 'array' },
+                                    rationale: { type: 'string' },
+                                    projected_impact: { type: 'object' }
+                                }
+                            },
+                            implementation_plan: {
+                                type: 'object',
+                                properties: {
+                                    timeline: { type: 'string' },
+                                    priority_actions: { type: 'array' },
+                                    monitoring_kpis: { type: 'array' }
+                                }
+                            }
+                        },
+                        required: ['current_performance', 'recommendations', 'implementation_plan']
+                    })
+            },
+            {
+                    outputName: ':plotly:',
+                    functionName: 'generate_budget_charts',
+                    functionDescription: 'Create interactive Plotly visualizations for budget allocation, performance trends, and ROI analysis',
+                    outputType: 'custom',
+                    jsonSchema: JSON.stringify({
+                        type: 'object',
+                        properties: {
+                            data: { type: 'array' },
+                            layout: { type: 'object' }
+                        },
+                        required: ['data', 'layout']
+                    })
+            }
+        ]
     }
 ];
 
