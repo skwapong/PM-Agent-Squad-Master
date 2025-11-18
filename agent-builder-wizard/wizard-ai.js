@@ -5242,7 +5242,7 @@ function updateModelRecommendation() {
     }
 
     // Show link to full model reference
-    const linkHTML = '<br><a href="MODEL_REFERENCE.md" target="_blank" class="text-indigo-600 hover:text-indigo-700 underline text-xs">📖 View Full Model Comparison</a>';
+    const linkHTML = '<br><a href="MODEL_REFERENCE.html" target="_blank" class="text-indigo-600 hover:text-indigo-700 underline text-xs font-medium">📖 View Full Model Comparison Guide</a>';
     recElement.innerHTML += linkHTML;
 }
 
@@ -9033,6 +9033,31 @@ function populateFieldsFromConfig() {
 // ============================================================================
 
 function exportAgentConfig() {
+    // Validate that there's meaningful content to export
+    const hasProjectName = agentConfig.projectName && agentConfig.projectName.trim() !== '';
+    const hasAgentName = agentConfig.agentName && agentConfig.agentName.trim() !== '';
+    const hasSystemPrompt = agentConfig.systemPrompt && agentConfig.systemPrompt.trim() !== '';
+    const hasKnowledgeBases = knowledgeBases && knowledgeBases.length > 0;
+
+    // Check if any meaningful data exists
+    if (!hasProjectName && !hasAgentName && !hasSystemPrompt && !hasKnowledgeBases) {
+        const shouldProceed = confirm(
+            '⚠️ No Configuration Data Found\n\n' +
+            'Your agent configuration appears to be empty. ' +
+            'The export will contain default values only.\n\n' +
+            'Recommended: Complete at least the following before exporting:\n' +
+            '• Project Name\n' +
+            '• Agent Name\n' +
+            '• System Prompt\n' +
+            '• Knowledge Bases\n\n' +
+            'Do you want to export anyway?'
+        );
+
+        if (!shouldProceed) {
+            return; // Cancel export
+        }
+    }
+
     const exportData = {
         version: '1.0',
         exportDate: new Date().toISOString(),

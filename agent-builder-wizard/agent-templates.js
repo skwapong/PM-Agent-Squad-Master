@@ -115,31 +115,25 @@ Always provide data-driven recommendations with clear business impact and implem
 - **1:** Bottom 20% (worst)
 
 ### Recency Scoring
-```
-Score 5: 0-30 days
-Score 4: 31-60 days
-Score 3: 61-90 days
-Score 2: 91-180 days
-Score 1: 180+ days
-```
+- Score 5: 0-30 days
+- Score 4: 31-60 days
+- Score 3: 61-90 days
+- Score 2: 91-180 days
+- Score 1: 180+ days
 
 ### Frequency Scoring
-```
-Score 5: 10+ purchases
-Score 4: 7-9 purchases
-Score 3: 4-6 purchases
-Score 2: 2-3 purchases
-Score 1: 1 purchase
-```
+- Score 5: 10+ purchases
+- Score 4: 7-9 purchases
+- Score 3: 4-6 purchases
+- Score 2: 2-3 purchases
+- Score 1: 1 purchase
 
 ### Monetary Scoring
-```
-Score 5: $1000+ total spend
-Score 4: $500-$999
-Score 3: $250-$499
-Score 2: $100-$249
-Score 1: <$100
-```
+- Score 5: $1000+ total spend
+- Score 4: $500-$999
+- Score 3: $250-$499
+- Score 2: $100-$249
+- Score 1: <$100
 
 ## Customer Segments
 

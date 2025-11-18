@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Reference Guide - Agent Builder Wizard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .model-card {
+            transition: all 0.2s ease;
+        }
+        .model-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .badge-recommended {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .badge-alternative {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+        }
+        .badge-not-recommended {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        .provider-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        AI Model Reference Guide
+                    </h1>
+                    <p class="text-sm text-gray-600 mt-1">Comprehensive comparison of all supported AI models</p>
+                </div>
+                <button onclick="window.close()" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition">
+                    ← Back to Wizard
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-8 overflow-x-auto py-3">
+                <a href="#recommendations" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">🏆 Top Recommendations</a>
+                <a href="#anthropic" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">Anthropic Claude</a>
+                <a href="#openai" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">OpenAI GPT</a>
+                <a href="#amazon" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">Amazon Nova</a>
+                <a href="#meta" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">Meta Llama</a>
+                <a href="#google" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">Google Gemini</a>
+                <a href="#mistral" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">Mistral AI</a>
+                <a href="#comparison" class="text-sm font-medium text-gray-700 hover:text-indigo-600 whitespace-nowrap">📊 Cost Comparison</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Top 3 Recommendations -->
+        <section id="recommendations" class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-6">🏆 Top 3 Recommendations</h2>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Gold - Claude 3.5 Sonnet V2 -->
+                <div class="model-card bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-400 rounded-xl p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-300 opacity-20 rounded-full -mr-16 -mt-16"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-4xl">🥇</span>
+                            <span class="badge-recommended text-white text-xs px-3 py-1 rounded-full font-semibold">BEST OVERALL</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Claude 3.5 Sonnet V2</h3>
+                        <div class="provider-badge text-sm text-gray-600 mb-4">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                            Anthropic
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">Best-in-class reasoning, empathy, and instruction-following. Ideal for 90% of agent use cases.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Context:</span>
+                                <span class="font-semibold">200K tokens</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Cost:</span>
+                                <span class="font-semibold">$3 / $15 per 1M</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Best For:</span>
+                                <span class="font-semibold text-right">Complex reasoning</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Silver - Claude 3.5 Haiku -->
+                <div class="model-card bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-400 rounded-xl p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-gray-300 opacity-20 rounded-full -mr-16 -mt-16"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-4xl">🥈</span>
+                            <span class="badge-alternative text-white text-xs px-3 py-1 rounded-full font-semibold">FAST & AFFORDABLE</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Claude 3.5 Haiku</h3>
+                        <div class="provider-badge text-sm text-gray-600 mb-4">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                            Anthropic
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">Fast responses (<3s) with excellent cost efficiency. Perfect for high-volume, simple queries.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Context:</span>
+                                <span class="font-semibold">200K tokens</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Cost:</span>
+                                <span class="font-semibold">$0.80 / $4 per 1M</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Best For:</span>
+                                <span class="font-semibold text-right">FAQ bots</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bronze - GPT-4o -->
+                <div class="model-card bg-gradient-to-br from-orange-50 to-orange-100 border-2 border-orange-400 rounded-xl p-6 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-300 opacity-20 rounded-full -mr-16 -mt-16"></div>
+                    <div class="relative">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-4xl">🥉</span>
+                            <span class="badge-alternative text-white text-xs px-3 py-1 rounded-full font-semibold">OPENAI FLAGSHIP</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">GPT-4o</h3>
+                        <div class="provider-badge text-sm text-gray-600 mb-4">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                            OpenAI
+                        </div>
+                        <p class="text-sm text-gray-700 mb-4">Strong general capabilities with excellent vision support. Good for OpenAI ecosystem integrations.</p>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Context:</span>
+                                <span class="font-semibold">128K tokens</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Cost:</span>
+                                <span class="font-semibold">$2.50 / $10 per 1M</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Best For:</span>
+                                <span class="font-semibold text-right">Vision tasks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Models by Provider -->
+
+        <!-- Anthropic Claude -->
+        <section id="anthropic" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-xl">🤖</span>
+                Anthropic Claude Models
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Claude 4 Opus</h3>
+                            <p class="text-xs text-gray-500">Highest Capability</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Most advanced Claude model for extremely complex tasks.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 200K tokens</div>
+                        <div>💰 Cost: Premium tier</div>
+                        <div>⚡ Speed: Slower (8-12s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Claude 4.5 Sonnet</h3>
+                            <p class="text-xs text-gray-500">Latest Balanced</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Latest balanced model with enhanced capabilities.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 200K tokens</div>
+                        <div>💰 Cost: Mid-tier</div>
+                        <div>⚡ Speed: Moderate (5-7s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Claude 4.5 Haiku</h3>
+                            <p class="text-xs text-gray-500">Fast & Efficient</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Latest fast model with improved efficiency.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 200K tokens</div>
+                        <div>💰 Cost: Low tier</div>
+                        <div>⚡ Speed: Very fast (<2s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-green-50 border-2 border-green-500 rounded-lg p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Claude 3.5 Sonnet V2</h3>
+                            <p class="text-xs text-green-600">⭐ RECOMMENDED</p>
+                        </div>
+                        <span class="badge-recommended text-white text-xs px-2 py-1 rounded-full">Best</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Best-in-class for most agent use cases with excellent balance.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 200K tokens</div>
+                        <div>💰 Cost: $3 / $15 per 1M</div>
+                        <div>⚡ Speed: Fast (4-6s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm opacity-75">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Claude 3 Opus</h3>
+                            <p class="text-xs text-amber-600">⚠️ Superseded</p>
+                        </div>
+                        <span class="badge-not-recommended text-white text-xs px-2 py-1 rounded-full">Legacy</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Previous flagship. Use Claude 3.5 Sonnet V2 instead (better + cheaper).</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 200K tokens</div>
+                        <div>💰 Cost: $15 / $75 per 1M</div>
+                        <div>⚡ Speed: Slow (8-12s)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- OpenAI GPT -->
+        <section id="openai" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-xl">🧠</span>
+                OpenAI GPT Models
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">GPT-5</h3>
+                            <p class="text-xs text-gray-500">Latest Generation</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">OpenAI's newest flagship model (when available).</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: TBD</div>
+                        <div>💰 Cost: Premium tier</div>
+                        <div>⚡ Speed: TBD</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-green-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">GPT-4o</h3>
+                            <p class="text-xs text-green-600">Recommended</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Top 3</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Strong general capabilities with excellent vision support.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $2.50 / $10 per 1M</div>
+                        <div>⚡ Speed: Fast (3-5s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">GPT-4o Mini</h3>
+                            <p class="text-xs text-gray-500">Cost-Effective</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Fast and affordable for simple-to-moderate tasks.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $0.15 / $0.60 per 1M</div>
+                        <div>⚡ Speed: Very fast (<2s)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Amazon Nova -->
+        <section id="amazon" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center text-xl">☁️</span>
+                Amazon Bedrock / Nova Models
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Nova Pro</h3>
+                            <p class="text-xs text-gray-500">High Performance</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Longest context (300K). Good for AWS-native environments.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 300K tokens</div>
+                        <div>💰 Cost: $0.80 / $3.20 per 1M</div>
+                        <div>⚡ Speed: Moderate (5-8s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Nova Lite</h3>
+                            <p class="text-xs text-gray-500">Lightweight</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Situational</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Fast and cost-effective for simple AWS workloads.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 300K tokens</div>
+                        <div>💰 Cost: $0.06 / $0.24 per 1M</div>
+                        <div>⚡ Speed: Fast (2-4s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-red-50 rounded-lg border border-red-200 p-5 shadow-sm opacity-75">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Nova Micro</h3>
+                            <p class="text-xs text-red-600">❌ Not Recommended</p>
+                        </div>
+                        <span class="badge-not-recommended text-white text-xs px-2 py-1 rounded-full">Avoid</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Too basic for production agents. High error rate.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $0.035 / $0.14 per 1M</div>
+                        <div>⚡ Speed: Very fast (<2s)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Meta Llama -->
+        <section id="meta" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">🦙</span>
+                Meta Llama Models (Open Source)
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Llama 4 Maverick 17B</h3>
+                            <p class="text-xs text-gray-500">Advanced Reasoning</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Latest Llama model with improved reasoning capabilities.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: TBD</div>
+                        <div>💰 Cost: TBD</div>
+                        <div>⚡ Speed: TBD</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Llama 3.1 405B</h3>
+                            <p class="text-xs text-gray-500">Open Source Flagship</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Strong reasoning for open-source model. Good for code.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $2.65 / $3.50 per 1M</div>
+                        <div>⚡ Speed: Moderate (6-9s)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Google Gemini -->
+        <section id="google" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-xl">💎</span>
+                Google Gemini Models
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Gemini 2.5 Pro</h3>
+                            <p class="text-xs text-gray-500">High Capability</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Google's most capable model for complex tasks.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: TBD</div>
+                        <div>💰 Cost: TBD</div>
+                        <div>⚡ Speed: TBD</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Gemini 2.5 Flash</h3>
+                            <p class="text-xs text-gray-500">Fast Responses</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Balanced speed and capability for most use cases.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: TBD</div>
+                        <div>💰 Cost: TBD</div>
+                        <div>⚡ Speed: Fast</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Mistral AI -->
+        <section id="mistral" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <span class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-xl">🌬️</span>
+                Mistral AI Models
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Mistral Large 2</h3>
+                            <p class="text-xs text-gray-500">European Alternative</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Strong for EU data residency requirements. Good multilingual.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $2 / $6 per 1M</div>
+                        <div>⚡ Speed: Moderate (5-7s)</div>
+                    </div>
+                </div>
+
+                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Mistral Small</h3>
+                            <p class="text-xs text-gray-500">Budget EU Option</p>
+                        </div>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Situational</span>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-3">Cost-effective for simple tasks with EU requirements.</p>
+                    <div class="space-y-1 text-xs text-gray-600">
+                        <div>💾 Context: 128K tokens</div>
+                        <div>💰 Cost: $0.20 / $0.60 per 1M</div>
+                        <div>⚡ Speed: Fast (3-5s)</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Cost Comparison Table -->
+        <section id="comparison" class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 Cost Comparison</h2>
+            <div class="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Model</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Provider</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Input Cost</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Output Cost</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Total (1M+1M)</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Context</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="bg-green-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">🥇 Claude 3.5 Sonnet V2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Anthropic</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">$18</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">200K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">🥈 Claude 3.5 Haiku</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Anthropic</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.80</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$4</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">$4.80</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">200K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">🥉 GPT-4o</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">OpenAI</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.50</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$10</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600">$12.50</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">128K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">GPT-4o Mini</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">OpenAI</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.60</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">$0.75</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">128K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nova Pro</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Amazon</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$0.80</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.20</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600">$4.00</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">300K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Llama 3.1 405B</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Meta</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2.65</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3.50</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600">$6.15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">128K</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Mistral Large 2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Mistral</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$6</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-blue-600">$8</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">128K</td>
+                            </tr>
+                            <tr class="bg-red-50 opacity-75">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Claude 3 Opus (Superseded)</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Anthropic</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">$75</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-red-600">$90</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">200K</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-gray-50 px-6 py-3 text-xs text-gray-600">
+                    💡 All prices are per 1 million tokens. "Total (1M+1M)" shows cost for 1M input + 1M output tokens.
+                </div>
+            </div>
+        </section>
+
+        <!-- Decision Guide -->
+        <section class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">🎯 Quick Decision Guide</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="text-xl">🎨</span>
+                        Choose Claude 3.5 Sonnet V2 for:
+                    </h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-0.5">✓</span>
+                            <span>Customer service agents (empathy + nuance)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-0.5">✓</span>
+                            <span>Complex reasoning & analysis tasks</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-0.5">✓</span>
+                            <span>Content creation & creative writing</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-green-600 mt-0.5">✓</span>
+                            <span>Most production use cases (90%)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="text-xl">⚡</span>
+                        Choose Claude 3.5 Haiku for:
+                    </h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 mt-0.5">✓</span>
+                            <span>Simple FAQ chatbots</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 mt-0.5">✓</span>
+                            <span>High-volume, low-complexity queries</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 mt-0.5">✓</span>
+                            <span>Budget-conscious projects</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-blue-600 mt-0.5">✓</span>
+                            <span>Real-time responses needed (<3s)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="text-xl">👁️</span>
+                        Choose GPT-4o for:
+                    </h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 mt-0.5">✓</span>
+                            <span>Vision/image understanding tasks</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 mt-0.5">✓</span>
+                            <span>Existing OpenAI ecosystem</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 mt-0.5">✓</span>
+                            <span>Structured JSON outputs</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-orange-600 mt-0.5">✓</span>
+                            <span>Multimodal applications</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                    <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                        <span class="text-xl">🔧</span>
+                        Avoid These Models:
+                    </h3>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-600 mt-0.5">✗</span>
+                            <span>Claude 3 Opus (superseded by 3.5 Sonnet V2)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-600 mt-0.5">✗</span>
+                            <span>GPT-4 Turbo (superseded by GPT-4o)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-600 mt-0.5">✗</span>
+                            <span>Nova Micro (too basic for production)</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-600 mt-0.5">✗</span>
+                            <span>Llama 3.1 8B (high error rate)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-sm text-gray-600">
+                <p class="mb-2">💡 Model availability and pricing subject to change. Always verify current pricing with your provider.</p>
+                <p>Need help choosing? Use <strong>Claude 3.5 Sonnet V2</strong> for most use cases.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
