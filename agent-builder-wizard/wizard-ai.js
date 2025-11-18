@@ -20,7 +20,7 @@ let agentConfig = {
     name: '',
     projectName: '',
     projectDescription: '',
-    model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+    model: 'anthropic.claude-4.5-sonnet',
     temperature: 0.5,
     maxToolsIterations: 0,
     systemPrompt: ''
@@ -3250,7 +3250,7 @@ async function generateAgent() {
         console.log('📊 AI generation started at:', new Date(wizardStats.aiGenerationStartTime).toLocaleTimeString());
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${fullDescription}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "outputs": [\n    {\n      "outputName": "campaign_plan",\n      "functionName": "generate_campaign_plan",\n      "functionDescription": "Generate a comprehensive digital marketing campaign plan including strategy, objectives, target audience, budget allocation, creative direction, KPIs, and implementation timeline",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"campaign_objective\\": {\\"type\\": \\"string\\"}, \\"target_audience\\": {\\"type\\": \\"object\\"}, \\"budget_allocation\\": {\\"type\\": \\"object\\"}, \\"creative_direction\\": {\\"type\\": \\"string\\"}, \\"kpi_targets\\": {\\"type\\": \\"array\\"}, \\"platform_strategy\\": {\\"type\\": \\"object\\"}, \\"timeline\\": {\\"type\\": \\"string\\"}}, \\"required\\": [\\"campaign_objective\\", \\"budget_allocation\\", \\"kpi_targets\\"]}"\n    },\n    {\n      "outputName": ":plotly:",\n      "functionName": "generate_performance_chart",\n      "functionDescription": "Create interactive performance visualizations using Plotly.js for campaign metrics and analytics",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"data\\": {\\"type\\": \\"array\\"}, \\"layout\\": {\\"type\\": \\"object\\"}}, \\"required\\": [\\"data\\"]}"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
+        const prompt = `Based on this agent description:\n\n"${fullDescription}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "outputs": [\n    {\n      "outputName": "campaign_plan",\n      "functionName": "generate_campaign_plan",\n      "functionDescription": "Generate a comprehensive digital marketing campaign plan including strategy, objectives, target audience, budget allocation, creative direction, KPIs, and implementation timeline",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"campaign_objective\\": {\\"type\\": \\"string\\"}, \\"target_audience\\": {\\"type\\": \\"object\\"}, \\"budget_allocation\\": {\\"type\\": \\"object\\"}, \\"creative_direction\\": {\\"type\\": \\"string\\"}, \\"kpi_targets\\": {\\"type\\": \\"array\\"}, \\"platform_strategy\\": {\\"type\\": \\"object\\"}, \\"timeline\\": {\\"type\\": \\"string\\"}}, \\"required\\": [\\"campaign_objective\\", \\"budget_allocation\\", \\"kpi_targets\\"]}"\n    },\n    {\n      "outputName": ":plotly:",\n      "functionName": "generate_performance_chart",\n      "functionDescription": "Create interactive performance visualizations using Plotly.js for campaign metrics and analytics",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"data\\": {\\"type\\": \\"array\\"}, \\"layout\\": {\\"type\\": \\"object\\"}}, \\"required\\": [\\"data\\"]}"\n    }\n  ],\n  "model": "anthropic.claude-4.5-sonnet",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 4.5 Sonnet is the latest balanced model with superior reasoning and reduced hallucinations, ideal for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -4606,11 +4606,11 @@ function generateAgentConfig(domain) {
     };
 
     const domainModels = {
-        hr: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+        hr: 'anthropic.claude-4.5-sonnet',
         support: 'openai.gpt-4o',
-        it: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
-        sales: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
-        marketing: 'anthropic.claude-3-5-sonnet-20241022-v2:0'
+        it: 'anthropic.claude-4.5-sonnet',
+        sales: 'anthropic.claude-4.5-sonnet',
+        marketing: 'anthropic.claude-4.5-sonnet'
     };
 
     const domainTemperatures = {
@@ -5229,12 +5229,21 @@ Guide complex sales processes to successful closures while building lasting cust
 function updateModelRecommendation() {
     const modelData = {
         // Top Tier - Recommended
-        'anthropic.claude-3-5-sonnet-20241022-v2:0': {
+        'anthropic.claude-4.5-sonnet': {
             tier: 'recommended',
             icon: '✅',
             color: 'text-green-600',
             message: 'Best overall choice for most agent use cases',
-            details: 'Excellent reasoning, empathy, and instruction-following. 200K context. Best for customer service, analysis, and content creation.',
+            details: 'Latest balanced model with superior reasoning, reduced hallucinations, and excellent instruction-following. 200K context. Ideal for customer service, analysis, complex workflows, and content creation.',
+            cost: '$3/$15 per 1M tokens',
+            warning: null
+        },
+        'anthropic.claude-3-5-sonnet-20241022-v2:0': {
+            tier: 'good',
+            icon: '✔️',
+            color: 'text-blue-600',
+            message: 'Previous generation - still capable',
+            details: 'Good reasoning and empathy, but may hallucinate more than 4.5 Sonnet. 200K context. Consider upgrading to 4.5 for better accuracy.',
             cost: '$3/$15 per 1M tokens',
             warning: null
         },
@@ -8716,7 +8725,7 @@ function resetWizard() {
         name: '',
         projectName: '',
         projectDescription: '',
-        model: 'anthropic.claude-3-5-sonnet-20241022-v2:0',
+        model: 'anthropic.claude-4.5-sonnet',
         temperature: 0.5,
         systemPrompt: ''
     };
@@ -8730,7 +8739,7 @@ function resetWizard() {
     document.getElementById('projectName').value = '';
     document.getElementById('projectDescription').value = '';
     document.getElementById('agentName').value = '';
-    document.getElementById('modelSelect').value = 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+    document.getElementById('modelSelect').value = 'anthropic.claude-4.5-sonnet';
     document.getElementById('temperature').value = 0.5;
     document.getElementById('temperatureInput').value = 0.5;
     document.getElementById('maxToolsIterations').value = 0;
@@ -9294,7 +9303,7 @@ function populateFieldsFromConfig() {
 
     // Step 3 fields
     const modelSelect = document.getElementById('modelSelect');
-    if (modelSelect) modelSelect.value = agentConfig.model || 'anthropic.claude-3-5-sonnet-20241022-v2:0';
+    if (modelSelect) modelSelect.value = agentConfig.model || 'anthropic.claude-4.5-sonnet';
 
     const temperature = document.getElementById('temperature');
     const temperatureInput = document.getElementById('temperatureInput');
