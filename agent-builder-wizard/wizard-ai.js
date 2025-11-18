@@ -8612,6 +8612,8 @@ function clearAutoSave() {
     if (confirm('Clear auto-saved work? This will permanently delete your auto-save backup.')) {
         localStorage.removeItem('agentBuilderAutoSave');
         showToast('Auto-saved work cleared successfully', 'success');
+        // Reset first save flag so next save shows the toast
+        isFirstAutoSave = true;
     }
 }
 
@@ -9025,6 +9027,7 @@ function showToast(message, type = 'info', duration = 3000) {
 
 let autoSaveTimeout = null;
 const AUTO_SAVE_DELAY = 2000; // 2 seconds debounce
+let isFirstAutoSave = true; // Track first auto-save for toast notification
 
 function setupAutoSave() {
     // Track changes to all form fields
@@ -9075,6 +9078,14 @@ function saveToLocalStorage() {
     try {
         localStorage.setItem('agentBuilderAutoSave', JSON.stringify(dataToSave));
         console.log('💾 Auto-saved to localStorage');
+
+        // Show toast notification on first auto-save
+        console.log('🔍 isFirstAutoSave:', isFirstAutoSave);
+        if (isFirstAutoSave) {
+            console.log('🎉 Showing first auto-save toast notification');
+            showToast('Auto-save enabled! Your work is being saved automatically.', 'success');
+            isFirstAutoSave = false;
+        }
     } catch (error) {
         console.error('❌ Auto-save failed:', error);
         showToast('Auto-save failed\nPlease check your browser storage', 'error');
@@ -9105,6 +9116,9 @@ function loadFromLocalStorage() {
                     populateFieldsFromConfig();
                     updateStepDisplay();
                     showToast('Auto-saved work restored successfully', 'success');
+
+                    // Don't show first save toast since we loaded existing save
+                    isFirstAutoSave = false;
                     return true;
                 }
             } else {
