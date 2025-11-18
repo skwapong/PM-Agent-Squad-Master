@@ -6565,6 +6565,11 @@ function renderConfigSummary() {
             </div>
 
             <div>
+                <p class="text-sm font-semibold text-gray-600">Max Tools Iterations:</p>
+                <p class="text-gray-900">${agentConfig.maxToolsIterations || 0}</p>
+            </div>
+
+            <div>
                 <p class="text-sm font-semibold text-gray-600">${getTranslation('step4.kb')}</p>
                 <ul class="list-disc list-inside text-gray-900">
                     ${knowledgeBases.map(kb => `<li>${kb.name}</li>`).join('')}
@@ -6577,6 +6582,15 @@ function renderConfigSummary() {
                     ${tools.map(tool => `<li>${tool.name}</li>`).join('')}
                 </ul>
             </div>
+
+            ${outputs && outputs.length > 0 ? `
+            <div>
+                <p class="text-sm font-semibold text-gray-600">Outputs:</p>
+                <ul class="list-disc list-inside text-gray-900 text-sm">
+                    ${outputs.map(output => `<li>${output.functionName || output.outputName || 'Unnamed output'}</li>`).join('')}
+                </ul>
+            </div>
+            ` : ''}
         </div>
     `;
 }
