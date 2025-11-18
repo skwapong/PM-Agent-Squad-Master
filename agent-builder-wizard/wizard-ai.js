@@ -49,6 +49,14 @@ let generationCancelled = false;
 // Chat response abort controller
 let chatAbortController = null;
 
+// File attachment state
+let currentAttachment = null;
+
+// Generation timer state
+let generationTimer = null;
+let generationStartTime = null;
+const ESTIMATED_GENERATION_TIME = 90; // seconds (under-promise to over-deliver)
+
 // Initialize wizard
 document.addEventListener('DOMContentLoaded', function() {
     // Start tracking wizard session time
@@ -2450,6 +2458,41 @@ function setupEventListeners() {
     // Reset Button
     document.getElementById('resetBtn')?.addEventListener('click', resetWizard);
 
+    // Clear Auto-Save Link
+    const clearAutoSaveLink = document.getElementById('clearAutoSaveLink');
+    if (clearAutoSaveLink) {
+        clearAutoSaveLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            clearAutoSave();
+        });
+    }
+
+    // File attachment event listeners
+    const attachFileBtn = document.getElementById('attachFileBtn');
+    const chatAttachment = document.getElementById('chatAttachment');
+    const removeAttachmentBtn = document.getElementById('removeAttachmentBtn');
+
+    if (attachFileBtn) {
+        attachFileBtn.addEventListener('click', function() {
+            if (chatAttachment) {
+                chatAttachment.click();
+            }
+        });
+    }
+
+    if (chatAttachment) {
+        chatAttachment.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileAttachment(file);
+            }
+        });
+    }
+
+    if (removeAttachmentBtn) {
+        removeAttachmentBtn.addEventListener('click', clearAttachment);
+    }
+
     // Temperature slider and input box
     const tempSlider = document.getElementById('temperature');
     const tempInput = document.getElementById('temperatureInput');
@@ -2702,17 +2745,18 @@ async function sendToAI() {
     const sendBtn = document.getElementById('aiSendBtn');
     const stopBtn = document.getElementById('aiStopBtn');
 
-    // Validate input
-    if (!message) {
+    // Validate input - allow attachment-only messages
+    if (!message && !currentAttachment) {
         // Show error message
         if (errorDiv) {
+            errorDiv.textContent = '⚠️ Please enter a message or attach a file';
             errorDiv.style.display = 'block';
             // Add red border to input
             input.classList.add('border-red-500');
             input.classList.remove('border-gray-300');
 
             // Hide error after 3 seconds
-            setTimeout(() => {
+            setTimeout(function() {
                 errorDiv.style.display = 'none';
                 input.classList.remove('border-red-500');
                 input.classList.add('border-gray-300');
@@ -2735,17 +2779,34 @@ async function sendToAI() {
     // Create abort controller for this request
     chatAbortController = new AbortController();
 
+    // Build full message including attachment
+    let fullMessage = message;
+    let displayMessage = message;
+
+    if (currentAttachment) {
+        // Add attachment content to the message sent to AI
+        fullMessage = message
+            ? message + '\n\n[Attached file: ' + currentAttachment.name + ']\n' + currentAttachment.content
+            : '[Attached file: ' + currentAttachment.name + ']\n' + currentAttachment.content;
+
+        // Display message with attachment indicator (plain text to avoid HTML injection)
+        displayMessage = message
+            ? message + '\n📎 ' + currentAttachment.name
+            : '📎 ' + currentAttachment.name;
+    }
+
     // Save message as agent description if it looks like a description
     if (message.length > 20 && !agentConfig.description) {
         agentConfig.description = message;
     }
 
     // Add user message to chat
-    addChatMessage('user', message);
-    chatHistory.push({ role: 'user', content: message });
+    addChatMessage('user', displayMessage);
+    chatHistory.push({ role: 'user', content: fullMessage });
 
-    // Clear input
+    // Clear input and attachment (silent to avoid toast notification)
     input.value = '';
+    clearAttachment(true);
 
     // Show typing indicator
     showTypingIndicator('Agent Foundry Assistant is thinking...');
@@ -3027,6 +3088,63 @@ function cancelGeneration() {
     addChatMessage('assistant', '⏸️ Cancelling generation... Please wait for the current operation to complete.');
 }
 
+// Start generation timer
+function startGenerationTimer() {
+    generationStartTime = Date.now();
+    const timerDiv = document.getElementById('generationTimer');
+    const elapsedSpan = document.getElementById('elapsedTime');
+    const progressBar = document.getElementById('progressBar');
+
+    if (!timerDiv) return;
+
+    // Show timer
+    timerDiv.style.display = 'block';
+
+    // Update elapsed time every second
+    generationTimer = setInterval(function() {
+        const elapsedSeconds = Math.floor((Date.now() - generationStartTime) / 1000);
+
+        if (elapsedSpan) {
+            elapsedSpan.textContent = elapsedSeconds + 's';
+        }
+
+        // Update progress bar (capped at 95% until complete)
+        if (progressBar) {
+            const progress = Math.min(95, (elapsedSeconds / ESTIMATED_GENERATION_TIME) * 100);
+            progressBar.style.width = progress + '%';
+        }
+    }, 1000);
+}
+
+// Stop generation timer
+function stopGenerationTimer(success) {
+    if (success === undefined) success = true;
+
+    if (generationTimer) {
+        clearInterval(generationTimer);
+        generationTimer = null;
+    }
+
+    const timerDiv = document.getElementById('generationTimer');
+    const progressBar = document.getElementById('progressBar');
+
+    if (success && progressBar) {
+        // Complete the progress bar
+        progressBar.style.width = '100%';
+    }
+
+    // Hide timer after a short delay
+    setTimeout(function() {
+        if (timerDiv) {
+            timerDiv.style.display = 'none';
+        }
+        // Reset progress bar
+        if (progressBar) {
+            progressBar.style.width = '0%';
+        }
+    }, success ? 2000 : 500);
+}
+
 // Auto-Generate Agent
 async function generateAgent() {
     // Reset cancellation flag
@@ -3052,16 +3170,17 @@ async function generateAgent() {
         description = agentConfig.description;
     }
 
-    if (!description || description.length < 20) {
+    if ((!description || description.length < 20) && !currentAttachment) {
         console.log('🚫 Validation failed:');
         console.log('  - descriptionTextarea.value:', descriptionTextarea ? `"${descriptionTextarea.value.substring(0, 50)}..." (${descriptionTextarea.value.length})` : 'N/A');
         console.log('  - chatInput.value:', chatInput ? `"${chatInput.value.substring(0, 50)}..." (${chatInput.value.length})` : 'N/A');
         console.log('  - agentConfig.description:', agentConfig.description ? `"${agentConfig.description.substring(0, 50)}..." (${agentConfig.description.length})` : 'empty');
         console.log('  - final description:', description ? `"${description.substring(0, 50)}..." (${description.length})` : 'empty');
+        console.log('  - currentAttachment:', currentAttachment ? currentAttachment.name : 'none');
 
         const currentLang = agentConfig.language || 'english';
         const dict = translations[currentLang] || translations['english'];
-        alert(dict['validation.description.required'] || 'Please describe your agent first! Add at least a brief description of what your agent should do (minimum 20 characters).');
+        alert(dict['validation.description.required'] || 'Please describe your agent first! Add at least a brief description (minimum 20 characters) or attach a file with agent details.');
         // Focus on the appropriate input field
         if (chatInput) {
             chatInput.focus();
@@ -3074,16 +3193,29 @@ async function generateAgent() {
         return;
     }
 
-    // Update agentConfig with current value
-    agentConfig.description = description;
+    // Build full description including attachment
+    let fullDescription = description;
+
+    if (currentAttachment) {
+        // Add attachment content to the description sent to AI
+        fullDescription = description
+            ? description + '\n\n[Attached file: ' + currentAttachment.name + ']\n' + currentAttachment.content
+            : '[Attached file: ' + currentAttachment.name + ']\n' + currentAttachment.content;
+    }
+
+    // Update agentConfig with description (without attachment for storage)
+    agentConfig.description = description || 'Agent configured from attached file';
 
     // Also populate the agentDescription textarea if it exists (for Step 0 validation)
     const descTextarea = document.getElementById('agentDescription');
     if (descTextarea && !descTextarea.value.trim()) {
-        descTextarea.value = description;
+        descTextarea.value = description || 'Agent configured from attached file';
     }
 
     showTypingIndicator(getTranslation('sidebar.generating'));
+
+    // Start the generation timer
+    startGenerationTimer();
 
     try {
         // Check if Claude API is available
@@ -3115,7 +3247,7 @@ async function generateAgent() {
         console.log('📊 AI generation started at:', new Date(wizardStats.aiGenerationStartTime).toLocaleTimeString());
 
         // Ask Claude to generate the full configuration
-        const prompt = `Based on this agent description:\n\n"${description}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "outputs": [\n    {\n      "outputName": "campaign_plan",\n      "functionName": "generate_campaign_plan",\n      "functionDescription": "Generate a comprehensive digital marketing campaign plan including strategy, objectives, target audience, budget allocation, creative direction, KPIs, and implementation timeline",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"campaign_objective\\": {\\"type\\": \\"string\\"}, \\"target_audience\\": {\\"type\\": \\"object\\"}, \\"budget_allocation\\": {\\"type\\": \\"object\\"}, \\"creative_direction\\": {\\"type\\": \\"string\\"}, \\"kpi_targets\\": {\\"type\\": \\"array\\"}, \\"platform_strategy\\": {\\"type\\": \\"object\\"}, \\"timeline\\": {\\"type\\": \\"string\\"}}, \\"required\\": [\\"campaign_objective\\", \\"budget_allocation\\", \\"kpi_targets\\"]}"\n    },\n    {\n      "outputName": ":plotly:",\n      "functionName": "generate_performance_chart",\n      "functionDescription": "Create interactive performance visualizations using Plotly.js for campaign metrics and analytics",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"data\\": {\\"type\\": \\"array\\"}, \\"layout\\": {\\"type\\": \\"object\\"}}, \\"required\\": [\\"data\\"]}"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
+        const prompt = `Based on this agent description:\n\n"${fullDescription}"${languageInstruction}\n\nGenerate ONLY a JSON object (no other text) with this exact structure:\n\n{\n  "domain": "marketing",\n  "agentName": "Campaign Planning Expert",\n  "knowledgeBases": [\n    {\n      "name": "Campaign Planning Guide",\n      "description": "Comprehensive guide for planning marketing campaigns. Include best practices for:\n- Setting SMART goals and KPIs\n- Defining target audiences and personas\n- Budget allocation strategies\n- Timeline and milestone planning\n- Campaign brief templates"\n    },\n    {\n      "name": "Platform Best Practices",\n      "description": "Best practices for Meta, Google, TikTok advertising. Cover:\n- Platform-specific ad formats and specs\n- Audience targeting options\n- Bidding strategies\n- Creative guidelines\n- A/B testing frameworks"\n    }\n  ],\n  "outputs": [\n    {\n      "outputName": "campaign_plan",\n      "functionName": "generate_campaign_plan",\n      "functionDescription": "Generate a comprehensive digital marketing campaign plan including strategy, objectives, target audience, budget allocation, creative direction, KPIs, and implementation timeline",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"campaign_objective\\": {\\"type\\": \\"string\\"}, \\"target_audience\\": {\\"type\\": \\"object\\"}, \\"budget_allocation\\": {\\"type\\": \\"object\\"}, \\"creative_direction\\": {\\"type\\": \\"string\\"}, \\"kpi_targets\\": {\\"type\\": \\"array\\"}, \\"platform_strategy\\": {\\"type\\": \\"object\\"}, \\"timeline\\": {\\"type\\": \\"string\\"}}, \\"required\\": [\\"campaign_objective\\", \\"budget_allocation\\", \\"kpi_targets\\"]}"\n    },\n    {\n      "outputName": ":plotly:",\n      "functionName": "generate_performance_chart",\n      "functionDescription": "Create interactive performance visualizations using Plotly.js for campaign metrics and analytics",\n      "outputType": "custom",\n      "jsonSchema": "{\\"type\\": \\"object\\", \\"properties\\": {\\"data\\": {\\"type\\": \\"array\\"}, \\"layout\\": {\\"type\\": \\"object\\"}}, \\"required\\": [\\"data\\"]}"\n    }\n  ],\n  "model": "anthropic.claude-3-5-sonnet-20241022-v2:0",\n  "temperature": 0.7,\n  "maxToolsIterations": 3,\n  "modelReasoning": "Claude 3.5 Sonnet v2 provides excellent balance between response quality and speed for marketing tasks. Temperature 0.7 allows creative campaign suggestions while maintaining consistency. Max Tools Iterations set to 3 allows the agent to refine tool calls for better results.",\n  "systemPrompt": "You are an expert campaign strategist and marketing advisor for Treasure Data. Your role is to help marketers plan, optimize, and execute comprehensive marketing campaigns across multiple channels including Meta, Google, TikTok, and LinkedIn.\\n\\nYour expertise includes:\\n- Campaign planning and goal setting\\n- Audience targeting and segmentation\\n- Budget allocation and optimization\\n- Creative strategy and messaging\\n- Performance analytics and reporting\\n\\nProvide actionable, data-driven recommendations tailored to each campaign's specific goals and constraints."\n}\n\nIMPORTANT REQUIREMENTS FOR SYSTEM PROMPT:\n\n**The systemPrompt must be comprehensive, professional, and industry-leading (500-800 words). Follow these guidelines:**\n\n1. **IDENTITY & ROLE** (Opening section)\n   - Clear identity statement with expertise domain\n   - Primary role and responsibilities\n   - Value proposition to users\n   - Professional credentials or background context\n\n2. **CORE CAPABILITIES** (Detailed list)\n   - 8-12 specific capabilities with brief explanations\n   - Platform-specific expertise (if applicable)\n   - Technical and strategic skills\n   - Domain knowledge areas\n\n3. **OPERATIONAL GUIDELINES** (How the agent works)\n   - Decision-making framework\n   - Prioritization approach\n   - Quality standards\n   - Best practices the agent follows\n   - Communication style and tone\n\n4. **KNOWLEDGE BOUNDARIES** (What the agent covers)\n   - Scope of expertise\n   - Information sources and recency\n   - Areas of specialization\n   - Adjacent domains it can support\n\n5. **INTERACTION PROTOCOLS** (How to engage users)\n   - Question clarification approach\n   - Information gathering process\n   - Response structure and format\n   - Follow-up and iteration strategy\n   - Examples or templates to provide\n\n6. **CONSTRAINTS & LIMITATIONS** (Critical guardrails)\n   - What the agent will NOT do\n   - Ethical boundaries\n   - When to escalate to humans\n   - Uncertainty handling\n   - Compliance and legal considerations\n\n7. **OUTPUT QUALITY** (Deliverable standards)\n   - Specificity and actionability requirements\n   - Data and evidence usage\n   - Structured vs. conversational responses\n   - Follow-up recommendations\n\n8. **DOMAIN-SPECIFIC EXPERTISE** (For marketing agents)\n   - Platform knowledge (Meta, Google, TikTok, Pinterest, LinkedIn)\n   - Campaign lifecycle understanding\n   - Analytics and optimization frameworks\n   - Creative strategy principles\n   - Budget management approaches\n   - Audience targeting methodologies\n   - Performance benchmarks and KPIs\n   - A/B testing and experimentation\n   - Funnel optimization tactics\n   - Attribution and measurement\n\n**TONE & STYLE:** Professional, confident, consultative, data-driven, actionable\n\n**FORMAT:** Use newline characters (\\n\\n) to create well-structured sections. Use bullet points (-) for lists.\n\nOTHER REQUIREMENTS:\n1. Return ONLY the JSON object, nothing else\n2. Include 4-5 knowledge bases\n3. Make each knowledge base description detailed (200-400 words) with specific topics, guidelines, and examples\n4. The description field will be used as the actual knowledge base content\n5. Create a descriptive agentName (3-5 words) that reflects the agent's purpose\n6. Provide modelReasoning explaining why you chose that specific model, temperature, and maxToolsIterations\n7. Set maxToolsIterations (0-10) based on agent complexity: 0 for simple Q&A, 2-5 for standard agents, 5-10 for complex data/search agents\n8. Ensure the systemPrompt follows ALL the guidelines above for a comprehensive, industry-leading prompt (500-800 words)`;
 
         const aiResponse = await claudeAPI.sendMessage(prompt, []);  // Don't include chat history for cleaner JSON response
 
@@ -3290,6 +3422,10 @@ async function generateAgent() {
         console.log(`📊 Estimated cost: $${wizardStats.estimatedCost.toFixed(4)}`);
 
         removeTypingIndicator();
+        stopGenerationTimer(true);
+
+        // Clear attachment after successful generation (silent to avoid toast notification)
+        clearAttachment(true);
 
         // Restore buttons
         if (generateBtn) generateBtn.style.display = 'block';
@@ -3311,6 +3447,10 @@ async function generateAgent() {
     } catch (error) {
         console.error('❌ Auto-generate error:', error);
         removeTypingIndicator();
+        stopGenerationTimer(false);
+
+        // Clear attachment after failed generation (silent to avoid toast notification)
+        clearAttachment(true);
 
         // Restore buttons
         if (generateBtn) generateBtn.style.display = 'block';
@@ -8458,6 +8598,97 @@ function downloadFile(filename, content) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+}
+
+// Clear Auto-Saved Work
+function clearAutoSave() {
+    const saved = localStorage.getItem('agentBuilderAutoSave');
+
+    if (!saved) {
+        showToast('No auto-saved work found', 'info');
+        return;
+    }
+
+    if (confirm('Clear auto-saved work? This will permanently delete your auto-save backup.')) {
+        localStorage.removeItem('agentBuilderAutoSave');
+        showToast('Auto-saved work cleared successfully', 'success');
+    }
+}
+
+// Handle file attachment
+function handleFileAttachment(file) {
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB limit
+
+    // Check file size
+    if (file.size > MAX_FILE_SIZE) {
+        showToast('File too large. Maximum size is 5MB.', 'error');
+        return;
+    }
+
+    // Check file type (text files only)
+    const allowedTypes = ['.txt', '.md', '.json', '.csv'];
+    const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+    if (!allowedTypes.includes(fileExtension)) {
+        showToast('Invalid file type. Allowed: .txt, .md, .json, .csv', 'error');
+        return;
+    }
+
+    // Read file contents as text
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        currentAttachment = {
+            name: file.name,
+            content: e.target.result,
+            type: file.type || 'text/plain'
+        };
+
+        // Update UI
+        const attachmentNameSpan = document.getElementById('attachmentName');
+        const removeBtn = document.getElementById('removeAttachmentBtn');
+
+        if (attachmentNameSpan) {
+            attachmentNameSpan.textContent = file.name;
+        }
+        if (removeBtn) {
+            removeBtn.classList.remove('hidden');
+        }
+
+        showToast('Attached: ' + file.name, 'success');
+    };
+
+    reader.onerror = function() {
+        showToast('Failed to read file', 'error');
+    };
+
+    reader.readAsText(file);
+}
+
+// Clear file attachment
+function clearAttachment(silent) {
+    if (silent === undefined) silent = false;
+
+    const hadAttachment = currentAttachment !== null;
+    currentAttachment = null;
+
+    // Update UI
+    const attachmentNameSpan = document.getElementById('attachmentName');
+    const removeBtn = document.getElementById('removeAttachmentBtn');
+    const fileInput = document.getElementById('chatAttachment');
+
+    if (attachmentNameSpan) {
+        attachmentNameSpan.textContent = '';
+    }
+    if (removeBtn) {
+        removeBtn.classList.add('hidden');
+    }
+    if (fileInput) {
+        fileInput.value = '';
+    }
+
+    // Only show toast if user explicitly clicked remove and there was an attachment
+    if (!silent && hadAttachment) {
+        showToast('Attachment removed', 'info');
+    }
 }
 
 // Reset Wizard
