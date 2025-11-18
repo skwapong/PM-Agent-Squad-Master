@@ -70,7 +70,7 @@
             <h2 class="text-3xl font-bold text-gray-900 mb-6">🏆 Top 3 Recommendations</h2>
 
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- Gold - Claude 3.5 Sonnet V2 -->
+                <!-- Gold - Claude 4.5 Sonnet -->
                 <div class="model-card bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-400 rounded-xl p-6 relative overflow-hidden">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-300 opacity-20 rounded-full -mr-16 -mt-16"></div>
                     <div class="relative">
@@ -78,12 +78,12 @@
                             <span class="text-4xl">🥇</span>
                             <span class="badge-recommended text-white text-xs px-3 py-1 rounded-full font-semibold">BEST OVERALL</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Claude 3.5 Sonnet V2</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Claude 4.5 Sonnet</h3>
                         <div class="provider-badge text-sm text-gray-600 mb-4">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
                             Anthropic
                         </div>
-                        <p class="text-sm text-gray-700 mb-4">Best-in-class reasoning, empathy, and instruction-following. Ideal for 90% of agent use cases.</p>
+                        <p class="text-sm text-gray-700 mb-4">Latest balanced model with superior reasoning and reduced hallucinations. Ideal for most agent use cases.</p>
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600">Context:</span>
@@ -191,19 +191,19 @@
                     </div>
                 </div>
 
-                <div class="model-card bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                <div class="model-card bg-green-50 border-2 border-green-500 rounded-lg p-5 shadow-sm">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <h3 class="font-semibold text-gray-900">Claude 4.5 Sonnet</h3>
-                            <p class="text-xs text-gray-500">Latest Balanced</p>
+                            <p class="text-xs text-green-600">⭐ RECOMMENDED</p>
                         </div>
-                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Alternative</span>
+                        <span class="badge-recommended text-white text-xs px-2 py-1 rounded-full">Best</span>
                     </div>
-                    <p class="text-sm text-gray-600 mb-3">Latest balanced model with enhanced capabilities.</p>
+                    <p class="text-sm text-gray-600 mb-3">Latest balanced model with superior reasoning and reduced hallucinations. Best for most agent use cases.</p>
                     <div class="space-y-1 text-xs text-gray-600">
                         <div>💾 Context: 200K tokens</div>
-                        <div>💰 Cost: Mid-tier</div>
-                        <div>⚡ Speed: Moderate (5-7s)</div>
+                        <div>💰 Cost: $3 / $15 per 1M</div>
+                        <div>⚡ Speed: Fast (4-6s)</div>
                     </div>
                 </div>
 
@@ -223,15 +223,15 @@
                     </div>
                 </div>
 
-                <div class="model-card bg-green-50 border-2 border-green-500 rounded-lg p-5 shadow-sm">
+                <div class="model-card bg-white rounded-lg border border-blue-200 p-5 shadow-sm">
                     <div class="flex items-start justify-between mb-3">
                         <div>
                             <h3 class="font-semibold text-gray-900">Claude 3.5 Sonnet V2</h3>
-                            <p class="text-xs text-green-600">⭐ RECOMMENDED</p>
+                            <p class="text-xs text-blue-600">Previous Generation</p>
                         </div>
-                        <span class="badge-recommended text-white text-xs px-2 py-1 rounded-full">Best</span>
+                        <span class="badge-alternative text-white text-xs px-2 py-1 rounded-full">Good</span>
                     </div>
-                    <p class="text-sm text-gray-600 mb-3">Best-in-class for most agent use cases with excellent balance.</p>
+                    <p class="text-sm text-gray-600 mb-3">Still capable, but may hallucinate more than 4.5 Sonnet. Consider upgrading for better accuracy.</p>
                     <div class="space-y-1 text-xs text-gray-600">
                         <div>💾 Context: 200K tokens</div>
                         <div>💰 Cost: $3 / $15 per 1M</div>
@@ -523,7 +523,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             <tr class="bg-green-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">🥇 Claude 3.5 Sonnet V2</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">🥇 Claude 4.5 Sonnet</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">Anthropic</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$3</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">$15</td>
@@ -602,7 +602,7 @@
                 <div class="bg-white rounded-lg p-6 shadow-sm">
                     <h3 class="font-semibold text-gray-900 mb-3 flex items-center gap-2">
                         <span class="text-xl">🎨</span>
-                        Choose Claude 3.5 Sonnet V2 for:
+                        Choose Claude 4.5 Sonnet for:
                     </h3>
                     <ul class="space-y-2 text-sm text-gray-700">
                         <li class="flex items-start gap-2">
@@ -619,7 +619,7 @@
                         </li>
                         <li class="flex items-start gap-2">
                             <span class="text-green-600 mt-0.5">✓</span>
-                            <span>Most production use cases (90%)</span>
+                            <span>Most production use cases (reduced hallucinations)</span>
                         </li>
                     </ul>
                 </div>
@@ -708,7 +708,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="text-center text-sm text-gray-600">
                 <p class="mb-2">💡 Model availability and pricing subject to change. Always verify current pricing with your provider.</p>
-                <p>Need help choosing? Use <strong>Claude 3.5 Sonnet V2</strong> for most use cases.</p>
+                <p>Need help choosing? Use <strong>Claude 4.5 Sonnet</strong> for most use cases.</p>
             </div>
         </div>
     </footer>
