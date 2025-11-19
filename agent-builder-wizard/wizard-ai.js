@@ -10304,6 +10304,14 @@ function openTestAgentModal() {
     const agentNameSpan = document.getElementById('testAgentName');
     const domainSpan = document.getElementById('testAgentDomain');
     const sampleQueriesDiv = document.getElementById('sampleQueries');
+    const messagesDiv = document.getElementById('testChatMessages');
+
+    // Check if all required elements exist
+    if (!modal || !agentNameSpan || !domainSpan || !sampleQueriesDiv || !messagesDiv) {
+        console.error('❌ Test Agent Modal elements not found in DOM');
+        showToast('⚠️ Test Agent modal not properly initialized. Please refresh the page.', 'error');
+        return;
+    }
 
     // Set agent name and domain
     agentNameSpan.textContent = agentConfig.name || 'Your Agent';
@@ -10326,7 +10334,6 @@ function openTestAgentModal() {
 
     // Clear previous chat
     testChatHistory.length = 0;
-    const messagesDiv = document.getElementById('testChatMessages');
     messagesDiv.innerHTML = `
         <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <p class="text-sm text-blue-900">
