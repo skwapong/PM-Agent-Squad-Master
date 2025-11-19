@@ -229,7 +229,7 @@ const translations = {
         'sidebar.step1.msg': '📚 Great! Review your knowledge bases. These will be the foundation of your agent\'s expertise.',
         'sidebar.step2.msg': '🔧 Now let\'s configure your project. I\'ve pre-filled the details based on your description.',
         'sidebar.step3.msg': '🤖 Almost there! Review your agent settings. I\'ve optimized the model and temperature for your use case.',
-        'sidebar.step4.msg': '🎉 Excellent! Your agent is ready to deploy. Download the files and follow the AWS Bedrock deployment guide.',
+        'sidebar.step4.msg': '🎉 Excellent! Your agent is ready to deploy. Download the files and follow the Agent Foundry deployment guide.',
         'sidebar.generating': '✨ Asking Claude AI to generate your agent configuration...',
         'sidebar.connected': '🟢 Connected to Claude Code CLI! Using local connection on port 3001. All responses come from Claude AI via your Claude Code installation.',
 
@@ -471,7 +471,7 @@ Use consultative selling approaches and help build long-term customer relationsh
         'sidebar.step1.msg': '📚 Ótimo! Revise suas bases de conhecimento. Elas serão a base da expertise do seu agente.',
         'sidebar.step2.msg': '🔧 Agora vamos configurar seu projeto. Pré-preenchi os detalhes com base na sua descrição.',
         'sidebar.step3.msg': '🤖 Quase lá! Revise as configurações do agente. Otimizei o modelo e a temperatura para seu caso de uso.',
-        'sidebar.step4.msg': '🎉 Excelente! Seu agente está pronto para implantar. Baixe os arquivos e siga o guia de implantação do AWS Bedrock.',
+        'sidebar.step4.msg': '🎉 Excelente! Seu agente está pronto para implantar. Baixe os arquivos e siga o guia de implantação do Agent Foundry.',
         'sidebar.generating': '✨ Pedindo ao Claude AI para gerar a configuração do seu agente...',
         'sidebar.connected': '🟢 Conectado ao Claude Code CLI! Usando conexão local na porta 3001. Todas as respostas vêm do Claude AI através da sua instalação do Claude Code.',
 
@@ -714,7 +714,7 @@ Sempre priorize relacionamentos de longo prazo com clientes em vez de vitórias 
         'sidebar.step1.msg': '📚 ¡Genial! Revisa tus bases de conocimiento. Serán la base de la experiencia de tu agente.',
         'sidebar.step2.msg': '🔧 Ahora configuremos tu proyecto. He pre-rellenado los detalles basándome en tu descripción.',
         'sidebar.step3.msg': '🤖 ¡Casi listo! Revisa la configuración del agente. He optimizado el modelo y la temperatura para tu caso de uso.',
-        'sidebar.step4.msg': '🎉 ¡Excelente! Tu agente está listo para desplegar. Descarga los archivos y sigue la guía de despliegue de AWS Bedrock.',
+        'sidebar.step4.msg': '🎉 ¡Excelente! Tu agente está listo para desplegar. Descarga los archivos y sigue la guía de despliegue de Agent Foundry.',
         'sidebar.generating': '✨ Pidiendo a Claude AI que genere la configuración de tu agente...',
         'sidebar.connected': '🟢 ¡Conectado a Claude Code CLI! Usando conexión local en el puerto 3001. Todas las respuestas provienen de Claude AI a través de tu instalación de Claude Code.',
 
@@ -968,7 +968,7 @@ Siempre priorizar las relaciones a largo plazo con los clientes sobre las victor
         'sidebar.step1.msg': '📚 すばらしい！ナレッジベースを確認してください。これらがエージェントの専門知識の基盤となります。',
         'sidebar.step2.msg': '🔧 次はプロジェクトを設定しましょう。説明に基づいて詳細を事前入力しました。',
         'sidebar.step3.msg': '🤖 もう少しです！エージェント設定を確認してください。ユースケースに合わせてモデルと温度を最適化しました。',
-        'sidebar.step4.msg': '🎉 完璧です！エージェントのデプロイ準備が整いました。ファイルをダウンロードしてAWS Bedrockデプロイメントガイドに従ってください。',
+        'sidebar.step4.msg': '🎉 完璧です！エージェントのデプロイ準備が整いました。ファイルをダウンロードしてAgent Foundryデプロイメントガイドに従ってください。',
         'sidebar.generating': '✨ Claude AIにエージェント設定の生成を依頼しています...',
         'sidebar.connected': '🟢 Claude Code CLIに接続しました！ポート3001でローカル接続を使用しています。すべての応答はClaude Codeインストール経由でClaude AIから提供されます。',
 
@@ -1211,7 +1211,7 @@ Siempre priorizar las relaciones a largo plazo con los clientes sobre las victor
         'sidebar.step1.msg': '📚 Super ! Examinez vos bases de connaissances. Elles seront le fondement de l\'expertise de votre agent.',
         'sidebar.step2.msg': '🔧 Maintenant, configurons votre projet. J\'ai pré-rempli les détails en fonction de votre description.',
         'sidebar.step3.msg': '🤖 Presque terminé ! Examinez les paramètres de l\'agent. J\'ai optimisé le modèle et la température pour votre cas d\'utilisation.',
-        'sidebar.step4.msg': '🎉 Excellent ! Votre agent est prêt à être déployé. Téléchargez les fichiers et suivez le guide de déploiement AWS Bedrock.',
+        'sidebar.step4.msg': '🎉 Excellent ! Votre agent est prêt à être déployé. Téléchargez les fichiers et suivez le guide de déploiement Agent Foundry.',
         'sidebar.generating': '✨ Demande à Claude AI de générer la configuration de votre agent...',
         'sidebar.connected': '🟢 Connecté à Claude Code CLI ! Utilisation de la connexion locale sur le port 3001. Toutes les réponses proviennent de Claude AI via votre installation Claude Code.',
 
@@ -1454,7 +1454,7 @@ Toujours prioriser les relations client à long terme plutôt que les victoires 
         'sidebar.step1.msg': '📚 Ottimo! Rivedi le tue basi di conoscenza. Saranno la base dell\'esperienza del tuo agente.',
         'sidebar.step2.msg': '🔧 Ora configuriamo il tuo progetto. Ho precompilato i dettagli in base alla tua descrizione.',
         'sidebar.step3.msg': '🤖 Quasi fatto! Rivedi le impostazioni dell\'agente. Ho ottimizzato il modello e la temperatura per il tuo caso d\'uso.',
-        'sidebar.step4.msg': '🎉 Eccellente! Il tuo agente è pronto per essere distribuito. Scarica i file e segui la guida di distribuzione AWS Bedrock.',
+        'sidebar.step4.msg': '🎉 Eccellente! Il tuo agente è pronto per essere distribuito. Scarica i file e segui la guida di distribuzione Agent Foundry.',
         'sidebar.generating': '✨ Sto chiedendo a Claude AI di generare la configurazione del tuo agente...',
         'sidebar.connected': '🟢 Connesso a Claude Code CLI! Utilizzo connessione locale sulla porta 3001. Tutte le risposte provengono da Claude AI tramite la tua installazione di Claude Code.',
 
@@ -1697,7 +1697,7 @@ Dare sempre priorità alle relazioni clienti a lungo termine rispetto alle vitto
         'sidebar.step1.msg': '📚 Großartig! Überprüfen Sie Ihre Wissensbasen. Sie werden die Grundlage der Expertise Ihres Agenten sein.',
         'sidebar.step2.msg': '🔧 Jetzt konfigurieren wir Ihr Projekt. Ich habe die Details basierend auf Ihrer Beschreibung vorausgefüllt.',
         'sidebar.step3.msg': '🤖 Fast fertig! Überprüfen Sie die Agenteneinstellungen. Ich habe das Modell und die Temperatur für Ihren Anwendungsfall optimiert.',
-        'sidebar.step4.msg': '🎉 Ausgezeichnet! Ihr Agent ist bereit zur Bereitstellung. Laden Sie die Dateien herunter und folgen Sie dem AWS Bedrock Bereitstellungsleitfaden.',
+        'sidebar.step4.msg': '🎉 Ausgezeichnet! Ihr Agent ist bereit zur Bereitstellung. Laden Sie die Dateien herunter und folgen Sie dem Agent Foundry Bereitstellungsleitfaden.',
         'sidebar.generating': '✨ Bitte Claude AI, die Konfiguration Ihres Agenten zu generieren...',
         'sidebar.connected': '🟢 Mit Claude Code CLI verbunden! Verwendung lokaler Verbindung auf Port 3001. Alle Antworten kommen von Claude AI über Ihre Claude Code Installation.',
 
@@ -1940,7 +1940,7 @@ Immer langfristige Kundenbeziehungen über kurzfristige Erfolge priorisieren.`
         'sidebar.step1.msg': '📚 훌륭합니다! 지식 베이스를 검토하세요. 에이전트 전문 지식의 기반이 될 것입니다.',
         'sidebar.step2.msg': '🔧 이제 프로젝트를 구성하겠습니다. 설명을 기반으로 세부 정보를 미리 채웠습니다.',
         'sidebar.step3.msg': '🤖 거의 완료되었습니다! 에이전트 설정을 검토하세요. 사용 사례에 맞게 모델과 온도를 최적화했습니다.',
-        'sidebar.step4.msg': '🎉 훌륭합니다! 에이전트가 배포 준비되었습니다. 파일을 다운로드하고 AWS Bedrock 배포 가이드를 따르세요.',
+        'sidebar.step4.msg': '🎉 훌륭합니다! 에이전트가 배포 준비되었습니다. 파일을 다운로드하고 Agent Foundry 배포 가이드를 따르세요.',
         'sidebar.generating': '✨ Claude AI에게 에이전트 구성 생성을 요청하는 중...',
         'sidebar.connected': '🟢 Claude Code CLI에 연결되었습니다! 포트 3001에서 로컬 연결을 사용합니다. 모든 응답은 Claude Code 설치를 통해 Claude AI에서 제공됩니다.',
 
@@ -2183,7 +2183,7 @@ Immer langfristige Kundenbeziehungen über kurzfristige Erfolge priorisieren.`
         'sidebar.step1.msg': '📚 Geweldig! Bekijk je kennisbanken. Ze zullen de basis vormen van de expertise van je agent.',
         'sidebar.step2.msg': '🔧 Laten we nu je project configureren. Ik heb de details vooraf ingevuld op basis van je beschrijving.',
         'sidebar.step3.msg': '🤖 Bijna klaar! Bekijk de agent instellingen. Ik heb het model en de temperatuur geoptimaliseerd voor jouw use case.',
-        'sidebar.step4.msg': '🎉 Uitstekend! Je agent is klaar om te implementeren. Download de bestanden en volg de AWS Bedrock implementatiegids.',
+        'sidebar.step4.msg': '🎉 Uitstekend! Je agent is klaar om te implementeren. Download de bestanden en volg de Agent Foundry implementatiegids.',
         'sidebar.generating': '✨ Vraag Claude AI om de configuratie van je agent te genereren...',
         'sidebar.connected': '🟢 Verbonden met Claude Code CLI! Gebruik van lokale verbinding op poort 3001. Alle antwoorden komen van Claude AI via je Claude Code installatie.',
 
@@ -6709,11 +6709,11 @@ ${agentConfig.projectDescription}
 This project includes ${knowledgeBases.length} knowledge bases:
 ${knowledgeBases.map((kb, i) => `${i + 1}. ${kb.name}`).join('\n')}
 
-## Setup Steps for AWS Bedrock Agent Foundry
+## Setup Steps for Agent Foundry
 
 ### 1. Create Project
-1. Log into AWS Console
-2. Navigate to Amazon Bedrock → Agent Foundry
+1. Log into Treasure Data Console
+2. Navigate to AI Agent Foundry
 3. Click "Create Project"
 4. Enter project name: **${agentConfig.projectName}**
 5. Enter description: **${agentConfig.projectDescription}**
@@ -6789,7 +6789,7 @@ ${tools.map((tool, i) => `### Tool ${i + 1}: ${tool.name}
 **Knowledge Base:** ${knowledgeBases[i].name}
 `).join('\n')}
 
-## Configuration Steps in AWS Bedrock Agent Foundry
+## Configuration Steps in Agent Foundry
 
 ### 1. Create Agent
 1. In your project, click "Create Agent"
@@ -7622,7 +7622,7 @@ function downloadAllFiles() {
         • Adding Tools (Agent, Image Generator, Workflow Executor)<br>
         • Configuring Outputs (JSON, Text, React/Plotly visualizations)<br>
         • Setting up Prompt Variables (dynamic data injection)<br><br>
-        Check your Downloads folder and follow the guides to deploy your agent to AWS Bedrock!`);
+        Check your Downloads folder and follow the guides to deploy your agent to Agent Foundry!`);
     }, 1500);
 }
 
@@ -7643,11 +7643,11 @@ ${agentConfig.projectDescription}
 This project includes ${knowledgeBases.length} knowledge bases:
 ${knowledgeBases.map((kb, i) => `${i + 1}. ${kb.name}`).join('\n')}
 
-## Setup Steps for AWS Bedrock Agent Foundry
+## Setup Steps for Agent Foundry
 
 ### 1. Create Project
-1. Log into AWS Console
-2. Navigate to Amazon Bedrock → Agent Foundry
+1. Log into Treasure Data Console
+2. Navigate to AI Agent Foundry
 3. Click "Create Project"
 4. Enter project name: **${agentConfig.projectName}**
 5. Enter description: **${agentConfig.projectDescription}**
@@ -7717,7 +7717,7 @@ ${tools.map((tool, i) => `### Tool ${i + 1}: ${tool.name}
 **Knowledge Base:** ${knowledgeBases[i].name}
 `).join('\n')}
 
-## Configuration Steps in AWS Bedrock Agent Foundry
+## Configuration Steps in Agent Foundry
 
 ### 1. Create Agent
 1. In your project, click "Create Agent"
@@ -7935,7 +7935,7 @@ async function downloadAllFilesAsZip() {
         • Adding Tools (Agent, Image Generator, Workflow Executor)<br>
         • Configuring Outputs (JSON, Text, React/Plotly visualizations)<br>
         • Setting up Prompt Variables (dynamic data injection)<br><br>
-        Extract the ZIP file and follow the guides to deploy your agent to AWS Bedrock!`);
+        Extract the ZIP file and follow the guides to deploy your agent to Agent Foundry!`);
     } catch (error) {
         console.error('Error creating ZIP file:', error);
         addChatMessage('assistant', '❌ Failed to create ZIP file. Please try downloading files individually.');
