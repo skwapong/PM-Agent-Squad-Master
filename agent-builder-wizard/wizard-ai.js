@@ -9635,10 +9635,17 @@ IMPORTANT: At the end of your analysis, include a JSON block with actionable rec
 <recommendations>
 {
   "addKnowledgeBases": [
-    {"name": "KB Name", "content": "Initial content for this KB covering..."}
+    {"name": "KB Name", "content": "Initial content for this KB covering... (should be substantial, 200-500 words)"}
   ],
   "addOutputs": [
-    {"functionName": "function_name", "functionDescription": "Description", "outputType": "report", "outputDescription": "What it outputs", "parameters": {"param": "value"}}
+    {
+      "outputName": "Human-readable name",
+      "functionName": "function_name_snake_case",
+      "functionDescription": "What this output does",
+      "outputType": "report",
+      "artifactType": "text",
+      "jsonSchema": "{\"type\": \"object\", \"properties\": {\"field\": {\"type\": \"string\"}}}"
+    }
   ],
   "enhanceSystemPrompt": "Additional text to append to the system prompt that addresses the gaps identified...",
   "adjustParameters": {
@@ -9647,6 +9654,13 @@ IMPORTANT: At the end of your analysis, include a JSON block with actionable rec
   }
 }
 </recommendations>
+
+FIELD REQUIREMENTS:
+- outputName: User-friendly name (e.g., "Budget Reallocation Plan")
+- functionName: Snake case function name (e.g., "generate_budget_reallocation_plan")
+- outputType: Must be one of: report, visualization, test_plan, custom
+- artifactType: Must be one of: text, json, html, csv
+- jsonSchema: Valid JSON schema as a STRING (use escaped quotes)
 
 Format your response as HTML with sections using h4 tags, bullet points in ul/li, and use color classes: text-green-600 for positive, text-amber-600 for suggestions, text-red-600 for issues.`;
 
@@ -9760,8 +9774,14 @@ function applyKnowledgeBaseRecommendations() {
     showToast(`✅ Added ${addedCount} knowledge base${addedCount > 1 ? 's' : ''} successfully!`, 'success');
 
     // Verify the KBs were actually added
-    console.log(`Total KBs after add: ${knowledgeBases.length}`);
-    console.log('Last added KB:', knowledgeBases[knowledgeBases.length - 1]);
+    console.log(`✅ Total KBs after add: ${knowledgeBases.length}`);
+    const lastKB = knowledgeBases[knowledgeBases.length - 1];
+    console.log(`✅ Last added KB:`, {
+        id: lastKB.id,
+        name: lastKB.name,
+        contentLength: lastKB.content?.length || 0,
+        contentPreview: lastKB.content?.substring(0, 100) + '...'
+    });
 
     // Navigate to KB step to show the new additions
     currentStep = 4;
@@ -9779,15 +9799,17 @@ function applyOutputRecommendations() {
 
     let addedCount = 0;
     recommendations.addOutputs.forEach(output => {
-        const outputId = Date.now() + addedCount;
-        outputs.push({
-            id: outputId,
-            functionName: output.functionName,
+        outputCounter++;
+        const newOutput = {
+            id: `output-${outputCounter}`,
+            outputName: output.outputName || output.functionName || '',
+            functionName: output.functionName || '',
             functionDescription: output.functionDescription || '',
             outputType: output.outputType || 'report',
-            outputDescription: output.outputDescription || '',
-            parameters: output.parameters || {}
-        });
+            artifactType: output.artifactType || 'text',
+            jsonSchema: output.jsonSchema || ''
+        };
+        outputs.push(newOutput);
         addedCount++;
     });
 
@@ -9795,8 +9817,16 @@ function applyOutputRecommendations() {
     showToast(`✅ Added ${addedCount} output${addedCount > 1 ? 's' : ''} successfully!`, 'success');
 
     // Verify the outputs were actually added
-    console.log(`Total outputs after add: ${outputs.length}`);
-    console.log('Last added output:', outputs[outputs.length - 1]);
+    console.log(`✅ Total outputs after add: ${outputs.length}`);
+    const lastOutput = outputs[outputs.length - 1];
+    console.log(`✅ Last added output:`, {
+        id: lastOutput.id,
+        outputName: lastOutput.outputName,
+        functionName: lastOutput.functionName,
+        outputType: lastOutput.outputType,
+        artifactType: lastOutput.artifactType,
+        hasJsonSchema: !!lastOutput.jsonSchema
+    });
 
     // Navigate to Outputs step
     currentStep = 5;
@@ -9920,15 +9950,17 @@ async function applyAllRecommendations() {
     // Add outputs (no navigation)
     if (recommendations.addOutputs && recommendations.addOutputs.length > 0) {
         recommendations.addOutputs.forEach(output => {
-            const outputId = Date.now() + addedOutputs;
-            outputs.push({
-                id: outputId,
-                functionName: output.functionName,
+            outputCounter++;
+            const newOutput = {
+                id: `output-${outputCounter}`,
+                outputName: output.outputName || output.functionName || '',
+                functionName: output.functionName || '',
                 functionDescription: output.functionDescription || '',
                 outputType: output.outputType || 'report',
-                outputDescription: output.outputDescription || '',
-                parameters: output.parameters || {}
-            });
+                artifactType: output.artifactType || 'text',
+                jsonSchema: output.jsonSchema || ''
+            };
+            outputs.push(newOutput);
             addedOutputs++;
         });
         renderOutputs();
@@ -9936,6 +9968,12 @@ async function applyAllRecommendations() {
     }
 
     if (actions.length > 0) {
+        // Log what was applied
+        console.log(`✅ Applied ${actions.length} types of recommendations:`, actions);
+        console.log(`✅ Final state - KBs: ${knowledgeBases.length}, Outputs: ${outputs.length}`);
+        console.log(`✅ Temperature: ${agentConfig.temperature}, Max Iterations: ${agentConfig.maxToolsIterations}`);
+        console.log(`✅ System Prompt Length: ${agentConfig.systemPrompt?.length || 0} chars`);
+
         showToast(`🎉 Applied: ${actions.join(', ')}. Re-analyzing agent...`, 'success', 3000);
 
         // Wait a moment then re-analyze
