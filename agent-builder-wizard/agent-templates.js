@@ -646,6 +646,58 @@ IF customer.location IN gdpr_countries:
 - Ignore destination sync errors
 - Activate to all channels simultaneously (test sequentially)`
             }
+        ],
+        outputs: [
+            {
+                outputName: 'customer_segmentation_report',
+                functionName: 'generate_segmentation_report',
+                functionDescription: 'Generate comprehensive customer segmentation analysis with RFM scores, behavioral patterns, and actionable marketing recommendations for each segment',
+                outputType: 'custom',
+                jsonSchema: JSON.stringify({
+                    type: 'object',
+                    properties: {
+                        segments: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    segment_name: { type: 'string' },
+                                    segment_size: { type: 'number' },
+                                    percentage_of_base: { type: 'number' },
+                                    rfm_scores: { type: 'object' },
+                                    key_characteristics: { type: 'array' },
+                                    recommended_strategies: { type: 'array' },
+                                    expected_ltv: { type: 'number' },
+                                    activation_channels: { type: 'array' }
+                                }
+                            }
+                        },
+                        activation_plan: {
+                            type: 'object',
+                            properties: {
+                                priority_segments: { type: 'array' },
+                                quick_wins: { type: 'array' },
+                                measurement_kpis: { type: 'array' }
+                            }
+                        }
+                    },
+                    required: ['segments', 'activation_plan']
+                })
+            },
+            {
+                outputName: ':plotly:',
+                functionName: 'generate_segmentation_charts',
+                functionDescription: 'Create interactive Plotly visualizations for segment distribution, RFM analysis, and customer value breakdown',
+                outputType: 'custom',
+                jsonSchema: JSON.stringify({
+                    type: 'object',
+                    properties: {
+                        data: { type: 'array' },
+                        layout: { type: 'object' }
+                    },
+                    required: ['data', 'layout']
+                })
+            }
         ]
     },
 
@@ -1449,6 +1501,65 @@ https://yoursite.com/cart?utm_source=braze
 \`\`\`
 
 Track across platforms with customer_id to unify attribution.`
+            }
+        ],
+        outputs: [
+            {
+                outputName: 'journey_orchestration_plan',
+                functionName: 'generate_journey_plan',
+                functionDescription: 'Generate comprehensive customer journey orchestration plan with multi-touch touchpoints, trigger logic, personalization rules, and success metrics',
+                outputType: 'custom',
+                jsonSchema: JSON.stringify({
+                    type: 'object',
+                    properties: {
+                        journey_overview: {
+                            type: 'object',
+                            properties: {
+                                journey_name: { type: 'string' },
+                                objective: { type: 'string' },
+                                target_audience: { type: 'object' },
+                                expected_conversion_rate: { type: 'number' }
+                            }
+                        },
+                        touchpoints: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    step_number: { type: 'number' },
+                                    channel: { type: 'string' },
+                                    trigger: { type: 'string' },
+                                    timing: { type: 'string' },
+                                    message_template: { type: 'string' },
+                                    personalization_rules: { type: 'array' }
+                                }
+                            }
+                        },
+                        optimization_strategy: {
+                            type: 'object',
+                            properties: {
+                                a_b_tests: { type: 'array' },
+                                success_metrics: { type: 'array' },
+                                optimization_opportunities: { type: 'array' }
+                            }
+                        }
+                    },
+                    required: ['journey_overview', 'touchpoints', 'optimization_strategy']
+                })
+            },
+            {
+                outputName: ':plotly:',
+                functionName: 'generate_journey_flow_diagram',
+                functionDescription: 'Create interactive Plotly visualization of customer journey flow with conversion rates and drop-off points',
+                outputType: 'custom',
+                jsonSchema: JSON.stringify({
+                    type: 'object',
+                    properties: {
+                        data: { type: 'array' },
+                        layout: { type: 'object' }
+                    },
+                    required: ['data', 'layout']
+                })
             }
         ]
     },
