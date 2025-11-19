@@ -467,6 +467,19 @@
 
                     <!-- Chat Input -->
                     <div class="space-y-2">
+                        <div class="flex justify-end mb-1">
+                            <button
+                                type="button"
+                                id="expandChatInputBtn"
+                                class="text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1"
+                                onclick="toggleChatInputModal()"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
+                                </svg>
+                                Expand
+                            </button>
+                        </div>
                         <textarea
                             id="aiChatInput"
                             rows="3"
@@ -1369,6 +1382,37 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                 >Cancel</button>
                 <button
                     onclick="saveDescriptionFromModal()"
+                    class="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors font-medium"
+                >Save & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Input Expand Modal -->
+    <div id="chatInputModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Describe Your Agent</h3>
+                <button
+                    onclick="toggleChatInputModal()"
+                    class="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                >&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <textarea
+                    id="modalChatInput"
+                    rows="20"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none h-full"
+                    placeholder="Example: I want to build a campaign planning agent that helps marketers create comprehensive marketing campaigns across multiple channels (Meta, Google, TikTok, Pinterest). The agent should help with campaign strategy, budget allocation, audience targeting, creative direction, and performance analytics. It should provide actionable recommendations based on industry best practices and data-driven insights."
+                ></textarea>
+            </div>
+            <div class="flex justify-end gap-3 p-6 border-t border-gray-200">
+                <button
+                    onclick="toggleChatInputModal()"
+                    class="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >Cancel</button>
+                <button
+                    onclick="saveChatInputFromModal()"
                     class="px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition-colors font-medium"
                 >Save & Close</button>
             </div>

@@ -9531,20 +9531,60 @@ function saveDescriptionFromModal() {
 // Close modal on Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        const modal = document.getElementById('descriptionModal');
-        if (modal && !modal.classList.contains('hidden')) {
+        const descModal = document.getElementById('descriptionModal');
+        const chatModal = document.getElementById('chatInputModal');
+
+        if (descModal && !descModal.classList.contains('hidden')) {
             toggleDescriptionModal();
+        } else if (chatModal && !chatModal.classList.contains('hidden')) {
+            toggleChatInputModal();
         }
     }
 });
 
 // Close modal when clicking outside
 document.addEventListener('click', function(e) {
-    const modal = document.getElementById('descriptionModal');
-    if (modal && e.target === modal) {
+    const descModal = document.getElementById('descriptionModal');
+    const chatModal = document.getElementById('chatInputModal');
+
+    if (descModal && e.target === descModal) {
         toggleDescriptionModal();
+    } else if (chatModal && e.target === chatModal) {
+        toggleChatInputModal();
     }
 });
+
+// ============================================================================
+// CHAT INPUT MODAL FUNCTIONS
+// ============================================================================
+
+function toggleChatInputModal() {
+    const modal = document.getElementById('chatInputModal');
+    const mainChatInput = document.getElementById('aiChatInput');
+    const modalChatInput = document.getElementById('modalChatInput');
+
+    if (modal.classList.contains('hidden')) {
+        // Opening modal - copy content from main textarea to modal
+        modalChatInput.value = mainChatInput.value;
+        modal.classList.remove('hidden');
+        // Focus the modal textarea
+        setTimeout(() => modalChatInput.focus(), 100);
+    } else {
+        // Closing modal
+        modal.classList.add('hidden');
+    }
+}
+
+function saveChatInputFromModal() {
+    const mainChatInput = document.getElementById('aiChatInput');
+    const modalChatInput = document.getElementById('modalChatInput');
+
+    // Copy content from modal to main textarea
+    mainChatInput.value = modalChatInput.value;
+
+    // Close modal
+    toggleChatInputModal();
+}
 
 // ============================================================================
 // INITIALIZATION
