@@ -8,6 +8,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="td-theme.css">
     <style>
+        /* Make all text selectable for easy copying */
+        * {
+            user-select: text;
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+        }
+
+        /* Keep buttons non-selectable for better UX */
+        button, .drag-handle {
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
         .step-content {
             display: none;
         }
