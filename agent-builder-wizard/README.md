@@ -177,18 +177,42 @@ Domain: Marketing Analytics & Optimization
 - Drag & drop reordering
 - 18,000 character limit per KB
 
+**Knowledge Base Types:**
+
+**1. 📄 Text Knowledge Bases** (Default)
+- Static knowledge content (best practices, guidelines, frameworks)
+- Markdown formatted for readability
+- Great for: Process documentation, strategy guides, best practices
+- Example: "Platform Advertising Best Practices for Meta, Google, TikTok"
+
+**2. 🗄️ Database Knowledge Bases** (NEW - TD Integration)
+- Connect to Treasure Data audience databases
+- Real-time access to customer profiles and segments
+- Perfect for: Audience segmentation, customer analytics, personalization
+- Requires: Database name, table name, optional schema description
+- Uses TD MCP server for secure database access
+
 **Features:**
 - ✅ Add/remove KBs dynamically
+- ✅ Switch between Text and Database types
 - ✅ Expandable editors for large content
 - ✅ Real-time character counter with visual warnings
 - ✅ Duplicate KB option
 - ✅ Import/export KB content
+- ✅ Auto-suggests target function based on KB type
 
-**Example Knowledge Bases:**
+**Example Text Knowledge Bases:**
 1. **Platform Advertising Best Practices**: Meta, Google, TikTok specs and strategies
 2. **Budget Optimization Frameworks**: ROAS analysis, MMM, attribution models
 3. **Creative Performance Analysis**: A/B testing, creative fatigue, messaging frameworks
 4. **Performance Metrics & KPIs**: CAC, LTV, ROAS, conversion tracking
+
+**Example Database Knowledge Base:**
+- **Name:** TD Customer Profiles Database
+- **Database:** treasure_data
+- **Table:** customer_profiles
+- **Description:** Customer RFM scores, behavioral data, engagement metrics, churn risk scores
+- **Use Case:** Real-time audience segmentation, personalized campaign targeting
 
 ---
 

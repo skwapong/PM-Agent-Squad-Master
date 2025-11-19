@@ -5417,6 +5417,7 @@ function renderKnowledgeBases() {
         kbDiv.className = 'bg-gray-50 rounded-lg p-4 border border-gray-200';
         kbDiv.id = kb.id;
 
+        const kbType = kb.type || 'text';
         kbDiv.innerHTML = `
             <div class="flex justify-between items-start mb-3">
                 <div class="flex-1">
@@ -5437,18 +5438,92 @@ function renderKnowledgeBases() {
                     ${getTranslation('button.remove')}
                 </button>
             </div>
-            <div>
+
+            <div class="mb-3">
                 <label class="block text-sm font-medium text-gray-700 mb-1">
-                    ${getTranslation('step1.kb.content')} <span class="text-red-500">*</span>
+                    Knowledge Base Type <span class="text-red-500">*</span>
                 </label>
-                <textarea
-                    id="${kb.id}-content"
-                    rows="8"
-                    class="w-full border border-gray-300 rounded px-3 py-2 text-sm kb-editor focus:ring-2 focus:ring-indigo-500"
-                >${kb.content}</textarea>
-                <div class="flex justify-between items-center mt-1">
-                    <span id="${kb.id}-char-count" class="text-xs text-gray-500">${kb.content.length.toLocaleString()} / 18,000 ${getTranslation('step1.kb.characters')}</span>
-                    <button class="text-xs text-indigo-600 hover:text-indigo-700">${getTranslation('button.expand')}</button>
+                <select
+                    id="${kb.id}-type"
+                    class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                    onchange="handleKBTypeChange('${kb.id}')"
+                >
+                    <option value="text" ${kbType === 'text' ? 'selected' : ''}>📄 Text Knowledge Base</option>
+                    <option value="database" ${kbType === 'database' ? 'selected' : ''}>🗄️ Database (TD Audience Data)</option>
+                </select>
+                <p class="text-xs text-gray-500 mt-1">
+                    ${kbType === 'text' ? 'Text-based knowledge for agent expertise' : 'Connect to Treasure Data audience databases'}
+                </p>
+            </div>
+
+            <div id="${kb.id}-text-fields" style="display: ${kbType === 'text' ? 'block' : 'none'};">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        ${getTranslation('step1.kb.content')} <span class="text-red-500">*</span>
+                    </label>
+                    <textarea
+                        id="${kb.id}-content"
+                        rows="8"
+                        class="w-full border border-gray-300 rounded px-3 py-2 text-sm kb-editor focus:ring-2 focus:ring-indigo-500"
+                    >${kb.content || ''}</textarea>
+                    <div class="flex justify-between items-center mt-1">
+                        <span id="${kb.id}-char-count" class="text-xs text-gray-500">${(kb.content || '').length.toLocaleString()} / 18,000 ${getTranslation('step1.kb.characters')}</span>
+                        <button class="text-xs text-indigo-600 hover:text-indigo-700">${getTranslation('button.expand')}</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="${kb.id}-database-fields" style="display: ${kbType === 'database' ? 'block' : 'none'};">
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Database Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="${kb.id}-database"
+                            value="${kb.database || ''}"
+                            placeholder="e.g., treasure_data_audiences"
+                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <p class="text-xs text-gray-500 mt-1">The Treasure Data database containing audience data</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Table Name <span class="text-red-500">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="${kb.id}-table"
+                            value="${kb.table || ''}"
+                            placeholder="e.g., customer_profiles, campaign_audiences"
+                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <p class="text-xs text-gray-500 mt-1">The table containing the audience segments or customer data</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                            Description
+                        </label>
+                        <textarea
+                            id="${kb.id}-content"
+                            rows="3"
+                            placeholder="Optional: Describe the database schema, key columns, and what audience data is available..."
+                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
+                        >${kb.content || ''}</textarea>
+                        <p class="text-xs text-gray-500 mt-1">
+                            💡 Tip: Document important columns (user_id, segment, ltv, engagement_score, etc.)
+                        </p>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <div class="flex items-start gap-2">
+                            <span class="text-blue-600">ℹ️</span>
+                            <div class="text-xs text-blue-900">
+                                <strong>Database Connection:</strong> This KB will use the Treasure Data MCP to access audience data.
+                                Make sure the TD MCP server is configured and the database/table exists.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         `;
@@ -5463,28 +5538,76 @@ function renderKnowledgeBases() {
             }
         });
 
-        document.getElementById(`${kb.id}-content`).addEventListener('input', function() {
+        document.getElementById(`${kb.id}-content`)?.addEventListener('input', function() {
             const kbIndex = knowledgeBases.findIndex(k => k.id === kb.id);
             if (kbIndex !== -1) {
                 knowledgeBases[kbIndex].content = this.value;
             }
             updateCharCount(kb.id);
         });
+
+        // Add database field listeners if database type
+        if (kb.type === 'database') {
+            document.getElementById(`${kb.id}-database`)?.addEventListener('input', function() {
+                const kbIndex = knowledgeBases.findIndex(k => k.id === kb.id);
+                if (kbIndex !== -1) {
+                    knowledgeBases[kbIndex].database = this.value;
+                }
+            });
+
+            document.getElementById(`${kb.id}-table`)?.addEventListener('input', function() {
+                const kbIndex = knowledgeBases.findIndex(k => k.id === kb.id);
+                if (kbIndex !== -1) {
+                    knowledgeBases[kbIndex].table = this.value;
+                }
+            });
+        }
     });
 }
 
+// Handle KB type change
+function handleKBTypeChange(kbId) {
+    const typeSelect = document.getElementById(`${kbId}-type`);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (kbIndex === -1) return;
+
+    const newType = typeSelect.value;
+    knowledgeBases[kbIndex].type = newType;
+
+    // Add/remove database fields based on type
+    if (newType === 'database') {
+        knowledgeBases[kbIndex].database = knowledgeBases[kbIndex].database || '';
+        knowledgeBases[kbIndex].table = knowledgeBases[kbIndex].table || '';
+    } else {
+        delete knowledgeBases[kbIndex].database;
+        delete knowledgeBases[kbIndex].table;
+        delete knowledgeBases[kbIndex].connectionString;
+    }
+
+    // Re-render to show/hide appropriate fields
+    renderKnowledgeBases();
+
+    console.log(`🔄 Changed KB "${knowledgeBases[kbIndex].name}" type to: ${newType}`);
+}
+
 // Add Knowledge Base
-function addKnowledgeBase(name = '', content = '') {
+function addKnowledgeBase(name = '', content = '', type = 'text') {
     kbCounter++;
     const newKB = {
         id: `kb-${kbCounter}`,
         name: name,
-        content: content
+        content: content,
+        type: type || 'text', // 'text' or 'database'
+        // Database-specific fields
+        database: type === 'database' ? '' : undefined,
+        table: type === 'database' ? '' : undefined,
+        connectionString: type === 'database' ? '' : undefined
     };
     knowledgeBases.push(newKB);
     renderKnowledgeBases();
 
-    console.log(`✅ Added KB: "${name}" (${content.length} chars)`);
+    console.log(`✅ Added KB: "${name}" (type: ${type}, ${content.length} chars)`);
 }
 
 // Remove Knowledge Base

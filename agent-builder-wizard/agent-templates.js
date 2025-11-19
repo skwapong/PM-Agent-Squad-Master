@@ -645,6 +645,95 @@ IF customer.location IN gdpr_countries:
 - Sync PII to unsecured destinations
 - Ignore destination sync errors
 - Activate to all channels simultaneously (test sequentially)`
+            },
+            {
+                name: 'TD Customer Profiles Database',
+                type: 'database',
+                database: 'treasure_data',
+                table: 'customer_profiles',
+                content: `# Treasure Data Customer Profiles Database
+
+## Database Structure
+
+**Database:** treasure_data
+**Table:** customer_profiles
+
+## Key Columns
+
+### Customer Identifiers
+- \`customer_id\` (string): Unique customer identifier
+- \`email_hash\` (string): Hashed email for privacy
+- \`td_client_id\` (string): Treasure Data client ID
+- \`created_date\` (timestamp): Account creation date
+
+### RFM Metrics
+- \`last_purchase_date\` (timestamp): Date of most recent purchase
+- \`purchase_count\` (integer): Total number of purchases
+- \`total_spend\` (decimal): Lifetime customer value
+- \`avg_order_value\` (decimal): Average transaction amount
+- \`recency_score\` (integer): RFM recency score (1-5)
+- \`frequency_score\` (integer): RFM frequency score (1-5)
+- \`monetary_score\` (integer): RFM monetary score (1-5)
+- \`rfm_segment\` (string): Calculated RFM segment name
+
+### Behavioral Data
+- \`product_categories\` (array): Purchased product categories
+- \`favorite_category\` (string): Most purchased category
+- \`channel_preference\` (string): Preferred purchase channel (web, mobile, store)
+- \`last_campaign_engagement\` (timestamp): Last marketing interaction
+- \`email_engagement_score\` (decimal): Email open/click rate (0-100)
+- \`churn_risk_score\` (decimal): Predicted churn probability (0-100)
+- \`predicted_ltv\` (decimal): Predicted lifetime value
+
+### Demographic Attributes
+- \`age_range\` (string): Age bracket
+- \`location_city\` (string): City
+- \`location_state\` (string): State/province
+- \`location_country\` (string): Country
+
+### Engagement Metrics
+- \`web_sessions_30d\` (integer): Website sessions in last 30 days
+- \`app_sessions_30d\` (integer): Mobile app sessions in last 30 days
+- \`email_opens_30d\` (integer): Email opens in last 30 days
+- \`support_tickets_90d\` (integer): Support interactions in last 90 days
+
+## Example Queries
+
+### High-Value At-Risk Customers
+\`\`\`sql
+SELECT customer_id, total_spend, last_purchase_date, churn_risk_score
+FROM customer_profiles
+WHERE total_spend > 1000
+  AND churn_risk_score > 70
+  AND recency_score <= 2
+\`\`\`
+
+### Champions Segment
+\`\`\`sql
+SELECT customer_id, rfm_segment, total_spend, purchase_count
+FROM customer_profiles
+WHERE rfm_segment = 'Champions'
+  OR (recency_score = 5 AND frequency_score >= 4 AND monetary_score >= 4)
+\`\`\`
+
+### Email Engaged Customers
+\`\`\`sql
+SELECT customer_id, email_engagement_score, email_opens_30d
+FROM customer_profiles
+WHERE email_engagement_score > 60
+  AND email_opens_30d > 0
+\`\`\`
+
+## Data Freshness
+- Updated daily at 2:00 AM UTC
+- Real-time behavioral data has 15-minute lag
+- Purchase data synchronized hourly
+
+## Privacy & Compliance
+- All PII is hashed or encrypted
+- GDPR/CCPA compliant
+- Opt-out customers excluded from marketing segments
+- Data retention: 24 months from last activity`
             }
         ],
         outputs: [
