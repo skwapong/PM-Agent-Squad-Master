@@ -9829,7 +9829,7 @@ If providing a refined version, wrap it in:
             displayHTML = response.replace(/<refined-prompt>[\s\S]*?<\/refined-prompt>/, '');
         }
 
-        resultsDiv.innerHTML = `
+        const suggestionsHTML = `
             <div class="prose max-w-none">
                 ${displayHTML}
             </div>
@@ -9862,6 +9862,11 @@ If providing a refined version, wrap it in:
             `}
         `;
 
+        resultsDiv.innerHTML = suggestionsHTML;
+
+        // Store the suggestions HTML for back button
+        window.currentRefinementSuggestions = suggestionsHTML;
+
     } catch (error) {
         resultsDiv.innerHTML = `
             <div class="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -9890,12 +9895,19 @@ function previewRefinedPrompt() {
                 <button onclick="applyRefinedPrompt()" class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     ✅ Apply This Prompt
                 </button>
-                <button onclick="refineSystemPrompt()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                <button onclick="backToSuggestions()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
                     ← Back to Suggestions
                 </button>
             </div>
         </div>
     `;
+}
+
+function backToSuggestions() {
+    const resultsDiv = document.getElementById('refinePromptResults');
+    if (window.currentRefinementSuggestions) {
+        resultsDiv.innerHTML = window.currentRefinementSuggestions;
+    }
 }
 
 function applyRefinedPrompt() {
