@@ -17,7 +17,7 @@ const agentTemplates = [
             tone: 'analytical',
             audience: 'Data analysts, marketing operations teams, and campaign managers',
             domain: 'Customer Data Platform & Marketing Analytics',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.3,
             maxToolsIterations: 5,
             systemPrompt: `You are an expert Customer Segmentation Agent specializing in enterprise Customer Data Platforms (CDP).
@@ -664,7 +664,7 @@ IF customer.location IN gdpr_countries:
             tone: 'strategic',
             audience: 'Marketing automation specialists, campaign managers, and CRM teams',
             domain: 'Marketing Automation & Customer Experience',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.5,
             maxToolsIterations: 7,
             systemPrompt: `You are an expert Customer Journey Orchestration Agent specializing in enterprise marketing automation and omnichannel customer experiences.
@@ -1469,7 +1469,7 @@ Track across platforms with customer_id to unify attribution.`
             tone: 'analytical',
             audience: 'Marketing managers, campaign planners, and marketing operations teams',
             domain: 'Digital Marketing & Budget Management',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.4,
             maxToolsIterations: 5,
             systemPrompt: `You are an expert Campaign Budget Optimization Agent specializing in multi-channel marketing budget allocation and performance optimization.
@@ -1984,7 +1984,7 @@ Use data-driven insights, clear financial analysis, and actionable recommendatio
             tone: 'analytical',
             audience: 'Marketing strategists, data analysts, and audience managers',
             domain: 'Marketing Analytics & Audience Intelligence',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.3,
             maxToolsIterations: 5,
             systemPrompt: `You are an expert Audience Insights Analyzer specializing in customer behavior analysis, segmentation, and targeting optimization.
@@ -2718,7 +2718,7 @@ Group users by shared characteristics or experiences, then track behavior over t
             tone: 'analytical',
             audience: 'Creative teams, media buyers, and performance marketers',
             domain: 'Digital Advertising & Creative Optimization',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.4,
             maxToolsIterations: 4,
             systemPrompt: `You are an expert Creative Performance Analyst specializing in digital advertising creative optimization across Meta, Google, TikTok, and other platforms.
@@ -3368,7 +3368,7 @@ Deliver actionable creative insights that drive performance improvement and effi
             tone: 'Professional and data-driven',
             audience: 'Marketing managers, executives, and clients',
             domain: 'Marketing Analytics & Reporting',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.4,
             maxToolsIterations: 5,
             systemPrompt: `You are a Campaign Report Generator Agent, an expert in creating comprehensive, professional campaign performance reports that combine data analysis with strategic insights.
@@ -4547,7 +4547,7 @@ For custom or ad-hoc reports:
             tone: 'Strategic and collaborative',
             audience: 'Marketing directors, campaign managers, and cross-functional teams',
             domain: 'Multi-Channel Marketing Strategy',
-            model: 'anthropic.claude-sonnet-4-5-v1:0',
+            model: 'anthropic.claude-4.5-sonnet',
             temperature: 0.5,
             maxToolsIterations: 6,
             systemPrompt: `You are a Multi-Channel Campaign Coordinator Agent, an expert in orchestrating complex marketing campaigns across multiple channels to achieve cohesive brand messaging and optimal cross-channel performance.
