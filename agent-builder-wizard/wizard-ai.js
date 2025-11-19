@@ -7433,7 +7433,7 @@ function viewOutputWebpage() {
 
                             <div>
                                 <strong>Target Function:</strong>
-                                <div class="field-value">Query data directly (Presto SQL)</div>
+                                <div class="field-value">Read</div>
                             </div>
                         </div>
                         `;
@@ -7484,7 +7484,10 @@ function viewOutputWebpage() {
                         ${functionDescription ? `
                         <div style="margin-bottom: 12px;">
                             <strong>Function Description:</strong>
-                            <div class="field-value">${functionDescription}</div>
+                            <div class="copy-box">
+                                <button class="copy-btn" onclick="copyToClipboard('output-desc-${i}')">📋 Copy</button>
+                                <div id="output-desc-${i}" class="field-value">${functionDescription}</div>
+                            </div>
                         </div>
                         ` : ''}
                         <div style="margin-bottom: 12px;">
@@ -8444,7 +8447,7 @@ function generateOutputWebpageHTML() {
 
                             <div>
                                 <strong>Target Function:</strong>
-                                <div class="field-value">Query data directly (Presto SQL)</div>
+                                <div class="field-value">Read</div>
                             </div>
                         </div>
                         `;
@@ -8495,7 +8498,10 @@ function generateOutputWebpageHTML() {
                         ${functionDescription ? `
                         <div style="margin-bottom: 12px;">
                             <strong>Function Description:</strong>
-                            <div class="field-value">${functionDescription}</div>
+                            <div class="copy-box">
+                                <button class="copy-btn" onclick="copyToClipboard('output-desc-${i}')">📋 Copy</button>
+                                <div id="output-desc-${i}" class="field-value">${functionDescription}</div>
+                            </div>
                         </div>
                         ` : ''}
                         <div style="margin-bottom: 12px;">
