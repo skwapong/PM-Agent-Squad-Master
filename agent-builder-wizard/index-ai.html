@@ -970,9 +970,14 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                                         <p class="text-xs text-gray-500" data-i18n="step3.prompt.tip">AI-generated system prompt based on your description</p>
                                         <span id="systemPromptCharCount" class="text-xs font-medium text-gray-600">0 / 9000</span>
                                     </div>
-                                    <button id="regeneratePromptBtn" class="text-xs text-indigo-600 hover:text-indigo-700" data-i18n="button.regenerate">
-                                        🔄 Regenerate
-                                    </button>
+                                    <div class="flex items-center gap-2">
+                                        <button id="refinePromptBtn" class="text-xs text-purple-600 hover:text-purple-700 font-medium" title="Get AI suggestions to improve this prompt">
+                                            ✨ Refine with AI
+                                        </button>
+                                        <button id="regeneratePromptBtn" class="text-xs text-indigo-600 hover:text-indigo-700" data-i18n="button.regenerate">
+                                            🔄 Regenerate
+                                        </button>
+                                    </div>
                                 </div>
                                 <div id="systemPromptWarning" class="mt-2 text-xs text-amber-600 font-medium hidden">
                                     ⚠️ System prompt is approaching the 9000 character limit
@@ -1532,6 +1537,31 @@ The agent should be strategic, data-driven, and provide actionable recommendatio
                     onclick="closeTestAgentModal()"
                     class="px-4 py-2 text-white bg-green-600 hover:bg-green-700 rounded-lg transition-colors"
                 >Done Testing</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Refine System Prompt Modal -->
+    <div id="refinePromptModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    AI System Prompt Refinement
+                </h3>
+                <button onclick="closeRefinePromptModal()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <div id="refinePromptResults" class="space-y-4">
+                    <div id="refinePromptLoading" class="text-center py-12">
+                        <div class="inline-flex items-center gap-3">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                            <span class="text-gray-600">Analyzing your system prompt...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

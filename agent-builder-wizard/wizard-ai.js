@@ -2549,6 +2549,9 @@ function setupEventListeners() {
     // Regenerate prompt
     document.getElementById('regeneratePromptBtn')?.addEventListener('click', regenerateSystemPrompt);
 
+    // Refine prompt with AI
+    document.getElementById('refinePromptBtn')?.addEventListener('click', refineSystemPrompt);
+
     // Add KB button
     document.getElementById('addKBBtn')?.addEventListener('click', addKnowledgeBase);
 
@@ -9755,6 +9758,166 @@ Format your response as HTML with sections using h4 tags, bullet points in ul/li
 
 function closeOptimizeModal() {
     document.getElementById('optimizeModal').classList.add('hidden');
+}
+
+// ============================================================================
+// REFINE SYSTEM PROMPT WITH AI
+// ============================================================================
+
+async function refineSystemPrompt() {
+    const modal = document.getElementById('refinePromptModal');
+    const loadingDiv = document.getElementById('refinePromptLoading');
+    const resultsDiv = document.getElementById('refinePromptResults');
+
+    const currentPrompt = agentConfig.systemPrompt;
+    if (!currentPrompt || currentPrompt.trim().length === 0) {
+        showToast('⚠️ Please generate or write a system prompt first', 'warning');
+        return;
+    }
+
+    // Show modal and loading state
+    modal.classList.remove('hidden');
+    loadingDiv.style.display = 'block';
+    resultsDiv.innerHTML = loadingDiv.outerHTML;
+
+    try {
+        const refinementPrompt = `You are an expert at writing effective AI agent system prompts. Analyze this system prompt and provide specific, actionable suggestions to improve it.
+
+**Current System Prompt:**
+${currentPrompt}
+
+**Agent Context:**
+- Name: ${agentConfig.name}
+- Domain: ${agentConfig.domain}
+- Model: ${agentConfig.model}
+- Temperature: ${agentConfig.temperature}
+- Character Count: ${currentPrompt.length} / 9000
+
+**Your Task:**
+Analyze the prompt for:
+1. **Clarity & Structure** - Is the role and purpose crystal clear? Is it well-organized?
+2. **Specificity** - Are instructions specific enough? Any vague language?
+3. **Completeness** - Missing important capabilities, constraints, or guidelines?
+4. **Effectiveness** - Will this prompt produce high-quality, consistent outputs?
+5. **Optimization** - Can it be more concise without losing quality?
+
+**Provide:**
+1. **Strengths** - What's working well (2-3 points)
+2. **Issues** - Problems that need fixing (if any)
+3. **Suggestions** - Specific improvements with examples
+4. **Refined Version** - An improved version of the prompt (if improvements needed)
+
+Format as HTML with h4 tags and color classes: text-green-600 for strengths, text-red-600 for issues, text-amber-600 for suggestions.
+
+If providing a refined version, wrap it in:
+<refined-prompt>
+...improved prompt here...
+</refined-prompt>`;
+
+        const response = await claudeAPI.sendMessage(refinementPrompt, []);
+
+        // Check if there's a refined version
+        const refinedMatch = response.match(/<refined-prompt>([\s\S]*?)<\/refined-prompt>/);
+        let hasRefinedVersion = false;
+        let displayHTML = response;
+
+        if (refinedMatch) {
+            hasRefinedVersion = true;
+            const refinedPrompt = refinedMatch[1].trim();
+            window.currentRefinedPrompt = refinedPrompt;
+            // Remove the refined prompt from display (we'll show it as a button)
+            displayHTML = response.replace(/<refined-prompt>[\s\S]*?<\/refined-prompt>/, '');
+        }
+
+        resultsDiv.innerHTML = `
+            <div class="prose max-w-none">
+                ${displayHTML}
+            </div>
+            ${hasRefinedVersion ? `
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <h4 class="text-lg font-semibold text-gray-900 mb-4">✨ Apply Improvements</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button onclick="previewRefinedPrompt()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                            </svg>
+                            Preview Refined Prompt
+                        </button>
+                        <button onclick="applyRefinedPrompt()" class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all shadow-lg flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Apply Refined Prompt
+                        </button>
+                    </div>
+                </div>
+            ` : `
+                <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                    <p class="text-green-600 font-medium">✅ Your system prompt looks good! No major improvements needed.</p>
+                    <button onclick="closeRefinePromptModal()" class="mt-3 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                        Close
+                    </button>
+                </div>
+            `}
+        `;
+
+    } catch (error) {
+        resultsDiv.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p class="text-red-900"><strong>❌ Error:</strong> ${error.message}</p>
+                <p class="text-sm text-red-700 mt-2">Please ensure Claude Code CLI is running and try again.</p>
+            </div>
+        `;
+    }
+}
+
+function closeRefinePromptModal() {
+    document.getElementById('refinePromptModal').classList.add('hidden');
+}
+
+function previewRefinedPrompt() {
+    if (!window.currentRefinedPrompt) return;
+
+    const modal = document.getElementById('refinePromptResults');
+    modal.innerHTML = `
+        <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+            <h4 class="text-lg font-semibold text-gray-900 mb-4">📄 Refined System Prompt Preview</h4>
+            <div class="bg-white rounded border border-gray-300 p-4 max-h-96 overflow-y-auto">
+                <pre class="whitespace-pre-wrap text-sm font-mono">${window.currentRefinedPrompt}</pre>
+            </div>
+            <div class="flex gap-3 mt-4">
+                <button onclick="applyRefinedPrompt()" class="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    ✅ Apply This Prompt
+                </button>
+                <button onclick="refineSystemPrompt()" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    ← Back to Suggestions
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function applyRefinedPrompt() {
+    if (!window.currentRefinedPrompt) return;
+
+    const previousLength = agentConfig.systemPrompt?.length || 0;
+    agentConfig.systemPrompt = window.currentRefinedPrompt;
+
+    // Update the textarea
+    const textarea = document.getElementById('systemPrompt');
+    if (textarea) {
+        textarea.value = window.currentRefinedPrompt;
+        updateSystemPromptCharCount();
+    }
+
+    const newLength = window.currentRefinedPrompt.length;
+    const lengthChange = newLength - previousLength;
+    const changeText = lengthChange > 0 ? `+${lengthChange}` : `${lengthChange}`;
+
+    showToast(`✅ Refined prompt applied! (${changeText} chars)`, 'success');
+
+    closeRefinePromptModal();
 }
 
 // ============================================================================
