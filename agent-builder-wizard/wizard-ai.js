@@ -5482,11 +5482,20 @@ function renderKnowledgeBases() {
                         <input
                             type="text"
                             id="${kb.id}-database"
+                            list="${kb.id}-database-list"
                             value="${kb.database || ''}"
-                            placeholder="e.g., treasure_data_audiences"
+                            placeholder="Select or type database name..."
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
                         />
-                        <p class="text-xs text-gray-500 mt-1">The Treasure Data database containing audience data</p>
+                        <datalist id="${kb.id}-database-list">
+                            <option value="treasure_data">Default TD Database</option>
+                            <option value="treasure_data_audiences">Audience Data</option>
+                            <option value="treasure_data_cdp">Customer Data Platform</option>
+                            <option value="marketing_analytics">Marketing Analytics</option>
+                            <option value="customer_360">Customer 360 View</option>
+                            <option value="engagement_data">Engagement & Behavioral Data</option>
+                        </datalist>
+                        <p class="text-xs text-gray-500 mt-1">Select from common databases or type a custom name</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -5495,11 +5504,23 @@ function renderKnowledgeBases() {
                         <input
                             type="text"
                             id="${kb.id}-table"
+                            list="${kb.id}-table-list"
                             value="${kb.table || ''}"
-                            placeholder="e.g., customer_profiles, campaign_audiences"
+                            placeholder="Select or type table name..."
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
                         />
-                        <p class="text-xs text-gray-500 mt-1">The table containing the audience segments or customer data</p>
+                        <datalist id="${kb.id}-table-list">
+                            <option value="customer_profiles">Customer Profiles (RFM, demographics)</option>
+                            <option value="campaign_audiences">Campaign Audiences</option>
+                            <option value="user_segments">User Segments</option>
+                            <option value="engagement_events">Engagement Events</option>
+                            <option value="purchase_history">Purchase History</option>
+                            <option value="web_behavioral_data">Web Behavioral Data</option>
+                            <option value="email_engagement">Email Engagement</option>
+                            <option value="churn_predictions">Churn Predictions</option>
+                            <option value="lifetime_value_scores">Lifetime Value Scores</option>
+                        </datalist>
+                        <p class="text-xs text-gray-500 mt-1">Select from common tables or type a custom name</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
