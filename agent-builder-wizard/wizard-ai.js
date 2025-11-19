@@ -9587,6 +9587,298 @@ function saveChatInputFromModal() {
 }
 
 // ============================================================================
+// OPTIMIZE AGENT FUNCTIONS
+// ============================================================================
+
+async function optimizeAgent() {
+    const modal = document.getElementById('optimizeModal');
+    const loadingDiv = document.getElementById('optimizeLoading');
+    const resultsDiv = document.getElementById('optimizationResults');
+
+    // Show modal and loading state
+    modal.classList.remove('hidden');
+    loadingDiv.style.display = 'block';
+    resultsDiv.innerHTML = loadingDiv.outerHTML;
+
+    try {
+        // Build analysis prompt
+        const analysisPrompt = `You are an AI agent optimization expert. Analyze this agent configuration and provide actionable recommendations to improve it.
+
+**Agent Configuration:**
+- Name: ${agentConfig.name}
+- Domain: ${agentConfig.domain}
+- Model: ${agentConfig.model}
+- Temperature: ${agentConfig.temperature}
+- Max Tools Iterations: ${agentConfig.maxToolsIterations}
+- Number of Knowledge Bases: ${knowledgeBases.length}
+- Number of Outputs: ${outputs.length}
+- System Prompt Length: ${agentConfig.systemPrompt?.length || 0} characters
+
+**System Prompt Preview:**
+${agentConfig.systemPrompt?.substring(0, 500)}...
+
+**Knowledge Bases:**
+${knowledgeBases.map((kb, i) => `${i + 1}. ${kb.name} (${kb.content?.length || 0} chars)`).join('\n')}
+
+**Outputs:**
+${outputs.map((out, i) => `${i + 1}. ${out.functionName} (${out.outputType})`).join('\n')}
+
+Provide optimization recommendations in the following categories:
+1. **System Prompt** - How to improve clarity, specificity, and effectiveness
+2. **Model Selection** - Is the current model optimal for this use case?
+3. **Temperature & Parameters** - Are temperature and max iterations appropriate?
+4. **Knowledge Bases** - Are they well-organized? Any gaps or redundancies?
+5. **Outputs** - Are the outputs appropriate? Any missing outputs?
+6. **Overall Quality Score** - Rate 0-100 with justification
+
+Format your response as HTML with sections using h4 tags, bullet points in ul/li, and use color classes: text-green-600 for positive, text-amber-600 for suggestions, text-red-600 for issues.`;
+
+        // Call Claude API
+        const response = await claudeAPI.sendMessage(analysisPrompt, []);
+
+        // Hide loading, show results
+        resultsDiv.innerHTML = `
+            <div class="prose max-w-none">
+                ${response}
+            </div>
+        `;
+
+    } catch (error) {
+        resultsDiv.innerHTML = `
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p class="text-red-900"><strong>❌ Error:</strong> ${error.message}</p>
+                <p class="text-sm text-red-700 mt-2">Please ensure Claude Code CLI is running and try again.</p>
+            </div>
+        `;
+    }
+}
+
+function closeOptimizeModal() {
+    document.getElementById('optimizeModal').classList.add('hidden');
+}
+
+// ============================================================================
+// TEST AGENT FUNCTIONS
+// ============================================================================
+
+const testChatHistory = [];
+
+// Sample queries by domain
+const domainSampleQueries = {
+    marketing: [
+        "Create a campaign plan for launching a new product on social media",
+        "What's the best way to allocate a $50K budget across Meta and Google?",
+        "How do I improve my campaign's conversion rate?",
+        "Analyze this campaign: 100K impressions, 2K clicks, 50 conversions"
+    ],
+    sales: [
+        "How do I qualify a lead effectively?",
+        "Create an email template for following up with prospects",
+        "What's the best way to handle price objections?",
+        "Help me prepare for a discovery call with an enterprise client"
+    ],
+    support: [
+        "How do I handle an angry customer complaint?",
+        "Create a knowledge base article about password resets",
+        "What's the escalation process for critical issues?",
+        "Help me write a response to a refund request"
+    ],
+    hr: [
+        "Create an onboarding checklist for new engineers",
+        "How do I handle a performance improvement plan?",
+        "What are best practices for conducting interviews?",
+        "Help me write a job description for a senior product manager"
+    ],
+    it: [
+        "How do I troubleshoot a network connectivity issue?",
+        "Create a security incident response plan",
+        "What's the best way to manage software licenses?",
+        "Help me document our backup and recovery process"
+    ]
+};
+
+function openTestAgentModal() {
+    const modal = document.getElementById('testAgentModal');
+    const agentNameSpan = document.getElementById('testAgentName');
+    const domainSpan = document.getElementById('testAgentDomain');
+    const sampleQueriesDiv = document.getElementById('sampleQueries');
+
+    // Set agent name and domain
+    agentNameSpan.textContent = agentConfig.name || 'Your Agent';
+    domainSpan.textContent = agentConfig.domain || 'general topics';
+
+    // Load sample queries
+    const queries = domainSampleQueries[agentConfig.domain] || [
+        "What can you help me with?",
+        "Tell me about your capabilities",
+        "How do I get started?",
+        "What kind of questions can I ask?"
+    ];
+
+    sampleQueriesDiv.innerHTML = queries.map(query => `
+        <button
+            onclick="fillTestQuery('${query.replace(/'/g, "\\'")}')"
+            class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-full transition-colors"
+        >${query}</button>
+    `).join('');
+
+    // Clear previous chat
+    testChatHistory.length = 0;
+    const messagesDiv = document.getElementById('testChatMessages');
+    messagesDiv.innerHTML = `
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm text-blue-900">
+                <strong>👋 Welcome!</strong> This is a simulation of how your agent will respond.
+                Try asking questions related to: <strong class="text-blue-700">${agentConfig.domain || 'general topics'}</strong>
+            </p>
+        </div>
+    `;
+
+    modal.classList.remove('hidden');
+}
+
+function closeTestAgentModal() {
+    document.getElementById('testAgentModal').classList.add('hidden');
+}
+
+function fillTestQuery(query) {
+    document.getElementById('testChatInput').value = query;
+    document.getElementById('testChatInput').focus();
+}
+
+async function sendTestMessage() {
+    const input = document.getElementById('testChatInput');
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // Add user message to chat
+    addTestMessage('user', message);
+    input.value = '';
+
+    // Show typing indicator
+    const messagesDiv = document.getElementById('testChatMessages');
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'testTypingIndicator';
+    typingDiv.className = 'bg-white border border-gray-200 rounded-lg p-4';
+    typingDiv.innerHTML = `
+        <div class="flex items-center gap-2 text-gray-600 text-sm">
+            <div class="typing-indicator">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+            <span>${agentConfig.name || 'Agent'} is thinking...</span>
+        </div>
+    `;
+    messagesDiv.appendChild(typingDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    try {
+        // Build test prompt
+        const testPrompt = `You are simulating this agent:
+
+**Agent Name:** ${agentConfig.name}
+**Domain:** ${agentConfig.domain}
+**System Prompt:**
+${agentConfig.systemPrompt}
+
+**Available Knowledge Bases:**
+${knowledgeBases.map(kb => `- ${kb.name}: ${kb.content?.substring(0, 200)}...`).join('\n')}
+
+**Available Outputs:**
+${outputs.map(out => `- ${out.functionName}: ${out.functionDescription}`).join('\n')}
+
+User Question: "${message}"
+
+Respond as this agent would, referencing relevant knowledge bases and mentioning when you would use specific outputs. Keep responses concise (2-3 paragraphs). Be helpful and stay in character.`;
+
+        const response = await claudeAPI.sendMessage(testPrompt, testChatHistory);
+
+        // Remove typing indicator
+        typingDiv.remove();
+
+        // Add agent response
+        addTestMessage('agent', response);
+
+        // Add to history
+        testChatHistory.push({
+            role: 'user',
+            content: message
+        });
+        testChatHistory.push({
+            role: 'assistant',
+            content: response
+        });
+
+    } catch (error) {
+        typingDiv.remove();
+        addTestMessage('error', `❌ Error: ${error.message}. Please ensure Claude Code CLI is running.`);
+    }
+}
+
+function addTestMessage(role, content) {
+    const messagesDiv = document.getElementById('testChatMessages');
+    const messageDiv = document.createElement('div');
+
+    if (role === 'user') {
+        messageDiv.className = 'bg-indigo-50 border border-indigo-200 rounded-lg p-4';
+        messageDiv.innerHTML = `
+            <p class="text-sm text-indigo-900"><strong>You:</strong> ${content}</p>
+        `;
+    } else if (role === 'error') {
+        messageDiv.className = 'bg-red-50 border border-red-200 rounded-lg p-4';
+        messageDiv.innerHTML = `<p class="text-sm text-red-900">${content}</p>`;
+    } else {
+        messageDiv.className = 'bg-white border border-gray-200 rounded-lg p-4';
+        messageDiv.innerHTML = `
+            <p class="text-sm text-gray-900"><strong>${agentConfig.name || 'Agent'}:</strong></p>
+            <div class="text-sm text-gray-800 mt-2">${content}</div>
+        `;
+    }
+
+    messagesDiv.appendChild(messageDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function clearTestChat() {
+    testChatHistory.length = 0;
+    const messagesDiv = document.getElementById('testChatMessages');
+    messagesDiv.innerHTML = `
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p class="text-sm text-blue-900">
+                <strong>👋 Welcome!</strong> This is a simulation of how your agent will respond.
+                Try asking questions related to: <strong class="text-blue-700">${agentConfig.domain || 'general topics'}</strong>
+            </p>
+        </div>
+    `;
+}
+
+// Enter key handler for test chat
+document.addEventListener('DOMContentLoaded', function() {
+    const testInput = document.getElementById('testChatInput');
+    if (testInput) {
+        testInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendTestMessage();
+            }
+        });
+    }
+
+    // Attach button click handlers
+    const optimizeBtn = document.getElementById('optimizeAgentBtn');
+    if (optimizeBtn) {
+        optimizeBtn.addEventListener('click', optimizeAgent);
+    }
+
+    const testBtn = document.getElementById('testAgentBtn');
+    if (testBtn) {
+        testBtn.addEventListener('click', openTestAgentModal);
+    }
+});
+
+// ============================================================================
 // INITIALIZATION
 // ============================================================================
 
