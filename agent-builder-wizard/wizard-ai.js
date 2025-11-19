@@ -9723,6 +9723,12 @@ Format your response as HTML with sections using h4 tags, bullet points in ul/li
         // Store recommendations globally for action functions
         window.currentOptimizationRecommendations = recommendations;
 
+        // Extract and store the quality score
+        const scoreMatch = response.match(/(\d+)\/100/);
+        if (scoreMatch) {
+            window.currentOptimizationScore = parseInt(scoreMatch[1]);
+        }
+
     } catch (error) {
         resultsDiv.innerHTML = `
             <div class="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -9752,6 +9758,10 @@ function applyKnowledgeBaseRecommendations() {
     });
 
     showToast(`✅ Added ${addedCount} knowledge base${addedCount > 1 ? 's' : ''} successfully!`, 'success');
+
+    // Verify the KBs were actually added
+    console.log(`Total KBs after add: ${knowledgeBases.length}`);
+    console.log('Last added KB:', knowledgeBases[knowledgeBases.length - 1]);
 
     // Navigate to KB step to show the new additions
     currentStep = 4;
@@ -9783,6 +9793,10 @@ function applyOutputRecommendations() {
 
     renderOutputs();
     showToast(`✅ Added ${addedCount} output${addedCount > 1 ? 's' : ''} successfully!`, 'success');
+
+    // Verify the outputs were actually added
+    console.log(`Total outputs after add: ${outputs.length}`);
+    console.log('Last added output:', outputs[outputs.length - 1]);
 
     // Navigate to Outputs step
     currentStep = 5;
@@ -9855,40 +9869,175 @@ function applyParameterAdjustments() {
     }, 1000);
 }
 
-function applyAllRecommendations() {
+async function applyAllRecommendations() {
     const recommendations = window.currentOptimizationRecommendations;
     if (!recommendations) return;
 
+    const previousScore = window.currentOptimizationScore || 0;
     let actions = [];
+    let addedKBs = 0;
+    let addedOutputs = 0;
 
-    // Apply in sequence
+    // Apply parameters first (no navigation)
     if (recommendations.adjustParameters) {
-        applyParameterAdjustments();
+        const params = recommendations.adjustParameters;
+        if (params.temperature !== undefined) {
+            agentConfig.temperature = params.temperature;
+            const tempSlider = document.getElementById('temperature');
+            const tempValue = document.getElementById('temperatureValue');
+            if (tempSlider) tempSlider.value = params.temperature;
+            if (tempValue) tempValue.textContent = params.temperature;
+        }
+        if (params.maxToolsIterations !== undefined) {
+            agentConfig.maxToolsIterations = params.maxToolsIterations;
+            const iterInput = document.getElementById('maxToolsIterations');
+            if (iterInput) iterInput.value = params.maxToolsIterations;
+        }
         actions.push('parameters');
     }
 
+    // Apply system prompt enhancement (no navigation)
     if (recommendations.enhanceSystemPrompt) {
-        applySystemPromptEnhancement();
+        const currentPrompt = agentConfig.systemPrompt || '';
+        agentConfig.systemPrompt = currentPrompt + '\n\n' + recommendations.enhanceSystemPrompt;
+        const textarea = document.getElementById('systemPrompt');
+        if (textarea) {
+            textarea.value = agentConfig.systemPrompt;
+            updateSystemPromptCharCount();
+        }
         actions.push('system prompt');
     }
 
+    // Add knowledge bases (no navigation)
     if (recommendations.addKnowledgeBases && recommendations.addKnowledgeBases.length > 0) {
-        applyKnowledgeBaseRecommendations();
-        actions.push(`${recommendations.addKnowledgeBases.length} KB(s)`);
+        recommendations.addKnowledgeBases.forEach(kb => {
+            addKnowledgeBase(kb.name, kb.content);
+            addedKBs++;
+        });
+        actions.push(`${addedKBs} KB(s)`);
     }
 
+    // Add outputs (no navigation)
     if (recommendations.addOutputs && recommendations.addOutputs.length > 0) {
-        applyOutputRecommendations();
-        actions.push(`${recommendations.addOutputs.length} output(s)`);
+        recommendations.addOutputs.forEach(output => {
+            const outputId = Date.now() + addedOutputs;
+            outputs.push({
+                id: outputId,
+                functionName: output.functionName,
+                functionDescription: output.functionDescription || '',
+                outputType: output.outputType || 'report',
+                outputDescription: output.outputDescription || '',
+                parameters: output.parameters || {}
+            });
+            addedOutputs++;
+        });
+        renderOutputs();
+        actions.push(`${addedOutputs} output(s)`);
     }
 
     if (actions.length > 0) {
-        showToast(`🎉 Applied all recommendations: ${actions.join(', ')}`, 'success', 4000);
-    }
+        showToast(`🎉 Applied: ${actions.join(', ')}. Re-analyzing agent...`, 'success', 3000);
 
-    setTimeout(() => {
-        closeOptimizeModal();
-    }, 1500);
+        // Wait a moment then re-analyze
+        setTimeout(async () => {
+            await reAnalyzeAfterChanges(previousScore);
+        }, 1500);
+    } else {
+        setTimeout(() => {
+            closeOptimizeModal();
+        }, 1000);
+    }
+}
+
+async function reAnalyzeAfterChanges(previousScore) {
+    const resultsDiv = document.getElementById('optimizationResults');
+
+    // Show re-analyzing message
+    resultsDiv.innerHTML = `
+        <div class="text-center py-12">
+            <div class="inline-flex items-center gap-3">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+                <span class="text-gray-600">Re-analyzing updated agent configuration...</span>
+            </div>
+        </div>
+    `;
+
+    try {
+        const analysisPrompt = `You are an AI agent optimization expert. Analyze this UPDATED agent configuration and provide a brief quality assessment.
+
+**Agent Configuration:**
+- Name: ${agentConfig.name}
+- Domain: ${agentConfig.domain}
+- Model: ${agentConfig.model}
+- Temperature: ${agentConfig.temperature}
+- Max Tools Iterations: ${agentConfig.maxToolsIterations}
+- Number of Knowledge Bases: ${knowledgeBases.length}
+- Number of Outputs: ${outputs.length}
+- System Prompt Length: ${agentConfig.systemPrompt?.length || 0} characters
+
+**System Prompt Preview:**
+${agentConfig.systemPrompt?.substring(0, 500)}...
+
+**Knowledge Bases:**
+${knowledgeBases.map((kb, i) => `${i + 1}. ${kb.name} (${kb.content?.length || 0} chars)`).join('\n')}
+
+**Outputs:**
+${outputs.map((out, i) => `${i + 1}. ${out.functionName} (${out.outputType})`).join('\n')}
+
+Provide a brief updated analysis with:
+1. **Overall Quality Score** - Rate 0-100 with justification
+2. **What Improved** - List the improvements from the applied recommendations
+3. **Remaining Opportunities** - Any remaining gaps (if score < 95)
+
+Format as HTML with h4 tags and color classes: text-green-600 for positive, text-amber-600 for suggestions.`;
+
+        const response = await claudeAPI.sendMessage(analysisPrompt, []);
+
+        // Extract new score
+        const scoreMatch = response.match(/(\d+)\/100/);
+        const newScore = scoreMatch ? parseInt(scoreMatch[1]) : 0;
+        const scoreImprovement = newScore - previousScore;
+
+        resultsDiv.innerHTML = `
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6 mb-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">✅ Recommendations Applied Successfully!</h3>
+                        <p class="text-sm text-gray-600 mt-1">Agent configuration has been updated</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-3xl font-bold text-green-600">${newScore}/100</div>
+                        ${scoreImprovement > 0 ? `
+                            <div class="text-sm font-medium text-green-600">
+                                +${scoreImprovement} points improved! 🎉
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+            <div class="prose max-w-none">
+                ${response}
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-200 text-center">
+                <button onclick="closeOptimizeModal()" class="bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    Done
+                </button>
+            </div>
+        `;
+
+        window.currentOptimizationScore = newScore;
+
+    } catch (error) {
+        resultsDiv.innerHTML = `
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p class="text-yellow-900"><strong>⚠️ Applied but couldn't re-analyze:</strong> ${error.message}</p>
+                <p class="text-sm text-yellow-700 mt-2">Your changes have been applied successfully. Close this modal to continue.</p>
+                <button onclick="closeOptimizeModal()" class="mt-3 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Close
+                </button>
+            </div>
+        `;
+    }
 }
 
 // ============================================================================
