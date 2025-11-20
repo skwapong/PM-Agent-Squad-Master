@@ -2553,7 +2553,7 @@ function setupEventListeners() {
     document.getElementById('refinePromptBtn')?.addEventListener('click', refineSystemPrompt);
 
     // Add KB button
-    document.getElementById('addKBBtn')?.addEventListener('click', addKnowledgeBase);
+    document.getElementById('addKBBtn')?.addEventListener('click', () => addKnowledgeBase());
 
     // Add Tool button (Step 4)
     document.getElementById('addToolBtn')?.addEventListener('click', addTool);
@@ -5478,7 +5478,7 @@ function renderKnowledgeBases() {
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <label class="block text-sm font-medium text-gray-700">
-                                Database Name <span class="text-red-500">*</span>
+                                Database name <span class="text-red-500">*</span>
                             </label>
                             <button
                                 onclick="fetchTDDatabases('${kb.id}')"
@@ -5493,77 +5493,30 @@ function renderKnowledgeBases() {
                             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
                             onchange="handleDatabaseChange('${kb.id}')"
                         >
-                            <option value="">Select database...</option>
-                            <optgroup label="📁 Common Databases">
-                                <option value="treasure_data" ${kb.database === 'treasure_data' ? 'selected' : ''}>treasure_data</option>
-                                <option value="treasure_data_audiences" ${kb.database === 'treasure_data_audiences' ? 'selected' : ''}>treasure_data_audiences</option>
-                                <option value="treasure_data_cdp" ${kb.database === 'treasure_data_cdp' ? 'selected' : ''}>treasure_data_cdp</option>
-                                <option value="marketing_analytics" ${kb.database === 'marketing_analytics' ? 'selected' : ''}>marketing_analytics</option>
-                                <option value="customer_360" ${kb.database === 'customer_360' ? 'selected' : ''}>customer_360</option>
-                                <option value="engagement_data" ${kb.database === 'engagement_data' ? 'selected' : ''}>engagement_data</option>
+                            <option value="">Select a database</option>
+                            <optgroup label="💡 Click 'Fetch from TD' to load databases">
+                                <option disabled>Click the "🔄 Fetch from TD" button above to load 15,000+ databases from TD1</option>
                             </optgroup>
                         </select>
                         <p class="text-xs text-gray-500 mt-1">
                             <span id="${kb.id}-database-status">Click "Fetch from TD" to load your live databases</span>
                         </p>
                     </div>
+
                     <div>
                         <div class="flex items-center justify-between mb-1">
                             <label class="block text-sm font-medium text-gray-700">
-                                Table Name <span class="text-red-500">*</span>
+                                Table
                             </label>
                             <button
-                                onclick="fetchTDTables('${kb.id}')"
-                                id="${kb.id}-fetch-tables-btn"
-                                class="text-xs text-gray-400 cursor-not-allowed font-medium flex items-center gap-1"
-                                title="Select a database first"
-                                disabled
+                                onclick="addTableToKB('${kb.id}')"
+                                class="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
                             >
-                                🔄 Fetch Tables
+                                + Add Table
                             </button>
                         </div>
-                        <select
-                            id="${kb.id}-table"
-                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
-                        >
-                            <option value="">Select table...</option>
-                            <optgroup label="📊 Common Tables">
-                                <option value="customer_profiles" ${kb.table === 'customer_profiles' ? 'selected' : ''}>customer_profiles</option>
-                                <option value="campaign_audiences" ${kb.table === 'campaign_audiences' ? 'selected' : ''}>campaign_audiences</option>
-                                <option value="user_segments" ${kb.table === 'user_segments' ? 'selected' : ''}>user_segments</option>
-                                <option value="engagement_events" ${kb.table === 'engagement_events' ? 'selected' : ''}>engagement_events</option>
-                                <option value="purchase_history" ${kb.table === 'purchase_history' ? 'selected' : ''}>purchase_history</option>
-                                <option value="web_behavioral_data" ${kb.table === 'web_behavioral_data' ? 'selected' : ''}>web_behavioral_data</option>
-                                <option value="email_engagement" ${kb.table === 'email_engagement' ? 'selected' : ''}>email_engagement</option>
-                                <option value="churn_predictions" ${kb.table === 'churn_predictions' ? 'selected' : ''}>churn_predictions</option>
-                                <option value="lifetime_value_scores" ${kb.table === 'lifetime_value_scores' ? 'selected' : ''}>lifetime_value_scores</option>
-                            </optgroup>
-                        </select>
-                        <p class="text-xs text-gray-500 mt-1">
-                            <span id="${kb.id}-table-status">Select a database to fetch tables</span>
-                        </p>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            Description
-                        </label>
-                        <textarea
-                            id="${kb.id}-content"
-                            rows="3"
-                            placeholder="Optional: Describe the database schema, key columns, and what audience data is available..."
-                            class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500"
-                        >${kb.content || ''}</textarea>
-                        <p class="text-xs text-gray-500 mt-1">
-                            💡 Tip: Document important columns (user_id, segment, ltv, engagement_score, etc.)
-                        </p>
-                    </div>
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                        <div class="flex items-start gap-2">
-                            <span class="text-blue-600">ℹ️</span>
-                            <div class="text-xs text-blue-900">
-                                <strong>Database Connection:</strong> This KB will use the Treasure Data MCP to access audience data.
-                                Make sure the TD MCP server is configured and the database/table exists.
-                            </div>
+                        <div id="${kb.id}-tables-container" class="space-y-2">
+                            <!-- Tables will be added here dynamically -->
                         </div>
                     </div>
                 </div>
@@ -5641,41 +5594,263 @@ async function fetchTDDatabases(kbId) {
     if (!statusSpan || !selectElement) return;
 
     try {
-        statusSpan.textContent = '⏳ Fetching databases from Treasure Data...';
+        statusSpan.textContent = '⏳ Fetching live databases from TD1 account...';
         statusSpan.className = 'text-xs text-blue-600';
+        showToast('📡 Fetching live TD1 databases via MCP...', 'info');
 
-        // Call the agent to fetch databases using TD MCP
-        const prompt = "Please use the TD MCP list_databases tool to fetch all available databases. Return only a JSON array of database names, nothing else.";
+        // Call the local proxy server which uses TD MCP
+        const response = await fetch('http://localhost:3334/td/databases');
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
 
-        showToast('📡 Fetching live TD databases...', 'info');
+        const data = await response.json();
+        const databases = data.databases;
 
-        // Simulated response - in production this would call the TD MCP
-        // For now, we'll show a message to the user
-        statusSpan.textContent = '💡 TD MCP is configured. Databases will be fetched when using Agent Foundry.';
+        // Clear existing options
+        selectElement.innerHTML = '<option value="">Select database...</option>';
+
+        // Add search input option group
+        const searchGroup = document.createElement('optgroup');
+        searchGroup.label = `🗄️ TD1 Databases (${databases.length.toLocaleString()} total)`;
+
+        // Add all databases
+        databases.forEach(db => {
+            const option = document.createElement('option');
+            option.value = db;
+            option.textContent = db;
+            searchGroup.appendChild(option);
+        });
+
+        selectElement.appendChild(searchGroup);
+
+        // Update status
+        statusSpan.textContent = `✅ Loaded ${databases.length.toLocaleString()} databases from TD1 account (live connection)`;
         statusSpan.className = 'text-xs text-green-600';
+        showToast(`✅ Loaded ${databases.length.toLocaleString()} TD1 databases!`, 'success');
 
-        showToast('✅ TD MCP connection verified! Use this agent in Agent Foundry to fetch live databases.', 'success', 5000);
+        // Make the select searchable by adding a data attribute
+        selectElement.setAttribute('data-searchable', 'true');
 
-        // In a full implementation, we would:
-        // 1. Make an API call to a backend that uses TD MCP
-        // 2. Parse the returned database list
-        // 3. Populate the dropdown dynamically
+        console.log(`✅ Loaded ${databases.length} databases from TD1 account via TD MCP`);
 
     } catch (error) {
         console.error('Error fetching TD databases:', error);
-        statusSpan.textContent = '❌ Error fetching databases. Check TD MCP configuration.';
+        statusSpan.textContent = '❌ Error loading databases. Make sure local proxy server is running (node local-proxy-server.js)';
         statusSpan.className = 'text-xs text-red-600';
         showToast('❌ Failed to fetch databases: ' + error.message, 'error');
+    }
+}
+
+// Add table to knowledge base
+function addTableToKB(kbId) {
+    const container = document.getElementById(`${kbId}-tables-container`);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (!container || kbIndex === -1) return;
+
+    // Initialize tables array if it doesn't exist
+    if (!knowledgeBases[kbIndex].tables) {
+        knowledgeBases[kbIndex].tables = [];
+    }
+
+    const tableId = `${kbId}-table-${Date.now()}`;
+    const tableIndex = knowledgeBases[kbIndex].tables.length;
+
+    // Add table to KB data
+    knowledgeBases[kbIndex].tables.push({
+        id: tableId,
+        tableName: '',
+        tdQuery: '',
+        name: ''
+    });
+
+    // Create table UI
+    const tableDiv = document.createElement('div');
+    tableDiv.id = tableId;
+    tableDiv.className = 'bg-gray-50 p-3 rounded border border-gray-200';
+    tableDiv.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-medium text-gray-700">Table ${tableIndex + 1}</span>
+            <button
+                onclick="removeTableFromKB('${kbId}', '${tableId}')"
+                class="text-xs text-red-600 hover:text-red-700"
+            >
+                ⊖ Remove
+            </button>
+        </div>
+        <div class="space-y-2">
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-medium text-gray-700">
+                        Select Table <span class="text-red-500">*</span>
+                    </label>
+                    <button
+                        onclick="fetchTablesForTable('${kbId}', '${tableId}')"
+                        id="${tableId}-fetch-btn"
+                        class="text-xs text-indigo-600 hover:text-indigo-700 font-medium"
+                    >
+                        🔄 Fetch Tables
+                    </button>
+                </div>
+                <select
+                    id="${tableId}-dropdown"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500"
+                    onchange="handleTableSelect('${kbId}', '${tableId}')"
+                >
+                    <option value="">Select table...</option>
+                    <optgroup label="💡 Click 'Fetch Tables' to load">
+                        <option disabled>Select database first, then click "🔄 Fetch Tables"</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                    TD Query <span class="text-red-500">*</span>
+                </label>
+                <textarea
+                    id="${tableId}-query"
+                    rows="3"
+                    placeholder="SELECT * FROM table_name WHERE ..."
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-xs font-mono focus:ring-2 focus:ring-indigo-500"
+                    oninput="updateTableQuery('${kbId}', '${tableId}')"
+                ></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">
+                    Name <span class="text-red-500">*</span>
+                </label>
+                <input
+                    type="text"
+                    id="${tableId}-name"
+                    placeholder="e.g., Customer Segments"
+                    class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:ring-2 focus:ring-indigo-500"
+                    oninput="updateTableName('${kbId}', '${tableId}')"
+                />
+            </div>
+        </div>
+    `;
+
+    container.appendChild(tableDiv);
+}
+
+// Remove table from knowledge base
+function removeTableFromKB(kbId, tableId) {
+    const tableDiv = document.getElementById(tableId);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (tableDiv) {
+        tableDiv.remove();
+    }
+
+    if (kbIndex !== -1 && knowledgeBases[kbIndex].tables) {
+        knowledgeBases[kbIndex].tables = knowledgeBases[kbIndex].tables.filter(t => t.id !== tableId);
+        console.log(`🗑️ Removed table ${tableId} from KB ${kbId}`);
+    }
+}
+
+// Fetch tables for a specific table entry
+async function fetchTablesForTable(kbId, tableId) {
+    const databaseSelect = document.getElementById(`${kbId}-database`);
+    const tableDropdown = document.getElementById(`${tableId}-dropdown`);
+
+    if (!databaseSelect || !tableDropdown) return;
+
+    const database = databaseSelect.value;
+    if (!database) {
+        showToast('⚠️ Please select a database first', 'warning');
+        return;
+    }
+
+    try {
+        showToast(`📡 Fetching tables from ${database}...`, 'info');
+
+        const response = await fetch(`http://localhost:3334/td/tables/${encodeURIComponent(database)}`);
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const tables = data.tables;
+
+        // Clear and populate dropdown
+        tableDropdown.innerHTML = '<option value="">Select table...</option>';
+
+        const tableGroup = document.createElement('optgroup');
+        tableGroup.label = `📊 Tables in ${database} (${tables.length} total)`;
+
+        tables.forEach(table => {
+            const option = document.createElement('option');
+            option.value = table;
+            option.textContent = table;
+            tableGroup.appendChild(option);
+        });
+
+        tableDropdown.appendChild(tableGroup);
+        showToast(`✅ Loaded ${tables.length} tables!`, 'success');
+
+    } catch (error) {
+        console.error('Error fetching tables:', error);
+        showToast('❌ Failed to fetch tables: ' + error.message, 'error');
+    }
+}
+
+// Handle table selection
+function handleTableSelect(kbId, tableId) {
+    const tableDropdown = document.getElementById(`${tableId}-dropdown`);
+    const queryTextarea = document.getElementById(`${tableId}-query`);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (!tableDropdown || !queryTextarea) return;
+
+    const selectedTable = tableDropdown.value;
+
+    // Auto-populate query with basic SELECT
+    if (selectedTable && queryTextarea.value.trim() === '') {
+        queryTextarea.value = `SELECT * FROM ${selectedTable} LIMIT 100`;
+    }
+
+    // Update KB data
+    if (kbIndex !== -1 && knowledgeBases[kbIndex].tables) {
+        const table = knowledgeBases[kbIndex].tables.find(t => t.id === tableId);
+        if (table) {
+            table.tableName = selectedTable;
+            table.tdQuery = queryTextarea.value;
+        }
+    }
+}
+
+// Update table query
+function updateTableQuery(kbId, tableId) {
+    const queryTextarea = document.getElementById(`${tableId}-query`);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (kbIndex !== -1 && knowledgeBases[kbIndex].tables) {
+        const table = knowledgeBases[kbIndex].tables.find(t => t.id === tableId);
+        if (table) {
+            table.tdQuery = queryTextarea.value;
+        }
+    }
+}
+
+// Update table name
+function updateTableName(kbId, tableId) {
+    const nameInput = document.getElementById(`${tableId}-name`);
+    const kbIndex = knowledgeBases.findIndex(k => k.id === kbId);
+
+    if (kbIndex !== -1 && knowledgeBases[kbIndex].tables) {
+        const table = knowledgeBases[kbIndex].tables.find(t => t.id === tableId);
+        if (table) {
+            table.name = nameInput.value;
+        }
     }
 }
 
 // Handle database selection change
 function handleDatabaseChange(kbId) {
     const databaseSelect = document.getElementById(`${kbId}-database`);
-    const fetchTablesBtn = document.getElementById(`${kbId}-fetch-tables-btn`);
-    const tableStatus = document.getElementById(`${kbId}-table-status`);
 
-    if (!databaseSelect || !fetchTablesBtn) return;
+    if (!databaseSelect) return;
 
     const selectedDatabase = databaseSelect.value;
 
@@ -5685,24 +5860,7 @@ function handleDatabaseChange(kbId) {
         knowledgeBases[kbIndex].database = selectedDatabase;
     }
 
-    // Enable/disable fetch tables button
-    if (selectedDatabase) {
-        fetchTablesBtn.disabled = false;
-        fetchTablesBtn.className = 'text-xs text-indigo-600 hover:text-indigo-700 font-medium flex items-center gap-1 cursor-pointer';
-        fetchTablesBtn.title = `Fetch tables from ${selectedDatabase}`;
-        if (tableStatus) {
-            tableStatus.textContent = `Click "Fetch Tables" to load tables from ${selectedDatabase}`;
-            tableStatus.className = 'text-xs text-gray-600';
-        }
-    } else {
-        fetchTablesBtn.disabled = true;
-        fetchTablesBtn.className = 'text-xs text-gray-400 cursor-not-allowed font-medium flex items-center gap-1';
-        fetchTablesBtn.title = 'Select a database first';
-        if (tableStatus) {
-            tableStatus.textContent = 'Select a database to fetch tables';
-            tableStatus.className = 'text-xs text-gray-500';
-        }
-    }
+    console.log(`✅ Selected database: ${selectedDatabase} for KB: ${kbId}`);
 }
 
 // Fetch TD Tables
@@ -5720,20 +5878,45 @@ async function fetchTDTables(kbId) {
     }
 
     try {
-        statusSpan.textContent = `⏳ Fetching tables from ${database}...`;
+        statusSpan.textContent = `⏳ Fetching live tables from ${database}...`;
         statusSpan.className = 'text-xs text-blue-600';
+        showToast(`📡 Fetching tables from ${database} via MCP...`, 'info');
 
-        showToast(`📡 Fetching tables from ${database}...`, 'info');
+        // Call the local proxy server which uses TD MCP
+        const response = await fetch(`http://localhost:3334/td/tables/${encodeURIComponent(database)}`);
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
 
-        // In production, this would call TD MCP list_tables
-        statusSpan.textContent = '💡 TD MCP is configured. Tables will be fetched when using Agent Foundry.';
+        const data = await response.json();
+        const tables = data.tables;
+
+        // Clear existing options
+        tableSelect.innerHTML = '<option value="">Select table...</option>';
+
+        // Add tables
+        const tableGroup = document.createElement('optgroup');
+        tableGroup.label = `📊 Tables in ${database} (${tables.length.toLocaleString()} total)`;
+
+        tables.forEach(table => {
+            const option = document.createElement('option');
+            option.value = table;
+            option.textContent = table;
+            tableGroup.appendChild(option);
+        });
+
+        tableSelect.appendChild(tableGroup);
+
+        // Update status
+        statusSpan.textContent = `✅ Loaded ${tables.length.toLocaleString()} tables from ${database} (live connection)`;
         statusSpan.className = 'text-xs text-green-600';
+        showToast(`✅ Loaded ${tables.length.toLocaleString()} tables from ${database}!`, 'success');
 
-        showToast(`✅ TD MCP ready! Use this agent in Agent Foundry to fetch tables from ${database}.`, 'success', 5000);
+        console.log(`✅ Loaded ${tables.length} tables from ${database} via TD MCP`);
 
     } catch (error) {
         console.error('Error fetching TD tables:', error);
-        statusSpan.textContent = '❌ Error fetching tables. Check TD MCP configuration.';
+        statusSpan.textContent = '❌ Error fetching tables. Make sure local proxy server is running.';
         statusSpan.className = 'text-xs text-red-600';
         showToast('❌ Failed to fetch tables: ' + error.message, 'error');
     }
@@ -6748,15 +6931,49 @@ function validateKnowledgeBases() {
     }
 
     for (const kb of knowledgeBases) {
-        if (!kb.name || !kb.content) {
-            const kbName = kb.name || 'Untitled';
-            alert(`${getTranslation('validation.kb.title.content', kbName + ' must have both a title and content.')}`);
+        const kbName = kb.name || 'Untitled';
+
+        // Validate name
+        if (!kb.name) {
+            alert(`${getTranslation('validation.kb.title', kbName + ' must have a title.')}`);
             return false;
         }
 
-        if (kb.content.length > 18000) {
-            alert(`${kb.name} ${getTranslation('validation.kb.limit', 'exceeds the 18,000 character limit.')}`);
-            return false;
+        // For database KBs, validate database and tables
+        if (kb.type === 'database') {
+            if (!kb.database) {
+                alert(`${kbName} must have a database selected.`);
+                return false;
+            }
+            if (!kb.tables || kb.tables.length === 0) {
+                alert(`${kbName} must have at least one table added.`);
+                return false;
+            }
+            // Validate each table
+            for (const table of kb.tables) {
+                if (!table.tableName) {
+                    alert(`${kbName} has a table without a table name selected.`);
+                    return false;
+                }
+                if (!table.tdQuery) {
+                    alert(`${kbName} - ${table.tableName} must have a TD Query.`);
+                    return false;
+                }
+                if (!table.name) {
+                    alert(`${kbName} - ${table.tableName} must have a name.`);
+                    return false;
+                }
+            }
+        } else {
+            // For text KBs, validate content
+            if (!kb.content) {
+                alert(`${getTranslation('validation.kb.title.content', kbName + ' must have both a title and content.')}`);
+                return false;
+            }
+            if (kb.content.length > 18000) {
+                alert(`${kb.name} ${getTranslation('validation.kb.limit', 'exceeds the 18,000 character limit.')}`);
+                return false;
+            }
         }
     }
 
@@ -7556,13 +7773,40 @@ function viewOutputWebpage() {
                                         </div>
                                     </div>
 
+                                    ${kb.type === 'database' ? `
+                                    <div class="field">
+                                        <span class="field-label">🗄️ Database:</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbDatabase${index}')">📋 Copy</button>
+                                            <div id="kbDatabase${index}" class="field-value">${kb.database || 'Not specified'}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <span class="field-label">📊 Tables:</span>
+                                        <div style="margin-left: 20px;">
+                                            ${kb.tables && kb.tables.length > 0 ? kb.tables.map((table, tIndex) => `
+                                                <div style="margin-bottom: 15px; padding: 10px; background: #f9fafb; border-radius: 6px;">
+                                                    <div style="font-weight: 600; margin-bottom: 8px;">Table ${tIndex + 1}: ${table.name || 'Untitled'}</div>
+                                                    <div style="margin-bottom: 5px;"><strong>Table Name:</strong> ${table.tableName || 'Not specified'}</div>
+                                                    <div><strong>Query:</strong></div>
+                                                    <div class="copy-box" style="margin-top: 5px;">
+                                                        <button class="copy-btn" onclick="copyToClipboard('kbTable${index}_${tIndex}')">📋 Copy</button>
+                                                        <pre id="kbTable${index}_${tIndex}" style="background: #fff; padding: 8px; border-radius: 4px; font-size: 12px; overflow-x: auto;">${table.tdQuery || 'Not specified'}</pre>
+                                                    </div>
+                                                </div>
+                                            `).join('') : '<div style="color: #9ca3af;">No tables added</div>'}
+                                        </div>
+                                    </div>
+                                    ` : `
                                     <div class="field">
                                         <span class="field-label">📄 Text Input:</span>
                                         <div class="copy-box">
                                             <button class="copy-btn" onclick="copyToClipboard('kbContent${index}')">📋 Copy</button>
-                                            <div id="kbContent${index}" class="kb-content">${kb.content}</div>
+                                            <div id="kbContent${index}" class="kb-content">${kb.content || ''}</div>
                                         </div>
                                     </div>
+                                    `}
                                 </div>
                             </li>
                         `;
@@ -7808,18 +8052,41 @@ function viewOutputWebpage() {
                             name: agentConfig.projectName,
                             description: agentConfig.projectDescription
                         },
-                        knowledgeBases: knowledgeBases.map((kb, index) => ({
-                            id: index + 1,
-                            name: kb.name,
-                            description: kb.description,
-                            toolId: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
-                            content: kb.content
-                        })),
+                        knowledgeBases: knowledgeBases.map((kb, index) => {
+                            const baseKB = {
+                                id: index + 1,
+                                name: kb.name,
+                                description: kb.description,
+                                toolId: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                                type: kb.type || 'text'
+                            };
+
+                            if (kb.type === 'database') {
+                                return {
+                                    ...baseKB,
+                                    database: kb.database,
+                                    tables: kb.tables || []
+                                };
+                            } else {
+                                return {
+                                    ...baseKB,
+                                    content: kb.content
+                                };
+                            }
+                        }),
                         tools: knowledgeBases.map((kb, index) => ({
                             id: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
                             name: kb.name,
                             type: 'knowledge_base',
                             description: 'Access knowledge about ' + kb.name
+                        })),
+                        outputs: outputs.map(output => ({
+                            outputName: output.outputName,
+                            functionName: output.customFunctionName || output.functionName,
+                            functionDescription: output.customFunctionDescription || output.functionDescription,
+                            outputType: output.outputType,
+                            artifactType: output.artifactType,
+                            jsonSchema: output.customJsonSchema || output.jsonSchema
                         }))
                     }, null, 2)}</pre>
                 </div>
@@ -8570,13 +8837,40 @@ function generateOutputWebpageHTML() {
                                         </div>
                                     </div>
 
+                                    ${kb.type === 'database' ? `
+                                    <div class="field">
+                                        <span class="field-label">🗄️ Database:</span>
+                                        <div class="copy-box">
+                                            <button class="copy-btn" onclick="copyToClipboard('kbDatabase${index}')">📋 Copy</button>
+                                            <div id="kbDatabase${index}" class="field-value">${kb.database || 'Not specified'}</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <span class="field-label">📊 Tables:</span>
+                                        <div style="margin-left: 20px;">
+                                            ${kb.tables && kb.tables.length > 0 ? kb.tables.map((table, tIndex) => `
+                                                <div style="margin-bottom: 15px; padding: 10px; background: #f9fafb; border-radius: 6px;">
+                                                    <div style="font-weight: 600; margin-bottom: 8px;">Table ${tIndex + 1}: ${table.name || 'Untitled'}</div>
+                                                    <div style="margin-bottom: 5px;"><strong>Table Name:</strong> ${table.tableName || 'Not specified'}</div>
+                                                    <div><strong>Query:</strong></div>
+                                                    <div class="copy-box" style="margin-top: 5px;">
+                                                        <button class="copy-btn" onclick="copyToClipboard('kbTable${index}_${tIndex}')">📋 Copy</button>
+                                                        <pre id="kbTable${index}_${tIndex}" style="background: #fff; padding: 8px; border-radius: 4px; font-size: 12px; overflow-x: auto;">${table.tdQuery || 'Not specified'}</pre>
+                                                    </div>
+                                                </div>
+                                            `).join('') : '<div style="color: #9ca3af;">No tables added</div>'}
+                                        </div>
+                                    </div>
+                                    ` : `
                                     <div class="field">
                                         <span class="field-label">📄 Text Input:</span>
                                         <div class="copy-box">
                                             <button class="copy-btn" onclick="copyToClipboard('kbContent${index}')">📋 Copy</button>
-                                            <div id="kbContent${index}" class="kb-content">${kb.content}</div>
+                                            <div id="kbContent${index}" class="kb-content">${kb.content || ''}</div>
                                         </div>
                                     </div>
+                                    `}
                                 </div>
                             </li>
                         `;
@@ -8822,18 +9116,41 @@ function generateOutputWebpageHTML() {
                             name: agentConfig.projectName,
                             description: agentConfig.projectDescription
                         },
-                        knowledgeBases: knowledgeBases.map((kb, index) => ({
-                            id: index + 1,
-                            name: kb.name,
-                            description: kb.description,
-                            toolId: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
-                            content: kb.content
-                        })),
+                        knowledgeBases: knowledgeBases.map((kb, index) => {
+                            const baseKB = {
+                                id: index + 1,
+                                name: kb.name,
+                                description: kb.description,
+                                toolId: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                                type: kb.type || 'text'
+                            };
+
+                            if (kb.type === 'database') {
+                                return {
+                                    ...baseKB,
+                                    database: kb.database,
+                                    tables: kb.tables || []
+                                };
+                            } else {
+                                return {
+                                    ...baseKB,
+                                    content: kb.content
+                                };
+                            }
+                        }),
                         tools: knowledgeBases.map((kb, index) => ({
                             id: 'kb_' + kb.name.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
                             name: kb.name,
                             type: 'knowledge_base',
                             description: 'Access knowledge about ' + kb.name
+                        })),
+                        outputs: outputs.map(output => ({
+                            outputName: output.outputName,
+                            functionName: output.customFunctionName || output.functionName,
+                            functionDescription: output.customFunctionDescription || output.functionDescription,
+                            outputType: output.outputType,
+                            artifactType: output.artifactType,
+                            jsonSchema: output.customJsonSchema || output.jsonSchema
                         }))
                     }, null, 2)}</pre>
                 </div>
@@ -9554,9 +9871,30 @@ function loadTemplate(templateId) {
     }));
     kbCounter = knowledgeBases.length;
 
+    // Load outputs from template
+    if (template.outputs && template.outputs.length > 0) {
+        outputs = template.outputs.map((output, index) => ({
+            id: `output-${index + 1}`,
+            outputName: output.outputName || '',
+            functionName: output.functionName || '',
+            functionDescription: output.functionDescription || '',
+            outputType: output.outputType || 'custom',
+            artifactType: output.artifactType || 'text',
+            jsonSchema: output.jsonSchema || '',
+            // Custom fields for editing
+            customFunctionName: output.functionName || '',
+            customFunctionDescription: output.functionDescription || '',
+            customJsonSchema: output.jsonSchema || ''
+        }));
+        outputCounter = outputs.length;
+        console.log(`✅ Loaded ${outputs.length} outputs from template`);
+    } else {
+        outputs = [];
+        outputCounter = 0;
+    }
+
     // Reset other fields
     additionalTools = [];
-    outputs = [];
     promptVariables = [];
 
     // Populate UI
@@ -10543,6 +10881,30 @@ const domainSampleQueries = {
         "What's the best way to allocate a $50K budget across Meta and Google?",
         "How do I improve my campaign's conversion rate?",
         "Analyze this campaign: 100K impressions, 2K clicks, 50 conversions"
+    ],
+    "Marketing Analytics & Reporting": [
+        "Generate a performance report for my Q4 paid media campaigns",
+        "What were the top performing campaigns last month by ROAS?",
+        "Create an executive summary comparing Meta vs Google Ads performance",
+        "Show me which audience segments had the highest conversion rates"
+    ],
+    "Customer Data Platform & Marketing Analytics": [
+        "Create customer segments based on RFM analysis",
+        "Which customer segments have the highest lifetime value?",
+        "Analyze purchase patterns for our top 20% of customers",
+        "Identify at-risk customers who haven't purchased in 90 days"
+    ],
+    "Marketing Automation & Customer Experience": [
+        "Design a welcome email journey for new subscribers",
+        "Create an abandoned cart recovery workflow",
+        "What's the optimal send time for our email campaigns?",
+        "Build a re-engagement campaign for inactive users"
+    ],
+    "Paid Media & Campaign Analytics": [
+        "Optimize budget allocation across Meta, Google, and TikTok",
+        "Which ad creatives are driving the best performance?",
+        "Calculate ROAS and CPA for all active campaigns",
+        "Recommend budget adjustments based on performance trends"
     ],
     sales: [
         "How do I qualify a lead effectively?",

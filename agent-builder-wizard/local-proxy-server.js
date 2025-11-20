@@ -1,6 +1,6 @@
 /**
  * Local Proxy Server for Agent Builder Wizard
- * Runs on localhost:3333 to proxy requests to Claude API
+ * Runs on localhost:3333 to proxy requests to Claude API and TD MCP
  *
  * Usage:
  *   node local-proxy-server.js
@@ -8,26 +8,25 @@
  * Requirements:
  *   - Node.js installed
  *   - Set ANTHROPIC_API_KEY environment variable
+ *   - TD MCP configured via `claude mcp add td`
  *   - Or create .env file with: ANTHROPIC_API_KEY=sk-ant-...
  */
 
 const http = require('http');
 const https = require('https');
+const { spawn } = require('child_process');
 
 // Configuration
-const PORT = 3333;
+const PORT = 3334;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const TD_API_KEY = process.env.TD_API_KEY || '1/ea89d2d2294a812e542b0f52db328da3248c0a5f';
+const TD_SITE = process.env.TD_SITE || 'dev';
+const TD_ACCOUNT = process.env.TD_ACCOUNT || 'TD1';
 
-// Check for API key
+// Check for API key (optional - only needed for /chat endpoint)
 if (!ANTHROPIC_API_KEY) {
-    console.error('❌ ERROR: ANTHROPIC_API_KEY environment variable not set');
-    console.error('\n📝 To fix this:');
-    console.error('   1. Get your API key from: https://console.anthropic.com/');
-    console.error('   2. Run: export ANTHROPIC_API_KEY=sk-ant-...');
-    console.error('   3. Or create .env file with: ANTHROPIC_API_KEY=sk-ant-...');
-    console.error('\n🏢 For enterprise users without API key:');
-    console.error('   See ENTERPRISE_DEPLOYMENT.md for alternative solutions');
-    process.exit(1);
+    console.warn('⚠️ WARNING: ANTHROPIC_API_KEY not set - /chat endpoint will not work');
+    console.warn('   TD MCP endpoints (/td/databases, /td/tables) will still work');
 }
 
 // System prompt for agent building
@@ -52,7 +51,7 @@ Be encouraging, professional, and focus on practical agent-building advice.`;
 const server = http.createServer((req, res) => {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
     // Handle preflight
@@ -62,13 +61,31 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    // Only handle POST /chat
-    if (req.method !== 'POST' || req.url !== '/chat') {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Not found' }));
+    // Route requests
+    if (req.method === 'POST' && req.url === '/chat') {
+        handleChat(req, res);
         return;
     }
 
+    if (req.method === 'GET' && req.url === '/td/databases') {
+        handleTDDatabases(req, res);
+        return;
+    }
+
+    if (req.method === 'GET' && req.url.startsWith('/td/tables/')) {
+        handleTDTables(req, res);
+        return;
+    }
+
+    // 404 for unknown routes
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Not found' }));
+});
+
+/**
+ * Handle chat requests
+ */
+function handleChat(req, res) {
     // Parse request body
     let body = '';
     req.on('data', chunk => {
@@ -120,7 +137,153 @@ const server = http.createServer((req, res) => {
             }));
         }
     });
-});
+}
+
+/**
+ * Handle TD Databases request
+ */
+async function handleTDDatabases(req, res) {
+    try {
+        console.log('\n📡 Fetching databases from TD MCP...');
+
+        const databases = await callTDMCP('list_databases', {});
+
+        console.log(`✅ Retrieved ${databases.length} databases`);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            databases: databases,
+            total: databases.length,
+            timestamp: new Date().toISOString()
+        }));
+    } catch (error) {
+        console.error('❌ Error fetching databases:', error.message);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message }));
+    }
+}
+
+/**
+ * Handle TD Tables request
+ */
+async function handleTDTables(req, res) {
+    try {
+        const database = req.url.split('/td/tables/')[1];
+
+        if (!database) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Database name is required' }));
+            return;
+        }
+
+        console.log(`\n📡 Fetching tables from database: ${database}`);
+
+        const tables = await callTDMCP('list_tables', { database });
+
+        console.log(`✅ Retrieved ${tables.length} tables from ${database}`);
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+            database: database,
+            tables: tables,
+            total: tables.length,
+            timestamp: new Date().toISOString()
+        }));
+    } catch (error) {
+        console.error('❌ Error fetching tables:', error.message);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: error.message }));
+    }
+}
+
+/**
+ * Call TD MCP server
+ */
+function callTDMCP(tool, args) {
+    return new Promise((resolve, reject) => {
+        const mcp = spawn('npx', ['@treasuredata/mcp-server'], {
+            env: {
+                ...process.env,
+                TD_API_KEY: TD_API_KEY,
+                TD_SITE: TD_SITE,
+                TD_ACCOUNT: TD_ACCOUNT
+            }
+        });
+
+        let output = '';
+        let errorOutput = '';
+
+        const request = {
+            jsonrpc: '2.0',
+            method: 'tools/call',
+            params: {
+                name: tool,
+                arguments: args
+            },
+            id: 1
+        };
+
+        mcp.stdout.on('data', (data) => {
+            output += data.toString();
+        });
+
+        mcp.stderr.on('data', (data) => {
+            errorOutput += data.toString();
+        });
+
+        mcp.on('close', (code) => {
+            if (code !== 0) {
+                reject(new Error(`TD MCP error: ${errorOutput}`));
+                return;
+            }
+
+            try {
+                const lines = output.split('\n').filter(line => line.trim());
+                const response = JSON.parse(lines[lines.length - 1]);
+
+                if (response.result && response.result.content) {
+                    const text = response.result.content[0].text;
+
+                    // Try to parse as JSON first (if TD MCP returns JSON)
+                    try {
+                        const parsed = JSON.parse(text);
+                        if (parsed.databases) {
+                            resolve(parsed.databases);
+                            return;
+                        }
+                        if (parsed.tables) {
+                            resolve(parsed.tables);
+                            return;
+                        }
+                        if (Array.isArray(parsed)) {
+                            resolve(parsed);
+                            return;
+                        }
+                    } catch (jsonError) {
+                        // Not JSON, parse as text list
+                    }
+
+                    // Parse the list from the text response
+                    const items = text.split('\n')
+                        .map(line => line.trim())
+                        .filter(line => line && !line.startsWith('Available') && !line.startsWith('Total') && !line.startsWith('{') && !line.startsWith('[') && !line.startsWith(']') && !line.startsWith('}'));
+
+                    resolve(items);
+                } else {
+                    reject(new Error('Unexpected TD MCP response format'));
+                }
+            } catch (error) {
+                reject(new Error(`Failed to parse TD MCP response: ${error.message}`));
+            }
+        });
+
+        // Send the request
+        setTimeout(() => {
+            mcp.stdin.write(JSON.stringify(request) + '\n');
+            mcp.stdin.end();
+        }, 1000);
+    });
+}
 
 /**
  * Call Anthropic Claude API
