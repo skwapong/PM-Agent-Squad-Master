@@ -9252,20 +9252,42 @@ function handleFileAttachment(file) {
     }
 
     // Check file type (text files only)
-    const allowedTypes = ['.txt', '.md', '.json', '.csv'];
+    const allowedTypes = ['.txt', '.md', '.json', '.csv', '.gdoc'];
     const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
     if (!allowedTypes.includes(fileExtension)) {
-        showToast('Invalid file type. Allowed: .txt, .md, .json, .csv', 'error');
+        showToast('Invalid file type. Allowed: .txt, .md, .json, .csv, .gdoc', 'error');
         return;
     }
 
     // Read file contents as text
     const reader = new FileReader();
     reader.onload = function(e) {
+        let content = e.target.result;
+        let displayName = file.name;
+
+        // Handle Google Docs files (.gdoc)
+        if (fileExtension === '.gdoc') {
+            try {
+                const gdocData = JSON.parse(content);
+                if (gdocData.url) {
+                    // Extract the Google Docs URL
+                    content = `Google Doc: ${gdocData.url}\n\nNote: Please share this document publicly or with appropriate permissions for the agent to access it.`;
+                    displayName = file.name + ' (Google Doc Link)';
+                } else {
+                    showToast('Invalid .gdoc file format', 'error');
+                    return;
+                }
+            } catch (error) {
+                showToast('Failed to parse .gdoc file', 'error');
+                return;
+            }
+        }
+
         currentAttachment = {
-            name: file.name,
-            content: e.target.result,
-            type: file.type || 'text/plain'
+            name: displayName,
+            content: content,
+            type: file.type || 'text/plain',
+            isGoogleDoc: fileExtension === '.gdoc'
         };
 
         // Update UI
@@ -9273,13 +9295,13 @@ function handleFileAttachment(file) {
         const removeBtn = document.getElementById('removeAttachmentBtn');
 
         if (attachmentNameSpan) {
-            attachmentNameSpan.textContent = file.name;
+            attachmentNameSpan.textContent = displayName;
         }
         if (removeBtn) {
             removeBtn.classList.remove('hidden');
         }
 
-        showToast('Attached: ' + file.name, 'success');
+        showToast('Attached: ' + displayName, 'success');
     };
 
     reader.onerror = function() {
