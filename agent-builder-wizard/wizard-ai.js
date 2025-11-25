@@ -9269,16 +9269,24 @@ function handleFileAttachment(file) {
         if (fileExtension === '.gdoc') {
             try {
                 const gdocData = JSON.parse(content);
+                let docUrl = null;
+
+                // Check for different possible field names
                 if (gdocData.url) {
-                    // Extract the Google Docs URL
-                    content = `Google Doc: ${gdocData.url}\n\nNote: Please share this document publicly or with appropriate permissions for the agent to access it.`;
-                    displayName = file.name + ' (Google Doc Link)';
+                    docUrl = gdocData.url;
+                } else if (gdocData.doc_id) {
+                    // Construct URL from doc_id
+                    docUrl = `https://docs.google.com/document/d/${gdocData.doc_id}/edit`;
                 } else {
-                    showToast('Invalid .gdoc file format', 'error');
+                    showToast('Invalid .gdoc file format - missing URL or doc_id', 'error');
                     return;
                 }
+
+                // Extract the Google Docs URL
+                content = `Google Doc: ${docUrl}\n\nNote: Please share this document publicly or with appropriate permissions for the agent to access it.`;
+                displayName = file.name.replace('.gdoc', '') + ' (Google Doc)';
             } catch (error) {
-                showToast('Failed to parse .gdoc file', 'error');
+                showToast('Failed to parse .gdoc file: ' + error.message, 'error');
                 return;
             }
         }
