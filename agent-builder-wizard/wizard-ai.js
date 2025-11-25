@@ -3210,12 +3210,12 @@ async function generateAgent() {
     }
 
     // Update agentConfig with description (without attachment for storage)
-    agentConfig.description = description || 'Agent configured from attached file';
+    agentConfig.description = description || 'This agent has been automatically configured based on the attached file content and requirements.';
 
     // Also populate the agentDescription textarea if it exists (for Step 0 validation)
     const descTextarea = document.getElementById('agentDescription');
     if (descTextarea && !descTextarea.value.trim()) {
-        descTextarea.value = description || 'Agent configured from attached file';
+        descTextarea.value = description || 'This agent has been automatically configured based on the attached file content and requirements.';
     }
 
     showTypingIndicator(getTranslation('sidebar.generating'));
