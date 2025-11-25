@@ -6878,6 +6878,18 @@ function validateCurrentStep() {
 function validateAgentDescription() {
     const description = document.getElementById('agentDescription').value.trim();
 
+    // Allow proceeding if there's a file attachment (will be used for agent generation)
+    if (currentAttachment && currentAttachment.content) {
+        // Use attachment content as description if no description provided
+        if (!description || description.length < 50) {
+            agentConfig.description = currentAttachment.content.substring(0, 200) + '...';
+        } else {
+            agentConfig.description = description;
+        }
+        return true;
+    }
+
+    // If no attachment, require description
     if (!description || description.length < 50) {
         alert(getTranslation('validation.description.detailed', 'Please provide a detailed description of your agent (at least 50 characters).'));
         return false;
