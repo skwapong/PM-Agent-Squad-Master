@@ -7926,7 +7926,7 @@ function viewOutputWebpage() {
                         <div id="maxIterations" class="field-value">3</div>
                     </div>
                     <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
-                        ℹ️ Recommended: 3 for standard agents (0=simple, 2-5=standard, 5-10=complex)
+                        ℹ️ Maximum number of tool calls (KB lookups, function executions) the agent can make per response. Higher = more thorough but slower. Recommended: 0=no tools, 3=standard, 5-10=complex analysis
                     </p>
                 </div>
 
@@ -7936,6 +7936,9 @@ function viewOutputWebpage() {
                         <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
                         <div id="temperature" class="field-value">${agentConfig.temperature}</div>
                     </div>
+                    <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
+                        ℹ️ Controls randomness: 0.0=focused/deterministic, 1.0=creative/varied. Recommended: 0.3-0.5 for analysis, 0.7-0.9 for creative tasks
+                    </p>
                 </div>
 
                 <div class="field">
@@ -8998,7 +9001,7 @@ function generateOutputWebpageHTML() {
                         <div id="maxIterations" class="field-value">3</div>
                     </div>
                     <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
-                        ℹ️ Recommended: 3 for standard agents (0=simple, 2-5=standard, 5-10=complex)
+                        ℹ️ Maximum number of tool calls (KB lookups, function executions) the agent can make per response. Higher = more thorough but slower. Recommended: 0=no tools, 3=standard, 5-10=complex analysis
                     </p>
                 </div>
 
@@ -9008,6 +9011,9 @@ function generateOutputWebpageHTML() {
                         <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
                         <div id="temperature" class="field-value">${agentConfig.temperature}</div>
                     </div>
+                    <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
+                        ℹ️ Controls randomness: 0.0=focused/deterministic, 1.0=creative/varied. Recommended: 0.3-0.5 for analysis, 0.7-0.9 for creative tasks
+                    </p>
                 </div>
 
                 <div class="field">
