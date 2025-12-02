@@ -8157,7 +8157,8 @@ function viewOutputWebpage() {
     <script>
         function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
-            const text = element.innerText || element.textContent;
+            // Use textContent to preserve whitespace and formatting in <pre> tags
+            const text = element.textContent;
 
             navigator.clipboard.writeText(text).then(() => {
                 // Find the button that was clicked
