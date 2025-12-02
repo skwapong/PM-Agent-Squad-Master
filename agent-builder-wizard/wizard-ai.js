@@ -7886,14 +7886,6 @@ function viewOutputWebpage() {
                 </div>
 
                 <div class="field">
-                    <span class="field-label">Temperature:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
-                        <div id="temperature" class="field-value">${agentConfig.temperature}</div>
-                    </div>
-                </div>
-
-                <div class="field">
                     <span class="field-label">Max Tools Iterations:</span>
                     <div class="copy-box">
                         <button class="copy-btn" onclick="copyToClipboard('maxIterations')">📋 Copy</button>
@@ -7902,6 +7894,14 @@ function viewOutputWebpage() {
                     <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
                         ℹ️ Recommended: 3 for standard agents (0=simple, 2-5=standard, 5-10=complex)
                     </p>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Temperature:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
+                        <div id="temperature" class="field-value">${agentConfig.temperature}</div>
+                    </div>
                 </div>
 
                 <div class="field">
@@ -8950,14 +8950,6 @@ function generateOutputWebpageHTML() {
                 </div>
 
                 <div class="field">
-                    <span class="field-label">Temperature:</span>
-                    <div class="copy-box">
-                        <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
-                        <div id="temperature" class="field-value">${agentConfig.temperature}</div>
-                    </div>
-                </div>
-
-                <div class="field">
                     <span class="field-label">Max Tools Iterations:</span>
                     <div class="copy-box">
                         <button class="copy-btn" onclick="copyToClipboard('maxIterations')">📋 Copy</button>
@@ -8966,6 +8958,14 @@ function generateOutputWebpageHTML() {
                     <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
                         ℹ️ Recommended: 3 for standard agents (0=simple, 2-5=standard, 5-10=complex)
                     </p>
+                </div>
+
+                <div class="field">
+                    <span class="field-label">Temperature:</span>
+                    <div class="copy-box">
+                        <button class="copy-btn" onclick="copyToClipboard('temperature')">📋 Copy</button>
+                        <div id="temperature" class="field-value">${agentConfig.temperature}</div>
+                    </div>
                 </div>
 
                 <div class="field">
