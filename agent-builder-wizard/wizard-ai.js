@@ -6381,12 +6381,13 @@ function toggleOutputEdit(index) {
     }
 }
 
-// Sanitize function/output names - remove special characters and spaces, convert to snake_case
+// Sanitize function/output names - remove special characters (including &, !, @, #, spaces, etc.) and convert to snake_case
 function sanitizeFunctionName(value) {
+    if (!value) return '';
     return value
         .toLowerCase()
-        .replace(/[^a-z0-9_]/g, '_')  // Replace non-alphanumeric (except underscore) with underscore
-        .replace(/_+/g, '_')           // Replace multiple underscores with single
+        .replace(/[^a-z0-9_]/g, '_')  // Replace ANY non-alphanumeric char (spaces, &, !, @, #, etc.) with underscore
+        .replace(/_+/g, '_')           // Replace multiple consecutive underscores with single underscore
         .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
 }
 
