@@ -3318,14 +3318,14 @@ async function generateAgent() {
                 outputCounter++;
                 const newOutput = {
                     id: `output-${outputCounter}`,
-                    outputName: output.outputName || '',
-                    functionName: output.functionName || '',
+                    outputName: sanitizeFunctionName(output.outputName || ''),
+                    functionName: sanitizeFunctionName(output.functionName || ''),
                     functionDescription: output.functionDescription || '',
                     outputType: output.outputType || 'custom',
                     artifactType: output.artifactType || 'text',
                     jsonSchema: output.jsonSchema || '',
                     // Custom fields for editing
-                    customFunctionName: output.functionName || '',
+                    customFunctionName: sanitizeFunctionName(output.functionName || ''),
                     customFunctionDescription: output.functionDescription || '',
                     customJsonSchema: output.jsonSchema || ''
                 };
@@ -6381,17 +6381,42 @@ function toggleOutputEdit(index) {
     }
 }
 
+// Sanitize function/output names - remove special characters and spaces, convert to snake_case
+function sanitizeFunctionName(value) {
+    return value
+        .toLowerCase()
+        .replace(/[^a-z0-9_]/g, '_')  // Replace non-alphanumeric (except underscore) with underscore
+        .replace(/_+/g, '_')           // Replace multiple underscores with single
+        .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
+}
+
 function updateOutputName(index, value) {
     if (outputs[index]) {
-        outputs[index].outputName = value;
-        console.log(`✅ Updated Output ${index} name: ${value}`);
+        const sanitized = sanitizeFunctionName(value);
+        outputs[index].outputName = sanitized;
+
+        // Update the input field to show sanitized value
+        const inputElement = document.getElementById(`output-name-${index}`);
+        if (inputElement) {
+            inputElement.value = sanitized;
+        }
+
+        console.log(`✅ Updated Output ${index} name: ${value} → ${sanitized}`);
     }
 }
 
 function updateOutputFunctionName(index, value) {
     if (outputs[index]) {
-        outputs[index].customFunctionName = value;
-        console.log(`✅ Updated Output ${index} function name: ${value}`);
+        const sanitized = sanitizeFunctionName(value);
+        outputs[index].customFunctionName = sanitized;
+
+        // Update the input field to show sanitized value
+        const inputElement = document.getElementById(`output-func-name-${index}`);
+        if (inputElement) {
+            inputElement.value = sanitized;
+        }
+
+        console.log(`✅ Updated Output ${index} function name: ${value} → ${sanitized}`);
     }
 }
 
@@ -6525,7 +6550,15 @@ function renderOutputs() {
                 element.addEventListener('input', function() {
                     const outputIndex = outputs.findIndex(o => o.id === output.id);
                     if (outputIndex !== -1) {
-                        outputs[outputIndex][field] = this.value;
+                        // Sanitize outputName and functionName
+                        if (field === 'outputName' || field === 'functionName') {
+                            const sanitized = sanitizeFunctionName(this.value);
+                            outputs[outputIndex][field] = sanitized;
+                            this.value = sanitized; // Update input field to show sanitized value
+                            console.log(`✅ Sanitized ${field}: ${this.value} → ${sanitized}`);
+                        } else {
+                            outputs[outputIndex][field] = this.value;
+                        }
                     }
                 });
             }
@@ -9917,14 +9950,14 @@ function loadTemplate(templateId) {
     if (template.outputs && template.outputs.length > 0) {
         outputs = template.outputs.map((output, index) => ({
             id: `output-${index + 1}`,
-            outputName: output.outputName || '',
-            functionName: output.functionName || '',
+            outputName: sanitizeFunctionName(output.outputName || ''),
+            functionName: sanitizeFunctionName(output.functionName || ''),
             functionDescription: output.functionDescription || '',
             outputType: output.outputType || 'custom',
             artifactType: output.artifactType || 'text',
             jsonSchema: output.jsonSchema || '',
             // Custom fields for editing
-            customFunctionName: output.functionName || '',
+            customFunctionName: sanitizeFunctionName(output.functionName || ''),
             customFunctionDescription: output.functionDescription || '',
             customJsonSchema: output.jsonSchema || ''
         }));
