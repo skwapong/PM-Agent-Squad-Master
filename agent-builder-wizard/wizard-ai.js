@@ -8065,7 +8065,14 @@ function viewOutputWebpage() {
                             <strong>JSON Schema:</strong>
                             <div class="copy-box">
                                 <button class="copy-btn" onclick="copyToClipboard('output-schema-${i}')">📋 Copy</button>
-                                <pre id="output-schema-${i}" class="field-value" style="max-height: 200px; overflow-y: auto; font-size: 12px;">${jsonSchema}</pre>
+                                <pre id="output-schema-${i}" class="field-value" style="max-height: 200px; overflow-y: auto; font-size: 12px;">${(() => {
+                                    try {
+                                        const parsed = typeof jsonSchema === 'string' ? JSON.parse(jsonSchema) : jsonSchema;
+                                        return JSON.stringify(parsed, null, 2);
+                                    } catch (e) {
+                                        return jsonSchema;
+                                    }
+                                })()}</pre>
                             </div>
                         </div>
                         ` : ''}
@@ -9129,7 +9136,14 @@ function generateOutputWebpageHTML() {
                             <strong>JSON Schema:</strong>
                             <div class="copy-box">
                                 <button class="copy-btn" onclick="copyToClipboard('output-schema-${i}')">📋 Copy</button>
-                                <pre id="output-schema-${i}" class="field-value" style="max-height: 200px; overflow-y: auto; font-size: 12px;">${jsonSchema}</pre>
+                                <pre id="output-schema-${i}" class="field-value" style="max-height: 200px; overflow-y: auto; font-size: 12px;">${(() => {
+                                    try {
+                                        const parsed = typeof jsonSchema === 'string' ? JSON.parse(jsonSchema) : jsonSchema;
+                                        return JSON.stringify(parsed, null, 2);
+                                    } catch (e) {
+                                        return jsonSchema;
+                                    }
+                                })()}</pre>
                             </div>
                         </div>
                         ` : ''}
