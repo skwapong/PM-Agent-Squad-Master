@@ -10391,9 +10391,56 @@ Format your response as HTML with sections using h4 tags, bullet points in ul/li
             }
         }
 
-        // Hide loading, show results
+        // Hide loading, show results with better formatting
         resultsDiv.innerHTML = `
-            <div class="prose max-w-none">
+            <style>
+                .optimization-analysis h4 {
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    margin: 1.5rem 0 0.75rem 0;
+                    padding-bottom: 0.5rem;
+                    border-bottom: 2px solid #e5e7eb;
+                    color: #1f2937;
+                }
+                .optimization-analysis h4:first-child {
+                    margin-top: 0;
+                }
+                .optimization-analysis ul {
+                    margin: 0.5rem 0 1rem 0;
+                    padding-left: 0;
+                    list-style: none;
+                }
+                .optimization-analysis li {
+                    margin: 0.5rem 0;
+                    padding: 0.75rem 1rem;
+                    background: #f9fafb;
+                    border-left: 3px solid #9ca3af;
+                    border-radius: 0.375rem;
+                    line-height: 1.6;
+                }
+                .optimization-analysis li strong {
+                    display: block;
+                    margin-bottom: 0.25rem;
+                    color: #374151;
+                }
+                .optimization-analysis .text-green-600 {
+                    border-left-color: #10b981 !important;
+                    background: #f0fdf4 !important;
+                }
+                .optimization-analysis .text-amber-600 {
+                    border-left-color: #f59e0b !important;
+                    background: #fffbeb !important;
+                }
+                .optimization-analysis .text-red-600 {
+                    border-left-color: #ef4444 !important;
+                    background: #fef2f2 !important;
+                }
+                .optimization-analysis p {
+                    margin: 0.75rem 0;
+                    line-height: 1.6;
+                }
+            </style>
+            <div class="optimization-analysis prose max-w-none">
                 ${displayHTML}
             </div>
             ${recommendations ? `
